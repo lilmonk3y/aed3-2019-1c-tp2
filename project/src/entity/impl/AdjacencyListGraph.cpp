@@ -2,6 +2,7 @@
 // Created by Christian nahuel Rivera on 12/5/19.
 //
 
+#include <set>
 #include "../AdjacencyListGraph.h"
 
 bool AdjacencyListGraph::adjacent(int vertexIndex1, int vertexIndex2) {
@@ -33,4 +34,23 @@ void AdjacencyListGraph::addEdge(int vertexIndex1, int vertexIndex2, long edgeCo
 
 int AdjacencyListGraph::getVertex() {
     return static_cast<int>(this->vertexAdjacents.size());
+}
+
+std::set<Edge> AdjacencyListGraph::getEdges() {
+    std::set<Edge> edges;
+    for(int vertex = 0; vertex < this->vertexAdjacents.size(); vertex++){
+        for(auto iterator = this->vertexAdjacents.at(vertex).begin(); iterator != this->vertexAdjacents.at(vertex).end(); iterator++){
+            edges.insert(Edge(vertex,(*iterator)->getVertex(),(*iterator)->getEdgeCost()));
+        }
+    }
+    return edges;
+}
+
+long AdjacencyListGraph::getTotalCost() {
+    std::set<Edge> edges = this->getEdges();
+    long totalCost = 0;
+    for(Edge edge : edges){
+        totalCost += edge.getEdgeCost();
+    }
+    return totalCost;
 }

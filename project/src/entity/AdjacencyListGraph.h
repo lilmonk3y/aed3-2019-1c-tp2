@@ -2,8 +2,8 @@
 // Created by Christian nahuel Rivera on 12/5/19.
 //
 
-#include <vector>
 #include <list>
+#include <vector>
 #include "Graph.h"
 #include "AdjacencyNode.h"
 
@@ -13,7 +13,8 @@ public:
     int getVertex();
     bool adjacent(int vertexIndex1, int vertexIndex2);
     void addEdge(int vertexIndex1, int vertexIndex2, long edgeCost);
-
+    std::set<Edge> getEdges();
+    long getTotalCost();
 private:
     std::vector<std::list<AdjacencyNode*>> vertexAdjacents;
 

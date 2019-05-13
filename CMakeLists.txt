@@ -8,7 +8,7 @@ include_directories(lib/googletest/googletest/include)
 include_directories(lib/googletest/googlemock/include)
 
 
-set(SOURCE_FILES prueba_integracion_con_gtest/test/factorialTest.cpp prueba_integracion_con_gtest/src/factorial.cpp project/src/entity/Graph.h project/src/entity/AdjacencyListGraph.h project/src/entity/impl/AdjacencyListGraph.cpp project/src/entity/impl/AdjacencyNode.cpp project/src/entity/AdjacencyNode.h project/test/entity/GraphTest.cpp project/src/utils/DefaultDisjoinSet.h project/src/utils/CompressedDisjoinSet.h project/src/utils/DisjoinSet.h project/src/utils/impl/DefaultDisjoinSet.cpp project/src/utils/impl/CompressedDisjoinSet.cpp project/test/utils/DisjoinSetTest.cpp)
+set(SOURCE_FILES prueba_integracion_con_gtest/test/factorialTest.cpp prueba_integracion_con_gtest/src/factorial.cpp project/src/entity/Graph.h project/src/entity/AdjacencyListGraph.h project/src/entity/impl/AdjacencyListGraph.cpp project/src/entity/impl/AdjacencyNode.cpp project/src/entity/AdjacencyNode.h project/test/entity/GraphTest.cpp project/src/utils/DefaultDisjoinSet.h project/src/utils/CompressedDisjoinSet.h project/src/utils/DisjoinSet.h project/src/utils/impl/DefaultDisjoinSet.cpp project/src/utils/impl/CompressedDisjoinSet.cpp project/test/utils/DisjoinSetTest.cpp project/src/utils/GetMST.h project/src/utils/impl/GetMST.cpp project/src/entity/Edge.h project/src/entity/impl/Edge.cpp project/test/utils/GetMSTTest.cpp)
 
 add_executable(aed3_2019_1c_tp2 main.cpp ${SOURCE_FILES})
 

@@ -30,3 +30,18 @@ TEST_F(GraphTest, whenAddingEdges_mustDoItAsExpected){
     ASSERT_TRUE(graph->adjacent(3,2));
     ASSERT_FALSE(graph->adjacent(2,1));
 }
+
+TEST_F(GraphTest, whenGettingAllEdges_mustNotReturnDuplicated){
+    graph = new AdjacencyListGraph(10);
+    graph->addEdge(2,3,5);
+    graph->addEdge(4,5,6);
+    graph->addEdge(7,6,8);
+
+    std::set<Edge> edges = graph->getEdges();
+
+    ASSERT_EQ(3, edges.size());
+    ASSERT_TRUE(edges.find(Edge(6,7,8)) != edges.end());
+    ASSERT_TRUE(edges.find(Edge(5,4,8)) != edges.end());
+    ASSERT_TRUE(edges.find(Edge(3,2,8)) != edges.end());
+    ASSERT_FALSE(edges.find(Edge(5,2,8)) == edges.end());
+}

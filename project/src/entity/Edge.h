@@ -8,10 +8,11 @@
 class Edge{
 public:
     Edge(int vertex1,int vertex2,long cost);
-    int getLeftVertex();
-    int getRigthVertex();
-    long getEdgeCost();
-    bool operator==(Edge other);
+    int getLeftVertex() const;
+    int getRigthVertex() const;
+    long getEdgeCost() const;
+    //bool operator==(const Edge *other)const;
+    //bool operator<(const Edge &other)const;
 
 private:
     int lVectexIndex;
@@ -19,11 +20,16 @@ private:
     long edgeCost;
 };
 
+bool operator==(const Edge first, const Edge other);
+bool operator<(const Edge first, const Edge other);
+
+/*
 struct
 {
     bool operator() (Edge& lEdge, Edge& rEdge) {
         return lEdge.getEdgeCost() < rEdge.getEdgeCost();
     }
 } cmpWeigth ;
+*/
 
 #endif //AED3_2019_1C_TP2_EDGE_H

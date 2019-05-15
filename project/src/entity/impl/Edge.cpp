@@ -4,15 +4,15 @@
 
 #include "../Edge.h"
 
-int Edge::getLeftVertex() {
+int Edge::getLeftVertex() const {
     return this->lVectexIndex;
 }
 
-int Edge::getRigthVertex() {
+int Edge::getRigthVertex() const {
     return this->rVertexIndex;
 }
 
-long Edge::getEdgeCost() {
+long Edge::getEdgeCost() const {
     return this->edgeCost;
 }
 
@@ -22,7 +22,21 @@ Edge::Edge(int vertex1, int vertex2, long cost) {
     this->edgeCost = cost;
 }
 
-bool Edge::operator==(Edge other) {
-    return (this->lVectexIndex == other.getLeftVertex() && this->rVertexIndex == other.getRigthVertex() && this->edgeCost == other.getEdgeCost())
-        || (this->lVectexIndex == other.getRigthVertex() && this->rVertexIndex == other.getLeftVertex() && this->edgeCost == other.getEdgeCost());
+/*bool Edge::operator==(const Edge *other)const {
+    return (this->lVectexIndex == other->getLeftVertex() && this->rVertexIndex == other->getRigthVertex() && this->edgeCost == other->getEdgeCost())
+        || (this->lVectexIndex == other->getRigthVertex() && this->rVertexIndex == other->getLeftVertex() && this->edgeCost == other->getEdgeCost());
+}
+
+bool Edge::operator<(const Edge &other)const {
+    return this->edgeCost < other.getEdgeCost();
+}*/
+
+
+bool operator==(const Edge first, const Edge other) {
+    return (first.getLeftVertex() == other.getLeftVertex() && first.getRigthVertex() == other.getRigthVertex()/* && first.getEdgeCost() == other.getEdgeCost()*/)
+    || (first.getLeftVertex() == other.getRigthVertex() && first.getRigthVertex()== other.getLeftVertex() /*&& first.getEdgeCost()== other.getEdgeCost()*/);
+}
+
+bool operator<(const Edge first, const Edge other) {
+    return first.getEdgeCost() < other.getEdgeCost();
 }

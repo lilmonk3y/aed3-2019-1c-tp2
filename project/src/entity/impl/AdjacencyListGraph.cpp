@@ -36,21 +36,33 @@ int AdjacencyListGraph::getVertex() {
     return static_cast<int>(this->vertexAdjacents.size());
 }
 
-std::set<Edge> AdjacencyListGraph::getEdges() {
-    std::set<Edge> edges;
+std::vector<Edge> *AdjacencyListGraph::getEdges() {
+    std::vector<Edge> *edges = new std::vector<Edge>();
     for(int vertex = 0; vertex < this->vertexAdjacents.size(); vertex++){
         for(auto iterator = this->vertexAdjacents.at(vertex).begin(); iterator != this->vertexAdjacents.at(vertex).end(); iterator++){
-            edges.insert(Edge(vertex,(*iterator)->getVertex(),(*iterator)->getEdgeCost()));
+            Edge edge = Edge(vertex,(*iterator)->getVertex(),(*iterator)->getEdgeCost());
+            if(! this->alreadyInserted(edges, &edge)){
+                edges->push_back(edge);
+            }
         }
     }
     return edges;
 }
 
 long AdjacencyListGraph::getTotalCost() {
-    std::set<Edge> edges = this->getEdges();
+    std::vector<Edge> *edges = this->getEdges();
     long totalCost = 0;
-    for(Edge edge : edges){
+    for (auto edge : *edges) {
         totalCost += edge.getEdgeCost();
     }
     return totalCost;
+}
+
+bool AdjacencyListGraph::alreadyInserted(std::vector<Edge> *edges, Edge *edge) {
+    for(auto inEdge : *edges){
+        if(inEdge == *edge){
+            return true;
+        }
+    }
+    return false;
 }

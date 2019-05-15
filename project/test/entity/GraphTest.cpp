@@ -8,7 +8,9 @@
 struct GraphTest : testing::Test{
     Graph *graph;
 
-    GraphTest(){}
+    GraphTest(){
+        graph = new AdjacencyListGraph(1);
+    }
 
     ~GraphTest(){
         delete graph;
@@ -31,17 +33,101 @@ TEST_F(GraphTest, whenAddingEdges_mustDoItAsExpected){
     ASSERT_FALSE(graph->adjacent(2,1));
 }
 
+TEST_F(GraphTest,whenAddingEdges_mustDoItAsExpected2){
+    graph = new AdjacencyListGraph(4);
+    
+    graph->addEdge(1,2,5);
+    graph->addEdge(3,2,5);
+    graph->addEdge(3,0,2);
+    graph->addEdge(3,1,2);
+    graph->addEdge(0,1,2);
+    graph->addEdge(0,2,2);
+
+    std::vector<Edge> *edgesGet = graph->getEdges();
+    ASSERT_EQ(6, edgesGet->size());
+
+}
+
+TEST_F(GraphTest, whenComparingEdges_mustDoItAsExpected2){
+    Edge edge = Edge(1,2,4);
+    Edge other = Edge(2,1,4);
+
+    ASSERT_TRUE(edge == other);
+}
+
 TEST_F(GraphTest, whenGettingAllEdges_mustNotReturnDuplicated){
     graph = new AdjacencyListGraph(10);
     graph->addEdge(2,3,5);
     graph->addEdge(4,5,6);
     graph->addEdge(7,6,8);
 
-    std::set<Edge> edges = graph->getEdges();
+    std::vector<Edge> *edges = graph->getEdges();
 
-    ASSERT_EQ(3, edges.size());
-    ASSERT_TRUE(edges.find(Edge(6,7,8)) != edges.end());
-    ASSERT_TRUE(edges.find(Edge(5,4,8)) != edges.end());
-    ASSERT_TRUE(edges.find(Edge(3,2,8)) != edges.end());
-    ASSERT_FALSE(edges.find(Edge(5,2,8)) == edges.end());
+    ASSERT_EQ(3, edges->size());
+}
+
+TEST_F(GraphTest, whenComparingEdgesSet_mustCompareOk1){
+    graph = new AdjacencyListGraph(2);
+    graph->addEdge(0,1,3);
+    graph->addEdge(1,0,3);
+
+    std::vector<Edge> *edges = graph->getEdges();
+
+    ASSERT_EQ(1, edges->size());
+}
+
+TEST_F(GraphTest, whenComparingEdgesSet_mustCompareOk2){
+    graph = new AdjacencyListGraph(2);
+    graph->addEdge(0,1,2);
+    graph->addEdge(0,1,2);
+
+    std::vector<Edge> *edges = graph->getEdges();
+
+    ASSERT_EQ(1, edges->size());
+}
+
+TEST_F(GraphTest, whenComparingEdgesSet_mustCompareOk3){
+    graph = new AdjacencyListGraph(2);
+    graph->addEdge(0,1,2);
+    graph->addEdge(0,1,3);
+
+    std::vector<Edge> *edges = graph->getEdges();
+
+    ASSERT_EQ(1, edges->size());
+}
+
+TEST_F(GraphTest, whenComparingEdgesSet_mustCompareOk){
+    graph = new AdjacencyListGraph(3);
+    graph->addEdge(0,2,4);
+    graph->addEdge(1,0,3);
+
+    std::vector<Edge> *edges = graph->getEdges();
+
+    ASSERT_EQ(2, edges->size());
+}
+
+TEST_F(GraphTest, whenComparingEdgesSet_mustCompareOk5){
+    graph = new AdjacencyListGraph(3);
+    graph->addEdge(0,1,5);
+    graph->addEdge(0,2,200);
+    graph->addEdge(1,2,5);
+
+    std::vector<Edge> *edges = graph->getEdges();
+
+    ASSERT_EQ(3, edges->size());
+}
+
+TEST_F(GraphTest,whenSorting_mustDoItAsExpected){
+    graph = new AdjacencyListGraph(3);
+    graph->addEdge(0,1,5);
+    graph->addEdge(0,2,200);
+    graph->addEdge(1,2,5);
+    std::vector<Edge> *edges = graph->getEdges();
+
+    sort(edges->begin(),edges->end());
+
+    ASSERT_EQ(3, edges->size());
+    ASSERT_TRUE(edges->at(0).getEdgeCost() == 5);
+    ASSERT_TRUE(edges->at(1).getEdgeCost() == 5);
+    ASSERT_TRUE(edges->at(2).getEdgeCost() == 200);
 }

@@ -52,17 +52,6 @@ struct MSTTest : testing::Test {
     }
 };
 
-TEST_F(MSTTest,whenGetPrimMSTOfATree_mustReturnTheSameGraph){
-    graph = new AdjacencyListGraph(2);
-    graph->addEdge(0,1,5);
-
-    Graph *actualMST = getMST->getMST(graph);
-
-    Graph *expectedMST = new AdjacencyListGraph(2);
-    expectedMST->addEdge(0,1,5);
-    ASSERT_EQ(actualMST->getTotalCost(), expectedMST->getTotalCost());
-}
-
 TEST_F(MSTTest,whenGetPrimMSTOfACircuit_mustReturnAnMSTOfTheOriginalGraph){
     // A circuit of 3 nodes
     graph = new AdjacencyListGraph(3);
@@ -72,117 +61,30 @@ TEST_F(MSTTest,whenGetPrimMSTOfACircuit_mustReturnAnMSTOfTheOriginalGraph){
 
     Graph *actualMST = getMST->getMST(graph);
 
-    Graph *expectedMST = new AdjacencyListGraph(3);
-    expectedMST->addEdge(0,1,5);
-    expectedMST->addEdge(1,2,5);
-    ASSERT_EQ(expectedMST->getTotalCost() , actualMST->getTotalCost());
+    ASSERT_EQ(10 , actualMST->getTotalCost());
 }
 
-TEST_F(MSTTest,whenGetKruskalDefaultMSTOfATree_mustReturnTheSameGraph){
+TEST_F(MSTTest,whenGetKruskalCompressedMSTOfATree_mustReturnTheSameGraph){
     graph= new AdjacencyListGraph(2);
     graph->addEdge(0,1,5);
 
     Graph *actualMST = getMST->getMST(graph);
 
-    Graph *expectedMST= new AdjacencyListGraph(2);
-    expectedMST->addEdge(0,1,5);
-    ASSERT_EQ(actualMST->getTotalWeight(),expectedMST->getTotalWeight());
-}
-
-TEST_F(MSTTest,whenGetKruskalDefaultMSTOfACircuit_mustReturnAnMSTOfTheOriginalGraph){
-    // A circuit of 3 nodes
-    graph->build(3);
-    graph->addEdge(Node(0),Node(1),5);
-    graph->addEdge(Node(0),Node(2),200);
-    graph->addEdge(Node(1),Node(2),5);
-
-    graph->setMSTStrategy(new KruskalDefaultMST());
-    Graph actualMST = graph->getMST();
-
-    Graph expectedMST(3);
-    expectedMST.addEdge(Node(0),Node(1),5);
-    expectedMST.addEdge(Node(1),Node(2),5);
-    ASSERT_EQ(expectedMST.getTotalWeight() , actualMST.getTotalWeight());
-}
-
-TEST_F(MSTTest,whenGetKruskalCompressedMSTOfATree_mustReturnTheSameGraph){
-    graph->build(2);
-    graph->addEdge(Node(0),Node(1),5);
-
-    graph->setMSTStrategy(new KruskalCompressedMST());
-    Graph actualMST = graph->getMST();
-
-    Graph expectedMST(2);
-    expectedMST.addEdge(Node(0),Node(1),5);
-    ASSERT_EQ(actualMST.getTotalWeight(),expectedMST.getTotalWeight());
-}
-
-TEST_F(MSTTest,whenGetKruskalCompressedMSTOfACircuit_mustReturnAnMSTOfTheOriginalGraph){
-    // A circuit of 3 nodes
-    graph->build(3);
-    graph->addEdge(Node(0),Node(1),5);
-    graph->addEdge(Node(0),Node(2),200);
-    graph->addEdge(Node(1),Node(2),5);
-
-    graph->setMSTStrategy(new KruskalCompressedMST());
-    Graph actualMST = graph->getMST();
-
-    Graph expectedMST(3);
-    expectedMST.addEdge(Node(0),Node(1),5);
-    expectedMST.addEdge(Node(1),Node(2),5);
-    ASSERT_EQ(expectedMST.getTotalWeight() , actualMST.getTotalWeight());
+    ASSERT_EQ(5,actualMST->getTotalCost());
 }
 
 TEST_F(MSTTest, whenGraph1PrimMST_shouldHaveTotalWeight6)
 {
-    graph1->setMSTStrategy(new PrimMST());
-    auto mst = graph1->getMST();
+    auto mst = getMST->getMST(graph1);
 
-    float actualWeight = mst.getTotalWeight();
+    float actualWeight = mst->getTotalCost();
     ASSERT_EQ(6, actualWeight);
 }
 
 TEST_F(MSTTest, whenGraph2PrimMST_shouldHaveTotalWeight37)
 {
-    graph2->setMSTStrategy(new PrimMST());
-    auto mst = graph2->getMST();
+    auto mst = getMST->getMST(graph2);
 
-    float actualWeight = mst.getTotalWeight();
-    ASSERT_EQ(37, actualWeight);
-}
-
-TEST_F(MSTTest, whenGraph1KruskalDefaultMST_shouldHaveTotalWeight6)
-{
-    graph1->setMSTStrategy(new KruskalDefaultMST());
-    auto mst = graph1->getMST();
-
-    float actualWeight = mst.getTotalWeight();
-    ASSERT_EQ(6, actualWeight);
-}
-
-TEST_F(MSTTest, whenGraph2KruskalDefaultMST_shouldHaveTotalWeight37)
-{
-    graph2->setMSTStrategy(new KruskalDefaultMST());
-    auto mst = graph2->getMST();
-
-    float actualWeight = mst.getTotalWeight();
-    ASSERT_EQ(37, actualWeight);
-}
-
-TEST_F(MSTTest, whenGraph1KruskalCompressedMST_shouldHaveTotalWeight6)
-{
-    graph1->setMSTStrategy(new KruskalCompressedMST());
-    auto mst = graph1->getMST();
-
-    float actualWeight = mst.getTotalWeight();
-    ASSERT_EQ(6, actualWeight);
-}
-
-TEST_F(MSTTest, whenGraph2KruskalCompressedMST_shouldHaveTotalWeight37)
-{
-    graph2->setMSTStrategy(new KruskalCompressedMST());
-    auto mst = graph2->getMST();
-
-    float actualWeight = mst.getTotalWeight();
+    float actualWeight = mst->getTotalCost();
     ASSERT_EQ(37, actualWeight);
 }

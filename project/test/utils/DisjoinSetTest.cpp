@@ -12,8 +12,8 @@ struct DisSetTest : testing::Test{
     DisjoinSet *disjoinSet;
 
     DisSetTest(){
-        disjoinSet = new DisjoinSetDefault();
-        //disjoinSet = new DisjoinSetCompressed();
+        //disjoinSet = new DisjoinSetDefault();
+        disjoinSet = new DisjoinSetCompressed();
     }
     ~DisSetTest(){
         delete disjoinSet;
@@ -23,7 +23,7 @@ struct DisSetTest : testing::Test{
 TEST_F(DisSetTest,whenCreateADisjoinSet_mustAddEveryNodeIntoADifferentComponent){
     Graph* graph = new AdjacencyListGraph(3);
 
-    disjoinSet->create(graph, nullptr);
+    disjoinSet->create(graph);
 
     ASSERT_EQ(0, disjoinSet->find(0));
     ASSERT_EQ(1, disjoinSet->find(1));
@@ -32,7 +32,7 @@ TEST_F(DisSetTest,whenCreateADisjoinSet_mustAddEveryNodeIntoADifferentComponent)
 
 TEST_F(DisSetTest, whenJoiningTwoComponents_mustPutThemTheSameComponentId){
     Graph* graph = new AdjacencyListGraph(3);
-    disjoinSet->create(graph, nullptr);
+    disjoinSet->create(graph);
 
     disjoinSet->join(0,1);
 
@@ -42,7 +42,7 @@ TEST_F(DisSetTest, whenJoiningTwoComponents_mustPutThemTheSameComponentId){
 
 TEST_F(DisSetTest, whenJoiningComponentsWithMoreThanOneElement_mustPutTheSameIdToAllElements){
     Graph* graph = new AdjacencyListGraph(6);
-    disjoinSet->create(graph, nullptr);
+    disjoinSet->create(graph);
     disjoinSet->join(0,1);
     disjoinSet->join(2,3);
     disjoinSet->join(4,5);

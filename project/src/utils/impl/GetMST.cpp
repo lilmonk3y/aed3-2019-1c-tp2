@@ -11,7 +11,7 @@ GetMST::GetMST(DisjoinSet *disjoinSetStrategy) {
 
 Graph * GetMST::getMST(Graph *graph) {
     Graph *mst = new AdjacencyListGraph(graph->getVertex());
-    disjoinSet->create(graph, nullptr);
+    disjoinSet->create(graph);
     std::vector<Edge> *edges = graph->getEdges();
     sort(edges->begin(),edges->end());
     for(auto edge : *edges){

@@ -5,7 +5,8 @@
 #ifndef AED3_2019_1C_TP2_DISJOINSET_H
 #define AED3_2019_1C_TP2_DISJOINSET_H
 
-#include "../entity/Graph.h"
+
+#include "../entity/core/Graph.h"
 
 class DisjoinSet {
 public:

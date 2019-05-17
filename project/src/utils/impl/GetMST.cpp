@@ -3,6 +3,7 @@
 //
 #include "../GetMST.h"
 #include "../../entity/AdjacencyListGraph.h"
+#include <algorithm>
 
 GetMST::GetMST(DisjoinSet *disjoinSetStrategy) {
     this->disjoinSet = disjoinSetStrategy;

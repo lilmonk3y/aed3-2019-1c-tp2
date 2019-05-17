@@ -3,8 +3,8 @@
 //
 
 #include "gtest/gtest.h"
-#include "../../src/entity/Graph.h"
-#include "../../src/entity/AdjacencyListGraph.h"
+#include "../../src/entity/core/Graph.h"
+#include "../../src/entity/core/AdjacencyListGraph.h"
 #include "../../src/utils/GetMST.h"
 #include "../../src/utils/DefaultDisjoinSet.h"
 

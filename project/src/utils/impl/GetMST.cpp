@@ -2,7 +2,7 @@
 // Created by Christian nahuel Rivera on 12/5/19.
 //
 #include "../GetMST.h"
-#include "../../entity/AdjacencyListGraph.h"
+#include "../../entity/core/AdjacencyListGraph.h"
 
 GetMST::GetMST(DisjoinSet *disjoinSetStrategy) {
     this->disjoinSet = disjoinSetStrategy;
@@ -11,7 +11,7 @@ GetMST::GetMST(DisjoinSet *disjoinSetStrategy) {
 
 Graph * GetMST::getMST(Graph *graph) {
     Graph *mst = new AdjacencyListGraph(graph->getVertex());
-    disjoinSet->create(graph);
+    disjoinSet->create(graph, nullptr);
     std::vector<Edge> *edges = graph->getEdges();
     sort(edges->begin(),edges->end());
     for(auto edge : *edges){

@@ -2,8 +2,18 @@
 // Created by Christian nahuel Rivera on 12/5/19.
 //
 
-#include <set>
 #include "../AdjacencyListGraph.h"
+
+AdjacencyListGraph::AdjacencyListGraph(int vertexAmount) {
+    this->resetSize(vertexAmount);
+}
+
+void AdjacencyListGraph::resetSize(int newVerticesSize) {
+    this->vertexAdjacents = std::vector<std::list<AdjacencyNode*>>(newVerticesSize);
+    for(int index = 0; index < this->vertexAdjacents.size(); index++){
+        this->vertexAdjacents.at(index) = std::list<AdjacencyNode*>();
+    }
+}
 
 bool AdjacencyListGraph::adjacent(int vertexIndex1, int vertexIndex2) {
     return isAdjacent(vertexIndex1, vertexIndex2) && isAdjacent(vertexIndex2, vertexIndex1);
@@ -18,13 +28,6 @@ bool AdjacencyListGraph::isAdjacent(int origin, int destiny) {
         }
     }
     return response;
-}
-
-AdjacencyListGraph::AdjacencyListGraph(int vertexAmount) {
-    this->vertexAdjacents = std::vector<std::list<AdjacencyNode*>>(vertexAmount);
-    for(int index = 0; index < this->vertexAdjacents.size(); index++){
-        this->vertexAdjacents.at(index) = std::list<AdjacencyNode*>();
-    }
 }
 
 void AdjacencyListGraph::addEdge(int vertexIndex1, int vertexIndex2, long edgeCost) {
@@ -66,3 +69,4 @@ bool AdjacencyListGraph::alreadyInserted(std::vector<Edge> *edges, Edge *edge) {
     }
     return false;
 }
+

@@ -5,7 +5,7 @@
 #ifndef AED3_2019_1C_TP2_GETMST_H
 #define AED3_2019_1C_TP2_GETMST_H
 
-#include "../entity/Graph.h"
+#include "../entity/core/Graph.h"
 #include "DisjoinSet.h"
 
 class GetMST{

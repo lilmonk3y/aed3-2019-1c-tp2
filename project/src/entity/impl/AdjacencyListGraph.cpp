@@ -22,7 +22,7 @@ bool AdjacencyListGraph::isAdjacent(int origin, int destiny) {
 
 AdjacencyListGraph::AdjacencyListGraph(int vertexAmount) {
     this->vertexAdjacents = std::vector<std::list<AdjacencyNode*>>(vertexAmount);
-    for(int index = 0; index < this->vertexAdjacents.size(); index++){
+    for(size_t index = 0; index < this->vertexAdjacents.size(); index++){
         this->vertexAdjacents.at(index) = std::list<AdjacencyNode*>();
     }
 }
@@ -38,7 +38,7 @@ int AdjacencyListGraph::getVertex() {
 
 std::vector<Edge> *AdjacencyListGraph::getEdges() {
     std::vector<Edge> *edges = new std::vector<Edge>();
-    for(int vertex = 0; vertex < this->vertexAdjacents.size(); vertex++){
+    for(size_t vertex = 0; vertex < this->vertexAdjacents.size(); vertex++){
         for(auto iterator = this->vertexAdjacents.at(vertex).begin(); iterator != this->vertexAdjacents.at(vertex).end(); iterator++){
             Edge edge = Edge(vertex,(*iterator)->getVertex(),(*iterator)->getEdgeCost());
             if(! this->alreadyInserted(edges, &edge)){
@@ -65,4 +65,12 @@ bool AdjacencyListGraph::alreadyInserted(std::vector<Edge> *edges, Edge *edge) {
         }
     }
     return false;
+}
+
+AdjacencyListGraph::~AdjacencyListGraph() {
+    for (const auto& adjacencyList : vertexAdjacents) {
+        for (auto* node : adjacencyList) {
+            delete node;
+        }
+    }
 }

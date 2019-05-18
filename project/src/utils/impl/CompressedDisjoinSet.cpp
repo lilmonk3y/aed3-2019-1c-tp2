@@ -9,7 +9,7 @@ void DisjoinSetCompressed::create(Graph *graph) {
     std::vector<int> heights;
     components.resize(graph->getVertex());
     heights.resize(graph->getVertex());
-    for(int index = 0; index < components.size(); index++){
+    for(size_t index = 0; index < components.size(); index++){
         components.at(index) = index;
         heights.at(index) = 1;
     }

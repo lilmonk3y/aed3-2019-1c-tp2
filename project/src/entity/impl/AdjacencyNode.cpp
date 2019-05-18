@@ -9,10 +9,6 @@ AdjacencyNode::AdjacencyNode(int vertexIndex, long edgeCost) {
     this->edgeCost = edgeCost;
 }
 
-AdjacencyNode::~AdjacencyNode() {
-    delete this;
-}
-
 int AdjacencyNode::getVertex() {
     return this->vertexIndex;
 }

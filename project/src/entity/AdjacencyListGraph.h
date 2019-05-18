@@ -14,6 +14,7 @@ public:
     void addEdge(int vertexIndex1, int vertexIndex2, long edgeCost);
     std::vector<Edge> *getEdges();
     long getTotalCost();
+    ~AdjacencyListGraph();
 private:
     std::vector<std::list<AdjacencyNode*>> vertexAdjacents;
 

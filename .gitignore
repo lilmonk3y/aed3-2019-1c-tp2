@@ -4,6 +4,7 @@ CMakeCache.txt
 CMakeFiles/
 Makefile
 aed3_2019_1c_tp2
+main-bellman-ford
 cmake_install.cmake
 lib/googletest/CMakeFiles/
 lib/googletest/CTestTestfile.cmake

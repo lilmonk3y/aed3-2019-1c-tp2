@@ -4,16 +4,18 @@
 
 #include "gtest/gtest.h"
 #include "../../src/utils/DisjoinSet.h"
-#include "../../src/utils/DefaultDisjoinSet.h"
+#include "../../src/utils/ArrayDisjoinSet.h"
 #include "../../src/entity/core/AdjacencyListGraph.h"
-#include "../../src/utils/CompressedDisjoinSet.h"
+#include "../../src/utils/ArrayCompressedDisjoinSet.h"
+#include "../../src/utils/TreeDisjoinSet.h"
 
 struct DisSetTest : testing::Test{
     DisjoinSet *disjoinSet;
 
     DisSetTest(){
-        //disjoinSet = new DisjoinSetDefault();
-        disjoinSet = new DisjoinSetCompressed();
+        //disjoinSet = new ArrayDisjoinSet();
+        //disjoinSet = new ArrayCompressedDisjoinSet();
+        disjoinSet = new TreeDisjoinSet();
     }
     ~DisSetTest(){
         delete disjoinSet;
@@ -58,4 +60,18 @@ TEST_F(DisSetTest, whenJoiningComponentsWithMoreThanOneElement_mustPutTheSameIdT
     ASSERT_EQ(0, disjoinSet->find(3));
     ASSERT_EQ(0, disjoinSet->find(4));
     ASSERT_EQ(0, disjoinSet->find(5));
+}
+
+TEST_F(DisSetTest,whenJoiningComponentsWithSons_mustAddSonsToComponent){
+    Graph* graph = new AdjacencyListGraph(6);
+    disjoinSet->create(graph);
+
+    disjoinSet->join(4,5);
+    disjoinSet->join(3,4);
+    disjoinSet->join(2,3);
+
+    ASSERT_EQ(2, disjoinSet->find(3));
+    ASSERT_EQ(2, disjoinSet->find(4));
+    ASSERT_EQ(2, disjoinSet->find(5));
+    ASSERT_EQ(2, disjoinSet->find(2));
 }

@@ -4,14 +4,13 @@
 #include "gtest/gtest.h"
 #include "../../src/entity/core/Graph.h"
 #include "../../src/entity/core/AdjacencyListGraph.h"
-#include "../../src/entity/core/DirectedTreeGraph.h"
+#include "../../src/entity/auxiliar/DirectedTreeGraph.h"
 
 struct GraphTest : testing::Test{
     Graph *graph;
 
     GraphTest(){
-        //graph = new AdjacencyListGraph(1);
-        graph = new DirectedTreeGraph(1);
+        graph = new AdjacencyListGraph(1);
     }
 
     ~GraphTest(){

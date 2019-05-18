@@ -1,9 +1,9 @@
 //
 // Created by Christian nahuel Rivera on 12/5/19.
 //
-#include "../DefaultDisjoinSet.h"
+#include "../ArrayDisjoinSet.h"
 
-void DisjoinSetDefault::create(Graph *graph) {
+void ArrayDisjoinSet::create(Graph *graph) {
     std::vector<int> components;
     components.resize(graph->getVertex());
     for(int index = 0; index < components.size(); index++){
@@ -12,15 +12,15 @@ void DisjoinSetDefault::create(Graph *graph) {
     this->components = components;
 }
 
-int DisjoinSetDefault::find(int vertex) {
+int ArrayDisjoinSet::find(int vertex) {
     return this->components.at(vertex);
 }
 
-void DisjoinSetDefault::join(int alreadyIn, int newNode) {
+void ArrayDisjoinSet::join(int alreadyIn, int newNode) {
     int originalComponent = find(newNode);
-    for (int &component : this->components) {
-        if(component == originalComponent){
-            component = find(alreadyIn);
+    for (int &iter : this->components) {
+        if(iter == originalComponent){
+            iter = find(alreadyIn);
         }
     }
 }

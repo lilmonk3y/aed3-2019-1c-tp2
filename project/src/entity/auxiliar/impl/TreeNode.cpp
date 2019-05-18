@@ -4,24 +4,29 @@
 
 #include "../TreeNode.h"
 
-void TreeNode::addAdjacent(TreeNode adjacent, long edgeCost) {
-    this->adjacentNodes.emplace_back(adjacent.getVertexIndex(),edgeCost);
-    this->adjacentCount++;
-}
-
-std::vector<TreeEdge> TreeNode::getAdyacentNodes() {
-    return this->adjacentNodes;
-}
-
 TreeNode::TreeNode(int vertexIndex) {
     this->vertexIndex = vertexIndex;
-    this->adjacentCount = 0;
+    this->father = nullptr;
+    this->componentIndex = vertexIndex;
+}
+
+void TreeNode::setFather(TreeNode *father, int fatherComponent) {
+    this->componentIndex = fatherComponent;
+    this->father = father;
+}
+
+TreeNode * TreeNode::getFather() {
+    return this->father;
 }
 
 int TreeNode::getVertexIndex() {
     return this->vertexIndex;
 }
 
-int TreeNode::getAdjacentCount() {
-    return this->adjacentCount;
+int TreeNode::getComponentIndex() {
+    return this->componentIndex;
+}
+
+void TreeNode::setComponentIndex(int newComponent) {
+    this->componentIndex = newComponent;
 }

@@ -2,21 +2,20 @@
 // Created by Christian nahuel Rivera on 12/5/19.
 //
 
-#ifndef AED3_2019_1C_TP2_COMPRESSEDDISJOINSET_H
-#define AED3_2019_1C_TP2_COMPRESSEDDISJOINSET_H
-
+#ifndef AED3_2019_1C_TP2_DEFAULTDISJOINSET_H
+#define AED3_2019_1C_TP2_DEFAULTDISJOINSET_H
 
 #include "DisjoinSet.h"
 #include <vector>
 
-class DisjoinSetCompressed : public DisjoinSet {
+class ArrayDisjoinSet : public DisjoinSet {
 public:
     int find(int vertex);
     void join(int alreadyIn, int newNode);
     void create(Graph *graph);
 
-private:
+
+protected:
     std::vector<int> components;
-    std::vector<int> heights;
 };
-#endif //AED3_2019_1C_TP2_COMPRESSEDDISJOINSET_H
+#endif //AED3_2019_1C_TP2_DEFAULTDISJOINSET_H

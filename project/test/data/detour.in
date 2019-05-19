@@ -1,0 +1,9 @@
+3
+2
+1
+800
+1
+0 1 1
+1 2 2
+
+# To minimize the money spent on gas traveling from city 1 to city 2, you have to go to city 0 first and go back - thus getting a path with repeated vertices 

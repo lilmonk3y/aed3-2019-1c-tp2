@@ -2,6 +2,9 @@
  * Grafo con pesos en los vértices y en las aristas.
  */
 
+#ifndef VERTEX_AND_EDGE_WEIGHTED_GRAPH
+#define VERTEX_AND_EDGE_WEIGHTED_GRAPH
+
 #include <vector>
 
 using Vertex = int;
@@ -28,5 +31,7 @@ private:
     std::vector<std::vector<DestinationEdge>> adjacencyList;
     std::vector<Weight> vertexWeight;
 };
+
+#endif
 
 

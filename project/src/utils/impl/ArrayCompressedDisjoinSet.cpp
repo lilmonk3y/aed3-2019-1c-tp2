@@ -35,6 +35,6 @@ void ArrayCompressedDisjoinSet::join(int alreadyIn, int newNode) {
         this->components.at(rRepresentative) = lRepresentative;
     }
     if(heights.at(lRepresentative) == heights.at(rRepresentative)) {
-        this->heights.at(lRepresentative) = this->heights.at(lRepresentative) + 1;
+        this->heights.at(rRepresentative) = this->heights.at(rRepresentative) + 1;
     }
 }

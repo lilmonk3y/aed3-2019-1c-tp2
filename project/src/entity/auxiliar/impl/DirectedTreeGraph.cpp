@@ -20,21 +20,39 @@ int DirectedTreeGraph::getVertex() {
 }
 
 void DirectedTreeGraph::addToComponent(int fatherIndex, int sonIndex) {
-    this->vertices.at(sonIndex)->setFather(this->getIndex(fatherIndex), this->getIndex(fatherIndex)->getComponentIndex());
+    TreeNode *newFather = this->getIndex(fatherIndex);
+    makeMyRootMySon(this->vertices.at(sonIndex), newFather);
 
-    updateMySonsComponent(sonIndex);
+    this->vertices.at(sonIndex)->setFather(newFather, newFather->getComponentIndex());
 
+    updateMySonsComponent(sonIndex, this->getIndex(fatherIndex)->getComponentIndex());
 }
 
-void DirectedTreeGraph::updateMySonsComponent(int sonIndex) const {// Update the child of son in the new component
+void DirectedTreeGraph::updateMySonsComponent(int sonIndex, int component) const {// Update the child of son in the new component
     for(auto vertex : vertices){
-        if(vertex->getFather() == vertices.at(sonIndex)){
-            vertex->setComponentIndex(vertices.at(sonIndex)->getComponentIndex());
-            updateMySonsComponent(vertex->getVertexIndex());
+        if(vertex->getFather() == vertices.at(sonIndex) && vertices.at(sonIndex) != vertex){
+            vertex->setComponentIndex(component);
+            updateMySonsComponent(vertex->getVertexIndex(), component);
         }
     }
 }
 
 TreeNode *DirectedTreeGraph::getIndex(int index) {
     return this->vertices.at(index);
+}
+
+void DirectedTreeGraph::makeMyRootMySon(TreeNode *node, TreeNode *newFather) {
+    if(node->getFather() != nullptr){
+        TreeNode* grandFather = getRoot(node->getFather());
+        if(grandFather != newFather)
+            grandFather->setFather(node, node->getComponentIndex());
+    }
+}
+
+TreeNode *DirectedTreeGraph::getRoot(TreeNode *node) {
+    if(node->getFather() == nullptr){
+        return node;
+    }else{
+        return getRoot(node->getFather());
+    }
 }

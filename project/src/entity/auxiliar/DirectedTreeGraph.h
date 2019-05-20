@@ -21,7 +21,13 @@ public:
 private:
     std::vector<TreeNode*> vertices;
 
-    void updateMySonsComponent(int sonIndex) const;
+    void updateMySonsComponent(int sonIndex, int component) const;
+
+    void updateMyFatherComponent(int index);
+
+    void makeMyRootMySon(TreeNode *node, TreeNode *newFather);
+
+    TreeNode *getRoot(TreeNode *node);
 };
 
 

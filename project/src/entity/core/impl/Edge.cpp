@@ -23,12 +23,12 @@ Edge::Edge(int vertex1, int vertex2, long cost) {
 }
 
 /*bool Edge::operator==(const Edge *other)const {
-    return (this->lVectexIndex == other->getLeftVertex() && this->rVertexIndex == other->getRigthVertex() && this->edgeCost == other->getEdgeCost())
-        || (this->lVectexIndex == other->getRigthVertex() && this->rVertexIndex == other->getLeftVertex() && this->edgeCost == other->getEdgeCost());
+    return (this->lVectexIndex == other->getLeftVertex() && this->rVertexIndex == other->getRigthVertex() && this->componentIndex == other->getEdgeCost())
+        || (this->lVectexIndex == other->getRigthVertex() && this->rVertexIndex == other->getLeftVertex() && this->componentIndex == other->getEdgeCost());
 }
 
 bool Edge::operator<(const Edge &other)const {
-    return this->edgeCost < other.getEdgeCost();
+    return this->componentIndex < other.getEdgeCost();
 }*/
 
 

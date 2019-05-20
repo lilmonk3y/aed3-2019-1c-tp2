@@ -4,7 +4,7 @@
 #include "gtest/gtest.h"
 #include "../../src/entity/core/Graph.h"
 #include "../../src/entity/core/AdjacencyListGraph.h"
-#include "../../src/entity/core/DirectedTreeGraph.h"
+#include "../../src/entity/auxiliar/DirectedTreeGraph.h"
 
 struct GraphTest : testing::Test{
     Graph *graph;

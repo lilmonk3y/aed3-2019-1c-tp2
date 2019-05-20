@@ -6,7 +6,9 @@
 #include "../../src/entity/core/Graph.h"
 #include "../../src/entity/core/AdjacencyListGraph.h"
 #include "../../src/utils/GetMST.h"
-#include "../../src/utils/DefaultDisjoinSet.h"
+#include "../../src/utils/ArrayDisjoinSet.h"
+#include "../../src/utils/TreeDisjoinSet.h"
+#include "../../src/utils/TreeCompressedDisjoinSet.h"
 
 
 struct MSTTest : testing::Test {
@@ -16,8 +18,10 @@ struct MSTTest : testing::Test {
     Graph *graph2;
 
     MSTTest(){
-        getMST = new GetMST(new DisjoinSetDefault());
-        //getMST = new GetMST(new DisjoinSetCompressed());
+        //getMST = new GetMST(new ArrayDisjoinSet());
+        //getMST = new GetMST(new ArrayCompressedDisjoinSet());
+        //getMST = new GetMST(new TreeDisjoinSet());
+        getMST = new GetMST(new TreeCompressedDisjoinSet());
 
         graph1 = new AdjacencyListGraph(4);
         graph1->addEdge(0,1, 3);

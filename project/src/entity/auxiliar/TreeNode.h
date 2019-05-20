@@ -6,20 +6,19 @@
 #define AED3_2019_1C_TP2_TREENODE_H
 
 
-#include <vector>
-#include "TreeEdge.h"
-
 class TreeNode {
 public:
     TreeNode(int vertexIndex);
-    void addAdjacent(TreeNode adjacent, long edgeCost);
-    std::vector<TreeEdge> getAdyacentNodes();
+    TreeNode * getFather();
+    void setFather(TreeNode *father, int fatherComponent);
     int getVertexIndex();
-    int getAdjacentCount();
+    int getComponentIndex();
+    void setComponentIndex(int newComponent);
+
 private:
-    std::vector<TreeEdge> adjacentNodes;
     int vertexIndex;
-    int adjacentCount;
+    int componentIndex;
+    TreeNode* father;
 };
 
 

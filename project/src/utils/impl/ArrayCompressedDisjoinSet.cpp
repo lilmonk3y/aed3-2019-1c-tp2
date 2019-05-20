@@ -2,9 +2,9 @@
 // Created by Christian nahuel Rivera on 12/5/19.
 //
 
-#include "../CompressedDisjoinSet.h"
+#include "../ArrayCompressedDisjoinSet.h"
 
-void DisjoinSetCompressed::create(Graph *graph) {
+void ArrayCompressedDisjoinSet::create(Graph *graph) {
     std::vector<int> components;
     std::vector<int> heights;
     components.resize(graph->getVertex());
@@ -17,7 +17,7 @@ void DisjoinSetCompressed::create(Graph *graph) {
     this->heights = heights;
 }
 
-int DisjoinSetCompressed::find(int vertex) {
+int ArrayCompressedDisjoinSet::find(int vertex) {
     // Si soy hijo, voy a buscar a mi padre y actualizo
     if( this->components.at(vertex) != vertex){
         this->components.at(vertex) = find(this->components.at(vertex));
@@ -25,7 +25,7 @@ int DisjoinSetCompressed::find(int vertex) {
     return this->components.at(vertex);
 }
 
-void DisjoinSetCompressed::join(int alreadyIn, int newNode) {
+void ArrayCompressedDisjoinSet::join(int alreadyIn, int newNode) {
     int lRepresentative = find(alreadyIn);
     int rRepresentative = find(newNode);
 
@@ -35,6 +35,6 @@ void DisjoinSetCompressed::join(int alreadyIn, int newNode) {
         this->components.at(rRepresentative) = lRepresentative;
     }
     if(heights.at(lRepresentative) == heights.at(rRepresentative)) {
-        this->heights.at(lRepresentative) = this->heights.at(lRepresentative) + 1;
+        this->heights.at(rRepresentative) = this->heights.at(rRepresentative) + 1;
     }
 }

@@ -15,6 +15,7 @@ public:
     std::vector<Edge> *getEdges();
     long getTotalCost();
     void resetSize(int newVerticesSize);
+    ~AdjacencyListGraph();
 private:
     std::vector<std::list<AdjacencyNode*>> vertexAdjacents;
 

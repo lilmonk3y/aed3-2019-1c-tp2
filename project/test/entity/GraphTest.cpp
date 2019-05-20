@@ -10,8 +10,7 @@ struct GraphTest : testing::Test{
     Graph *graph;
 
     GraphTest(){
-        //graph = new AdjacencyListGraph(1);
-        graph = new DirectedTreeGraph(1);
+        graph = new AdjacencyListGraph(1);
     }
 
     ~GraphTest(){

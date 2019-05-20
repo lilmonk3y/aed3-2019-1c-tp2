@@ -6,7 +6,7 @@
 void DisjoinSetDefault::create(Graph *graph) {
     std::vector<int> components;
     components.resize(graph->getVertex());
-    for(int index = 0; index < components.size(); index++){
+    for(size_t index = 0; index < components.size(); index++){
         components.at(index) = index;
     }
     this->components = components;

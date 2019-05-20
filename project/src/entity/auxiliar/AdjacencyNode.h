@@ -9,7 +9,6 @@
 class AdjacencyNode {
 public:
     AdjacencyNode(int vertexIndex, long edgeCost);
-    ~AdjacencyNode();
     int getVertex();
     long getEdgeCost();
 private:

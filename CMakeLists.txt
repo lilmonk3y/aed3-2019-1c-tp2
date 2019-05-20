@@ -11,5 +11,8 @@ include_directories(lib/googletest/googlemock/include)
 set(SOURCE_FILES prueba_integracion_con_gtest/test/factorialTest.cpp prueba_integracion_con_gtest/src/factorial.cpp project/src/entity/core/Graph.h project/src/entity/core/AdjacencyListGraph.h project/src/entity/core/impl/AdjacencyListGraph.cpp project/src/entity/auxiliar/impl/AdjacencyNode.cpp project/src/entity/auxiliar/AdjacencyNode.h project/test/entity/GraphTest.cpp project/src/utils/DefaultDisjoinSet.h project/src/utils/CompressedDisjoinSet.h project/src/utils/DisjoinSet.h project/src/utils/impl/DefaultDisjoinSet.cpp project/src/utils/impl/CompressedDisjoinSet.cpp project/test/utils/DisjoinSetTest.cpp project/src/utils/GetMST.h project/src/utils/impl/GetMST.cpp project/src/entity/core/Edge.h project/src/entity/core/impl/Edge.cpp project/test/utils/GetMSTTest.cpp project/src/entity/core/impl/DirectedTreeGraph.cpp project/src/entity/core/DirectedTreeGraph.h project/src/entity/auxiliar/impl/TreeNode.cpp project/src/entity/auxiliar/TreeNode.h project/src/entity/auxiliar/impl/TreeEdge.cpp project/src/entity/auxiliar/TreeEdge.h)
 
 add_executable(aed3_2019_1c_tp2 main.cpp ${SOURCE_FILES})
-
 target_link_libraries(aed3_2019_1c_tp2 gtest gtest_main)
+
+set(SOURCE_FILES_BELLMAN-FORD project/src/algorithms/gas-graph-bellman-ford.hpp project/src/algorithms/edge-weighted-graph-bellman-ford.hpp project/src/entity/EdgeWeightedGraph.h project/src/entity/GasGraph.h project/src/entity/impl/EdgeWeightedGraph.cpp project/src/entity/impl/GasGraph.cpp)
+
+add_executable(main-bellman-ford ./project/src/algorithms/main-bellman-ford.cpp ${SOURCE_FILES_BELLMAN-FORD})

@@ -9,15 +9,15 @@
 #include "Graph.h"
 #include "../auxiliar/TreeNode.h"
 
-class DirectedTreeGraph : public Graph {
+class DirectedTreeGraph {
 public:
     DirectedTreeGraph(int vertexSize);
-    int getVertex() override;
-    bool adjacent(int vertexIndex1, int vertexIndex2) override;
-    void addEdge(int vertexIndex1, int vertexIndex2, long edgeCost) override;
-    std::vector<Edge> *getEdges() override;
-    long getTotalCost() override;
-    void resetSize(int newVerticesSize) override;
+    int getVertex() ;
+    bool adjacent(int vertexIndex1, int vertexIndex2) ;
+    void addEdge(int vertexIndex1, int vertexIndex2, long edgeCost) ;
+    std::vector<Edge> *getEdges() ;
+    long getTotalCost() ;
+    void resetSize(int newVerticesSize) ;
     int getIndex(int index);
 private:
     std::vector<TreeNode> vertices;

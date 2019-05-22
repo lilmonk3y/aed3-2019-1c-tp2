@@ -17,3 +17,5 @@ lib/googletest/googlemock/cmake_install.cmake
 lib/googletest/googlemock/gtest/
 lib/googletest/googlemock/libgmock.a
 lib/googletest/googlemock/libgmock_main.a
+lib/googletest/googlemock/libgmock_maind.a
+lib/googletest/googlemock/libgmockd.a

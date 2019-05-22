@@ -41,7 +41,7 @@ int AdjacencyListGraph::getVertex() {
 
 std::vector<Edge> *AdjacencyListGraph::getEdges() {
     std::vector<Edge> *edges = new std::vector<Edge>();
-    for(size_t vertex = 0; vertex < this->vertexAdjacents.size(); vertex++){
+    for(std::size_t vertex = 0; vertex < this->vertexAdjacents.size(); vertex++){
         for(auto iterator = this->vertexAdjacents.at(vertex).begin(); iterator != this->vertexAdjacents.at(vertex).end(); iterator++){
             Edge edge = Edge(vertex,(*iterator)->getVertex(),(*iterator)->getEdgeCost());
             if(! this->alreadyInserted(edges, &edge)){

@@ -11,7 +11,7 @@ AdjacencyListGraph::AdjacencyListGraph(int vertexAmount) {
 
 void AdjacencyListGraph::resetSize(int newVerticesSize) {
     this->vertexAdjacents = std::vector<std::list<AdjacencyNode*>>(newVerticesSize);
-    for(uint index = 0; index < this->vertexAdjacents.size(); index++){
+    for(std::size_t index = 0; index < this->vertexAdjacents.size(); index++){
         this->vertexAdjacents.at(index) = std::list<AdjacencyNode*>();
     }
 }

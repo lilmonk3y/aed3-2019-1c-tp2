@@ -1,7 +1,3 @@
-//
-// Created by Christian nahuel Rivera on 12/5/19.
-//
-
 #ifndef TYPES_H
 #define TYPES_H
 

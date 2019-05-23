@@ -28,8 +28,6 @@
 #include <istream>
 #include "../utils/types.h"
 
-using ulong = unsigned long;
-
 typedef struct s_Trip {
     uint destination; // vertex id
     ulong cost;
@@ -54,7 +52,7 @@ private:
     vector<ulong> gas;
     size_t cities;
 
-    void addEdges(uint city1, uint city2, ulong gasRequired, ulong gasPrice1, ulong gasPrice2);
+    void addEdges(uint originCity, uint destinationCity, ulong gasRequired, ulong gasPrice);
 };
 
 #endif

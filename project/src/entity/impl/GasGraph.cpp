@@ -3,15 +3,18 @@
 #include "../../algorithms/edge-weighted-graph-bellman-ford.hpp"
 #include <utility>
 
-void GasGraph::addEdges(uint city1, uint city2, ulong gasRequired,
-    ulong gasPrice1, ulong gasPrice2) {
+void GasGraph::addEdges(uint originCity, uint destinationCity, ulong gasRequired, ulong gasPrice) {
+  // There is one vertex for each initial charge of gas in the origin city and one vertex for each
+  // final gas charge in the destination city. These two vertices are connected with an edge only if
+  // the combination of initial and final gas is possible - taking into consideration the gas
+  // required to travel.
   for (ulong initialGas = 0; initialGas <= TANK_CAPACITY; ++initialGas) {
-    uint vertex1 = city1 + initialGas * cities;
+    uint vertex1 = originCity + initialGas * cities;
     ulong minimumRefill = gasRequired > initialGas ? gasRequired - initialGas : 0;
     for (ulong refill = minimumRefill; refill <= TANK_CAPACITY - initialGas; ++refill) {
-      ulong refillCost = refill * gasPrice1;
+      ulong refillCost = refill * gasPrice;
       ulong gasAfterTrip = initialGas + refill - gasRequired;
-      uint vertex2 = city2 + gasAfterTrip * cities;
+      uint vertex2 = destinationCity + gasAfterTrip * cities;
 
       adjacencyList[vertex1].push_back(Trip(vertex2, refillCost));
     }
@@ -46,8 +49,9 @@ GasGraph::GasGraph(istream& istream) {
     for (uint city2 = 0; city2 < cities; ++city2) {
       auto const * const edge = graph.getEdge(city1, city2);
       ulong gasRequired = edge != NULL ? edge->second : min[city1][city2];
-      addEdges(city1, city2, gasRequired, price[city1], price[city2]);
-      addEdges(city2, city1, gasRequired, price[city2], price[city1]);
+      if (gasRequired > TANK_CAPACITY) continue;
+      addEdges(city1, city2, gasRequired, price[city1]);
+      addEdges(city2, city1, gasRequired, price[city2]);
     }
   }
 }

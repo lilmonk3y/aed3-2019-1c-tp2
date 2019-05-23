@@ -13,6 +13,13 @@ set(SOURCE_FILES prueba_integracion_con_gtest/test/factorialTest.cpp prueba_inte
 add_executable(aed3_2019_1c_tp2 main.cpp ${SOURCE_FILES})
 target_link_libraries(aed3_2019_1c_tp2 gtest gtest_main)
 
-set(SOURCE_FILES_BELLMAN-FORD project/src/algorithms/gas-graph-bellman-ford.hpp project/src/algorithms/edge-weighted-graph-bellman-ford.hpp project/src/entity/EdgeWeightedGraph.h project/src/entity/GasGraph.h project/src/entity/impl/EdgeWeightedGraph.cpp project/src/entity/impl/GasGraph.cpp)
+set(SOURCE_FILES_BELLMAN-FORD
+        project/src/algorithms/gas-graph-bellman-ford.hpp
+        project/src/algorithms/edge-weighted-graph-bellman-ford.hpp
+        project/src/entity/EdgeWeightedGraph.h project/src/entity/GasGraph.h
+        project/src/entity/impl/EdgeWeightedGraph.cpp
+        project/src/entity/impl/GasGraph.cpp
+        project/src/algorithms/floyd-warshall.hpp
+        project/src/algorithms/main-floyd-warshall.cpp)
 
 add_executable(main-bellman-ford ./project/src/algorithms/main-bellman-ford.cpp ${SOURCE_FILES_BELLMAN-FORD})

@@ -3,6 +3,7 @@
 //
 
 #include "../AdjacencyListGraph.h"
+#include "../../../utils/types.h"
 
 AdjacencyListGraph::AdjacencyListGraph(int vertexAmount) {
     this->resetSize(vertexAmount);
@@ -10,7 +11,7 @@ AdjacencyListGraph::AdjacencyListGraph(int vertexAmount) {
 
 void AdjacencyListGraph::resetSize(int newVerticesSize) {
     this->vertexAdjacents = std::vector<std::list<AdjacencyNode*>>(newVerticesSize);
-    for(int index = 0; index < this->vertexAdjacents.size(); index++){
+    for(uint index = 0; index < this->vertexAdjacents.size(); index++){
         this->vertexAdjacents.at(index) = std::list<AdjacencyNode*>();
     }
 }

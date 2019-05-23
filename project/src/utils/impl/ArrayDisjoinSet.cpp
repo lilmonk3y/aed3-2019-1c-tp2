@@ -1,7 +1,7 @@
 //
 // Created by Christian nahuel Rivera on 12/5/19.
 //
-#include "../ArrayDisjoinSet.h"
+#include "../ArrayDisjoinSet.h" 
 
 void ArrayDisjoinSet::create(Graph *graph) {
     std::vector<int> components;

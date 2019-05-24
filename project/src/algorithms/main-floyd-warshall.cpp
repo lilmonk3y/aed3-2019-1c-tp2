@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int mainFloyd() {//Todo: Cambiar el main de bellman para evitar main duplicado
+int main() {//Todo: Cambiar el main de bellman para evitar main duplicado
   // Lectura de la entrada:
   GasGraph graph(cin);
 

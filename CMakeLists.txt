@@ -18,8 +18,17 @@ set(SOURCE_FILES_BELLMAN-FORD
         project/src/algorithms/edge-weighted-graph-bellman-ford.hpp
         project/src/entity/EdgeWeightedGraph.h project/src/entity/GasGraph.h
         project/src/entity/impl/EdgeWeightedGraph.cpp
+        project/src/entity/impl/GasGraph.cpp)
+
+add_executable(main-bellman-ford ./project/src/algorithms/main-bellman-ford.cpp ${SOURCE_FILES_BELLMAN-FORD})
+
+
+set(SOURCE_FILES_FLOYD-WARSHALL
+        project/src/entity/EdgeWeightedGraph.h project/src/entity/GasGraph.h
+        project/src/entity/impl/EdgeWeightedGraph.cpp
         project/src/entity/impl/GasGraph.cpp
         project/src/algorithms/floyd-warshall.hpp
         project/src/algorithms/main-floyd-warshall.cpp)
 
-add_executable(main-bellman-ford ./project/src/algorithms/main-bellman-ford.cpp ${SOURCE_FILES_BELLMAN-FORD})
+add_executable(main-floyd-warshall ./project/src/algorithms/main-floyd-warshall.cpp ${SOURCE_FILES_FLOYD-WARSHALL})
+

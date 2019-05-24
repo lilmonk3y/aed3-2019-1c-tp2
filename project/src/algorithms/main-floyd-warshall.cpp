@@ -3,6 +3,9 @@
 #include "../entity/GasGraph.h"
 #include "floyd-warshall.hpp"
 
+
+using namespace std;
+
 int mainFloyd() {//Todo: Cambiar el main de bellman para evitar main duplicado
   // Lectura de la entrada:
   GasGraph graph(cin);
@@ -17,4 +20,5 @@ int mainFloyd() {//Todo: Cambiar el main de bellman para evitar main duplicado
   		cout << endl;
   	}
   }
+  return 0;
 }

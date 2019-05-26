@@ -9,17 +9,23 @@
 #include "../utils/DisjoinSet.h"
 #include "../entity/core/AdjacencyListGraph.h"
 #include "../utils/ArrayDisjoinSet.h"
+#include "../utils/GetMST.h"
+#include <set>
+using namespace std;
 
 class SegmentationAlgorithm {
 public:
-    Graph * segmentateGraphImage(Graph *graph);
+    DisjoinSet& segmentateGraphImage(Graph& graph); // referencia
 
 private:
 
-    int minInternalDifference(int componentI, int componentJ);
-    int internalDifference(int component);
-    int tau(int component);
-    int cardinal(DisjoinSet* disjoinSet, int component);
+    static int minInternalDifference(DisjoinSet* disjoinSet,Graph* grafo,int componenteI, int componenteJ);
+    static int internalDifference(DisjoinSet* disjoinSet,int indiceDeComponente,Graph* grafo);
+    static set<int> construirComponente(DisjoinSet* disjoinSet, int componenteIndice, Graph* Imagegraph);
+    static int pesoMaximo(Graph* graph);
+    static int min(int a ,int b);
+    static int cardinal(DisjoinSet* disjoinSet, Graph* Imagegraph, int component);
+    static int tau(DisjoinSet* disjoinSet, Graph* Imagegraph, int component);
 };
 
 

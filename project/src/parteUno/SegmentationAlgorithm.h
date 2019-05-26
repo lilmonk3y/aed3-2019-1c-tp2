@@ -18,17 +18,17 @@ class SegmentationAlgorithm {
 public:
     //vector<vector<int> >& segmentate(Graph& graph); // grafo es la imagen hecha grafo con adyacencias
     //Graph& imageToGraph(vector<vector<int> >& imagen);
-    DisjoinSet& graphSementationIntoSets(Graph& graph); // referencia
+    DisjoinSet& graphSementationIntoSets(AdjacencyListGraph& graph); // referencia
 
 private:
     //DisjoinSet& graphSementationIntoSets(Graph& graph); // referencia
-    static int minInternalDifference(DisjoinSet* disjoinSet,Graph* grafo,int componenteI, int componenteJ);
-    static int internalDifference(DisjoinSet* disjoinSet,int indiceDeComponente,Graph* grafo);
-    static set<int> construirComponente(DisjoinSet* disjoinSet, int componenteIndice, Graph* Imagegraph);
+    static int minInternalDifference(DisjoinSet* disjoinSet,AdjacencyListGraph* grafo,int componenteI, int componenteJ);
+    static int internalDifference(DisjoinSet* disjoinSet,int indiceDeComponente,AdjacencyListGraph* grafo);
+    static set<int> construirComponente(DisjoinSet* disjoinSet, int componenteIndice,AdjacencyListGraph* Imagegraph);
     static int pesoMaximo(Graph* graph);
     static int min(int a ,int b);
-    static int cardinal(DisjoinSet* disjoinSet, Graph* Imagegraph, int component);
-    static int tau(DisjoinSet* disjoinSet, Graph* Imagegraph, int component);
+    static int cardinal(DisjoinSet* disjoinSet,AdjacencyListGraph* Imagegraph, int component);
+    static int tau(DisjoinSet* disjoinSet,AdjacencyListGraph* Imagegraph, int component);
 };
 
 

@@ -85,11 +85,11 @@ AdjacencyListGraph::~AdjacencyListGraph() {
 /// metodos nuevos que agregó axel:
 
 // para construir el subgrafo G'=(C,E), donde G=(V,E) y C incluido en E
-Graph* AdjacencyListGraph::adjacencyListInducedSubGraph(Graph* graph,set<int> componente) {
-    int cantidadVertices = graph.getVertex(); // cantidad vertices V
-    Graph* subGraph = new AdjacencyListGraph(cantidadVertices);// estructura vacia subgrafo
+AdjacencyListGraph* AdjacencyListGraph::adjacencyListInducedSubGraph(AdjacencyListGraph* graph,set<int> componente) {
+    int cantidadVertices = graph->getVertex(); // cantidad vertices V
+    AdjacencyListGraph* subGraph = new AdjacencyListGraph(cantidadVertices);// estructura vacia subgrafo
     // agregar solo ejes que inciden en los vertices de la componente:
-    vector<Edge> ejesG = *graph.getEdges(); // desrreferencio
+    vector<Edge> ejesG = *graph->getEdges(); // desrreferencio
     for(const auto& iter : ejesG) { // O(M), ver si usar getNeighbors
         int iVertex = iter.getLeftVertex();
         int jVertex = iter.getRigthVertex();

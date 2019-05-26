@@ -19,7 +19,7 @@ public:
     long getTotalCost();
     void resetSize(int newVerticesSize);
     set<int> getNeighbors(int indiceVertice);// metodo nuevo
-    static Graph* adjacencyListInducedSubGraph(Graph* graph,set<int> componente);// metodo nuevo
+    static AdjacencyListGraph* adjacencyListInducedSubGraph(AdjacencyListGraph* graph,set<int> componente);// metodo nuevo
     ~AdjacencyListGraph();
 private:
     std::vector<std::list<AdjacencyNode*>> vertexAdjacents;

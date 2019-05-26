@@ -11,14 +11,17 @@
 #include "../utils/ArrayDisjoinSet.h"
 #include "../utils/GetMST.h"
 #include <set>
+#include <map>
 using namespace std;
 
 class SegmentationAlgorithm {
 public:
-    DisjoinSet& segmentateGraphImage(Graph& graph); // referencia
+    //vector<vector<int> >& segmentate(Graph& graph); // grafo es la imagen hecha grafo con adyacencias
+    //Graph& imageToGraph(vector<vector<int> >& imagen);
+    DisjoinSet& graphSementationIntoSets(Graph& graph); // referencia
 
 private:
-
+    //DisjoinSet& graphSementationIntoSets(Graph& graph); // referencia
     static int minInternalDifference(DisjoinSet* disjoinSet,Graph* grafo,int componenteI, int componenteJ);
     static int internalDifference(DisjoinSet* disjoinSet,int indiceDeComponente,Graph* grafo);
     static set<int> construirComponente(DisjoinSet* disjoinSet, int componenteIndice, Graph* Imagegraph);

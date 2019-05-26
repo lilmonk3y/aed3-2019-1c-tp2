@@ -5,7 +5,7 @@
 #include "SegmentationAlgorithm.h"
 #include <set>
 
-DisjoinSet& SegmentationAlgorithm::segmentateGraphImage(Graph& graph) {
+DisjoinSet& SegmentationAlgorithm::graphSementationIntoSets(Graph& graph) {
     Graph* grafo = new AdjacencyListGraph(graph.getVertex());
     DisjoinSet* disjoinSet;
     disjoinSet->create(&graph); // crear lista de conjuntos disjunto del grafo
@@ -90,3 +90,10 @@ int SegmentationAlgorithm::pesoMaximo(Graph* graph) {
     }
     return pesoMaximo;
 }
+
+/*
+Graph& imageToGraph(vector<vector<int> >& imagen) {
+    for(auto pixel:imagen) {
+
+    }
+}*/

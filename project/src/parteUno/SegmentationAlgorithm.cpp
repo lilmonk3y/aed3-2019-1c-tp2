@@ -5,8 +5,8 @@
 #include "SegmentationAlgorithm.h"
 #include <set>
 
-DisjoinSet& SegmentationAlgorithm::graphSementationIntoSets(Graph& graph) {
-    Graph* grafo = new AdjacencyListGraph(graph.getVertex());
+DisjoinSet& SegmentationAlgorithm::graphSementationIntoSets(AdjacencyListGraph& graph) {
+    AdjacencyListGraph* grafo = new AdjacencyListGraph(graph.getVertex());
     DisjoinSet* disjoinSet;
     disjoinSet->create(&graph); // crear lista de conjuntos disjunto del grafo
     std::vector<Edge>* edges = graph.getEdges(); // obtener E de G=(V,E)
@@ -23,20 +23,20 @@ DisjoinSet& SegmentationAlgorithm::graphSementationIntoSets(Graph& graph) {
     return *disjoinSet;
 }
 
-int SegmentationAlgorithm::minInternalDifference(DisjoinSet* disjoinSet,Graph* grafo,int componenteI, int componenteJ) {
+int SegmentationAlgorithm::minInternalDifference(DisjoinSet* disjoinSet,AdjacencyListGraph* grafo,int componenteI, int componenteJ) {
     int difCompI = internalDifference(disjoinSet,componenteI,grafo) + tau(disjoinSet, grafo, componenteI) ;
     int difCompJ = internalDifference(disjoinSet,componenteJ,grafo) + tau(disjoinSet, grafo, componenteJ) ;
     return min(difCompI , difCompJ);
 }
 
 // implementar max(conjuntoDeLosPesos, eso solo
-int SegmentationAlgorithm::internalDifference(DisjoinSet* disjoinSet,int indiceDeComponente,Graph* grafo) {
+int SegmentationAlgorithm::internalDifference(DisjoinSet* disjoinSet,int indiceDeComponente,AdjacencyListGraph* grafo) {
     set<int> componente = construirComponente(disjoinSet,indiceDeComponente,grafo); // ok
 
     Graph* subGrafoComponente = AdjacencyListGraph::adjacencyListInducedSubGraph(grafo,componente);// G=(C,E)
 
     GetMST kruskal = GetMST(new ArrayDisjoinSet());// elijo la estrategia del disjoint set
-    Graph* arbolRecubridorMinimoDeLaComponente = kruskal.getMST(subGrafoComponente);
+    Graph* arbolRecubridorMinimoDeLaComponente = kruskal.getMST(subGrafoComponente); // type AdjacencyListGraph
 
     return pesoMaximo(arbolRecubridorMinimoDeLaComponente);
 }
@@ -44,7 +44,7 @@ int SegmentationAlgorithm::internalDifference(DisjoinSet* disjoinSet,int indiceD
 // esto lo deberia hacer el disjoint set, reconstruir un conjunto disjunto
 // queda desprolijo el imageGraph
 // esto esta bien implementado:
-set<int> SegmentationAlgorithm::construirComponente(DisjoinSet* disjoinSet, int indiceDeComponente, Graph* Imagegraph) {
+set<int> SegmentationAlgorithm::construirComponente(DisjoinSet* disjoinSet, int indiceDeComponente, AdjacencyListGraph* Imagegraph) {
     std::set<int>  componenteVertices;
     int quantityVertex = Imagegraph->getVertex(); // cantidad de vertices
     for(int indexVertex=1; indexVertex <= quantityVertex; indexVertex++) {
@@ -55,14 +55,14 @@ set<int> SegmentationAlgorithm::construirComponente(DisjoinSet* disjoinSet, int 
     return componenteVertices;
 }
 
-int SegmentationAlgorithm::tau(DisjoinSet* disjoinSet, Graph* Imagegraph, int component) {
+int SegmentationAlgorithm::tau(DisjoinSet* disjoinSet,AdjacencyListGraph* Imagegraph, int component) {
     int k = 2; // eso se setea a mano
     return k/cardinal(disjoinSet,Imagegraph,component);
 }
 
 // no deberia implementarse esto aca, sino dentro del disjoint set
 // Graph se usa solo para el cardinal de vertices
-int SegmentationAlgorithm::cardinal(DisjoinSet* disjoinSet, Graph* Imagegraph, int component) {
+int SegmentationAlgorithm::cardinal(DisjoinSet* disjoinSet,AdjacencyListGraph* Imagegraph, int component) {
     int quantityVertex = Imagegraph->getVertex();
     int cardinal = 0;
     for(int indexVertex=1; indexVertex<=quantityVertex; indexVertex++) {

@@ -6,8 +6,9 @@
 #include <set>
 #include <iostream>
 
-SegmentationAlgorithm::SegmentationAlgorithm(AdjacencyListGraph* graph) {
+SegmentationAlgorithm::SegmentationAlgorithm(AdjacencyListGraph* graph, int scale) {
    this->grafo = graph;
+   this->scaleProportion = scale;
 }
 
 
@@ -68,7 +69,7 @@ set<int> SegmentationAlgorithm::construirComponente(DisjoinSet* disjoinSet, int 
 }
 
 int SegmentationAlgorithm::tau(DisjoinSet* disjoinSet, int component) {
-    int k = 2; // eso se setea a mano
+    int k = this->scaleProportion; // eso se setea a mano
     return k/cardinal(disjoinSet,component);
 }
 

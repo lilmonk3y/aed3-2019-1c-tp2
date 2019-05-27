@@ -16,11 +16,12 @@ using namespace std;
 
 class SegmentationAlgorithm {
 public:
-    SegmentationAlgorithm(AdjacencyListGraph* graph); // introducir imagen y genera adyacencias
+    SegmentationAlgorithm(AdjacencyListGraph* graph,int scale); // introducir imagen y genera adyacencias
     DisjoinSet* graphSementationIntoSets(); // referencia
 
 private:
     AdjacencyListGraph* grafo;
+    int scaleProportion;
     //DisjoinSet& graphSementationIntoSets(Graph& graph); // referencia
     int minInternalDifference(DisjoinSet* disjoinSet,int componenteI, int componenteJ);
     int internalDifference(DisjoinSet* disjoinSet,int indiceDeComponente);

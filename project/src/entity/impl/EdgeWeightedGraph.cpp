@@ -11,7 +11,7 @@ EdgeWeightedGraph::EdgeWeightedGraph(size_t vertices, size_t edges, istream& ist
   }
 };
 
-// Prerequisite: v < getNumberOfVertices() and u < getNumberOfVertices()
+// Prerequisite: vertex1, vertex2 < getAdjacencyList().size()
 pair<uint, ulong> const * const EdgeWeightedGraph::getEdge(uint vertex1, uint vertex2) const {
   for (const pair<uint, ulong>& edge : adjacencyList[vertex1]) {
     if (edge.first == vertex2) return &edge;
@@ -19,7 +19,6 @@ pair<uint, ulong> const * const EdgeWeightedGraph::getEdge(uint vertex1, uint ve
   return NULL;
 }
 
-// Prerequisite: v < getNumberOfVertices()
 const vector<vector<pair<uint, ulong>>>& EdgeWeightedGraph::getAdjacencyList() const {
   return adjacencyList;
 }

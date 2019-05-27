@@ -46,9 +46,9 @@ GasGraph::GasGraph(istream& istream, ulong tankCapacity) : tankCapacity(tankCapa
 
   adjacencyList.resize(getVertices());
 
-  for (uint city1 = 0; city1 < cities; ++city1) {
-    for (uint city2 = 0; city2 < cities; ++city2) {
-      auto const * const edge = graph.getEdge(city1, city2);
+  for (uint city1 = 0; city1 < cities - 1; ++city1) {
+    for (uint city2 = city1 + 1; city2 < cities; ++city2) {
+      const auto& edge = graph.getEdge(city1, city2);
       ulong gasRequired = edge != NULL ? edge->second : min[city1][city2];
       if (gasRequired > tankCapacity) continue;
       addEdges(city1, city2, gasRequired, price[city1], price[city2]);

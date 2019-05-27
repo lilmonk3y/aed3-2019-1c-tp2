@@ -21,7 +21,10 @@ void dijkstraFIFO(const GasGraph& graph, uint originCity, vector<ulong>& realMin
   costs.push(make_tuple(0, originCity));
   uint i; // vertex i
   ulong cost_i;
-  for (tie(cost_i, i) = costs.front(); not costs.empty(); costs.pop()) {
+  while (not costs.empty()) {
+    tie(cost_i, i) = costs.front();
+    costs.pop();
+    
     if (cost_i > minCost[i]) continue;
 
     for (const auto& edge_ij : graph.getNeighbors(i)) {

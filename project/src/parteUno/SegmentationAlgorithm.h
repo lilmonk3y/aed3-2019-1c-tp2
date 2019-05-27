@@ -16,19 +16,21 @@ using namespace std;
 
 class SegmentationAlgorithm {
 public:
-    //vector<vector<int> >& segmentate(Graph& graph); // grafo es la imagen hecha grafo con adyacencias
-    //Graph& imageToGraph(vector<vector<int> >& imagen);
-    DisjoinSet& graphSementationIntoSets(AdjacencyListGraph& graph); // referencia
+    SegmentationAlgorithm(AdjacencyListGraph* graph); // introducir imagen y genera adyacencias
+    DisjoinSet* graphSementationIntoSets(); // referencia
 
 private:
+    AdjacencyListGraph* grafo;
     //DisjoinSet& graphSementationIntoSets(Graph& graph); // referencia
-    static int minInternalDifference(DisjoinSet* disjoinSet,AdjacencyListGraph* grafo,int componenteI, int componenteJ);
-    static int internalDifference(DisjoinSet* disjoinSet,int indiceDeComponente,AdjacencyListGraph* grafo);
-    static set<int> construirComponente(DisjoinSet* disjoinSet, int componenteIndice,AdjacencyListGraph* Imagegraph);
-    static int pesoMaximo(Graph* graph);
-    static int min(int a ,int b);
-    static int cardinal(DisjoinSet* disjoinSet,AdjacencyListGraph* Imagegraph, int component);
-    static int tau(DisjoinSet* disjoinSet,AdjacencyListGraph* Imagegraph, int component);
+    int minInternalDifference(DisjoinSet* disjoinSet,int componenteI, int componenteJ);
+    int internalDifference(DisjoinSet* disjoinSet,int indiceDeComponente);
+    set<int> construirComponente(DisjoinSet* disjoinSet, int componenteIndice);
+    int pesoMaximo(Graph* graph);
+    int min(int a ,int b);
+    int cardinal(DisjoinSet* disjoinSet, int component);
+    int tau(DisjoinSet* disjoinSet,int component);
+    //vector<vector<int> >& segmentate(Graph& graph); // grafo es la imagen hecha grafo con adyacencias
+    //Graph& imageToGraph(vector<vector<int> >& imagen);
 };
 
 

@@ -12,7 +12,7 @@ struct SegmentationAlgorithmTest : testing::Test{
     SegmentationAlgorithm* segmentationAlgorithm;
 
     SegmentationAlgorithmTest(){
-        AdjacencyListGraph* grafo =  new AdjacencyListGraph(4);
+        AdjacencyListGraph* grafo =  new AdjacencyListGraph(1);
         segmentationAlgorithm = new SegmentationAlgorithm(grafo);
     }
 

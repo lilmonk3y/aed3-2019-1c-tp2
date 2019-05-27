@@ -137,7 +137,42 @@ TEST_F(SegmentationAlgorithmTest, matrizImagenAGrafoPesosTest){
     cout << imageGraph->getTotalCost() << endl;
     int sumValues = 100+100+70+100+100+100+50+100; // vertex 100
     sumValues = sumValues + 30+30; // vertex 30 (70 ya esta en la linea anterior)
-    sumValues = sumValues + 50+50+50+50+50+50+50;
+    sumValues = sumValues + 50+50+50+50+50+50+50; // valores asociado al vertice 50
 
     ASSERT_TRUE(imageGraph->getTotalCost()==sumValues); // no sabe que estoy agregando el mismo eje muchas veces
+}
+
+TEST_F(SegmentationAlgorithmTest, sumaDePesosCorrecta){
+    vector<vector<int> > imagen;
+
+    vector<int> fila0 = {0,0,0};
+    vector<int> fila1 = {0,1,0};
+    vector<int> fila2 = {0,0,0};
+    vector<int> fila3 = {0,0,0};
+    imagen = {fila0,fila1,fila2,fila3};
+    int ancho =3;
+    int alto =4;
+
+    AdjacencyListGraph* imageGraph = segmentationAlgorithm->imageToGraph(&imagen,ancho,alto);
+
+    ASSERT_TRUE(imageGraph->getVertex()==12); // cantidad de vertices
+    ASSERT_TRUE(imageGraph->getTotalCost()==8);
+    ASSERT_TRUE(imageGraph->getEdges()->size()==29); // todos los ejes que hay
+}
+
+TEST_F(SegmentationAlgorithmTest, sumaDePesosCorrectaOtroTest){
+    vector<vector<int> > imagen;
+
+    vector<int> fila0 = {0,0,0};
+    vector<int> fila1 = {0,1,0};
+    vector<int> fila2 = {0,0,2};
+    imagen = {fila0,fila1,fila2};
+    int ancho =3;
+    int alto =3;
+
+    AdjacencyListGraph* imageGraph = segmentationAlgorithm->imageToGraph(&imagen,ancho,alto);
+
+    ASSERT_TRUE(imageGraph->getVertex()==9); // cantidad de vertices
+    ASSERT_TRUE(imageGraph->getTotalCost()==7+1+2+2);
+    ASSERT_TRUE(imageGraph->getEdges()->size()==20); // todos los ejes que hay
 }

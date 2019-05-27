@@ -46,6 +46,7 @@ public:
     uint getCity(uint vertex) const;
     uint getTankCapacity() const;
     uint getVertex(uint city, ulong gasCharge) const;
+    uint getGasCharge(uint vertex) const;
 
 private:
     vector<vector<Edge>> adjacencyList;

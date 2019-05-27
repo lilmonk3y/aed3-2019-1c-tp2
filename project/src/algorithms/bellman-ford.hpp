@@ -8,44 +8,38 @@
 
 using namespace std;
 
-namespace bellmanFord {
-  void bellmanFord(const GasGraph& graph, uint sourceVertex, vector<ulong>& realMin) {
-    vector<bool> changed(graph.getVertices(), false);
-    changed[sourceVertex] = true;
+void bellmanFord(const GasGraph& graph, uint originCity, vector<ulong>& cityMinCost,
+    ulong initialGasCharge, ulong finalGasCharge) {
+  vector<bool> changed(graph.getVertices(), false);
+  changed[graph.getVertex(originCity, initialGasCharge)] = true;
 
-    vector<ulong> min(graph.getVertices(), infinity);
-    vector<ulong> minVertex(graph.getVertices(), infinity);
-    for (uint i = sourceVertex; i < graph.getVertices(); i+=graph.getCities()) min[i] = 0;
+  vector<ulong> minCost(graph.getVertices(), infinity);
+  for (ulong charge = 0; charge <= graph.getTankCapacity(); ++charge)
+    minCost[graph.getVertex(originCity, charge)] = 0;
 
-    realMin.assign(graph.getCities(), infinity);
-    realMin[sourceVertex] = 0;
+  cityMinCost.assign(graph.getCities(), infinity);
+  cityMinCost[originCity] = 0;
 
-    bool anyChange = true;
-    const uint lastVertex = graph.getVertices() - 1;
+  bool anyChange = true;
 
-    for(uint i = 0; i < graph.getVertices() and anyChange; ++i) {
-      anyChange = false;
-      for(uint vertex = 0; vertex <= lastVertex; ++vertex) {
-        if(not changed[vertex]) continue;
-        changed[vertex] = false;
-        for(const GasGraph::Edge& trip : graph.getNeighbors(vertex)) {
+  for (uint repetition = 0; repetition < graph.getVertices() and anyChange; ++repetition) {
+    anyChange = false;
+    for (uint vertex_i = 0; vertex_i < graph.getVertices(); ++vertex_i) {
+      if (changed[vertex_i]) {
+        changed[vertex_i] = false;
+        for(const GasGraph::Edge& edge_ij : graph.getNeighbors(vertex_i)) {
+          uint vertex_j = edge_ij.destination;
 
-          if(min[vertex] + trip.cost < min[trip.destination]) {
-            changed[trip.destination] = anyChange = true;
-            min[trip.destination] = min[vertex] + trip.cost;
-            min[trip.destination] = min[vertex] + trip.cost;
+          if (minCost[vertex_j] > minCost[vertex_i] + edge_ij.cost) {
+            minCost[vertex_j] = minCost[vertex_i] + edge_ij.cost;
+            changed[vertex_j] = anyChange = true;
 
-            uint city = graph.getCity(trip.destination);
-            if (min[trip.destination] < realMin[city]) realMin[city] = min[trip.destination];
+            if (graph.getGasCharge(vertex_j) == finalGasCharge)
+              cityMinCost[graph.getCity(vertex_j)] = minCost[vertex_j];
           }
         }
       }
     }
-
-    /*cout << "origen\tdestino\tcarga final\tcosto\n";
-    for (uint i = 0; i < graph.getVertices(); ++i) {
-      cout << sourceVertex << "\t" << graph.getCity(i) << "\t" << i/graph.getCities() << "\t\t" << min[i] << "\n";
-    }*/
   }
 }
 

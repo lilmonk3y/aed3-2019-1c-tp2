@@ -82,3 +82,8 @@ uint GasGraph::getTankCapacity() const {
 uint GasGraph::getVertex(uint vertex, ulong gasCharge) const {
   return getCity(vertex) + gasCharge * cities;
 }
+
+// Prerequisite: vertex < getVertices()
+uint GasGraph::getGasCharge(uint vertex) const {
+  return vertex / cities;
+}

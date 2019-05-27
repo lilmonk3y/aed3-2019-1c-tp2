@@ -5,7 +5,8 @@
 
 using namespace std;
 
-void floydWarshall(const GasGraph& graph, vector<vector<ulong>>& cityMinCost){
+void floydWarshall(const GasGraph& graph, vector<vector<ulong>>& cityMinCost,
+    ulong initialGasCharge, ulong finalGasCharge) {
   vector<vector<ulong>> minCost(graph.getVertices());
   for (uint vertex_i = 0; vertex_i < graph.getVertices(); ++vertex_i) {
     minCost[vertex_i].assign(graph.getVertices(), infinity);
@@ -28,11 +29,10 @@ void floydWarshall(const GasGraph& graph, vector<vector<ulong>>& cityMinCost){
       for (uint j = 0; j < graph.getVertices(); ++j) {
         if (minCost[i][j] >= minCost[i][k] + minCost[k][j]) {
           minCost[i][j] = minCost[i][k] + minCost[k][j];
-          uint origin = graph.getCity(i),
-               destination = graph.getCity(j);
-          if (i == origin and minCost[i][j] < cityMinCost[origin][destination]) {
-            cityMinCost[origin][destination] = minCost[i][j];
-          }
+
+          if (graph.getGasCharge(i) == initialGasCharge and
+              graph.getGasCharge(j) == finalGasCharge)
+            cityMinCost[graph.getCity(i)][graph.getCity(j)] = minCost[i][j];
         }
       }
     }

@@ -15,13 +15,15 @@ void floydWarshall(const GasGraph& graph, vector< vector<ulong> >& D, vector< ve
     for (const auto& edge : graph.getNeighbors(vertex)) {
       //if (edge.destination < vertex) continue;
       D[vertex][edge.destination] = edge.cost;
-      cout << "D ij: " << D[vertex][edge.destination] << "--- Vertex: " << vertex << "-- edgedestination: " << edge.destination  << endl;
-
     }
   }
 
   for(uint v = 0; v < graph.getVertices(); ++v){
     D[v][v] = 0;
+  }
+
+  for(uint city = 0; city < graph.getCities(); ++city){
+    R[city][city] = 0;
   }
   
   //Algoritmo de Floyd-Warshall
@@ -32,10 +34,8 @@ void floydWarshall(const GasGraph& graph, vector< vector<ulong> >& D, vector< ve
                   D[i][j] = D[i][k] + D[k][j];
                   uint origin = i % graph.getCities();
                   uint destination = j % graph.getCities();
-                  cout << "i: " << i << " j: " << j << " Origin: " << origin << " destination: " << destination << " Dij: " << D[i][j] << endl;
-                  if(D[i][j] < R[origin][destination] and origin != destination){
+                  if(i == origin and D[i][j] < R[origin][destination] and origin != destination){
                       R[origin][destination] = D[i][j];
-                      cout << "R o d: " << R[origin][destination] << endl;
                   }
               }
           }

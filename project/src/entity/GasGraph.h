@@ -45,6 +45,7 @@ public:
     const vector<Trip>& getNeighbors(uint vertex) const;
     uint getCity(uint vertex) const;
     uint getTankCapacity() const;
+    uint getVertex(uint city, uint gasCharge) const;
 
 private:
     vector<vector<Trip>> adjacencyList;

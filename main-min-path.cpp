@@ -8,6 +8,7 @@
 using namespace std;
 
 #define TANK_CAPACITY 60
+#define INITIAL_GAS_CHARGE 0
 
 typedef void f_minCostOneToMany_t (const GasGraph&, uint, vector<ulong>&);
 
@@ -42,7 +43,7 @@ int main(int argc, char* argv[]) {
     else if (algorithm == "bf") f_algorithm = bellmanFord::bellmanFord;
 
     for(uint originCity = 0; originCity < graph.getCities(); ++originCity) {
-      f_algorithm(graph, originCity + 0*(graph.getTankCapacity()+1), min);
+      f_algorithm(graph, graph.getVertex(originCity, INITIAL_GAS_CHARGE), min);
 
       for (uint destCity = 0; destCity < graph.getCities(); ++destCity) {
         cout << originCity << " " << destCity << " " << min[destCity] << endl;
@@ -51,11 +52,12 @@ int main(int argc, char* argv[]) {
   } else if (algorithm == "fw") {
     // Many-to-many algorithms:
 
-    vector<vector<ulong>> min;
-    floydWarshall(graph, min);
+    vector<vector<ulong>> D;  //Matriz de pesos
+    vector<vector<ulong>> R; //Matríz de resultado
+    floydWarshall(graph, D, R);
     for (uint originCity = 0; originCity < graph.getCities(); ++originCity) {
       for (uint destCity = 0; destCity < graph.getCities(); ++destCity) {
-        cout << originCity << " " << destCity << " " << min[originCity][destCity] << endl;
+        cout << originCity << " " << destCity << " " << R[originCity][destCity] << endl;
       }
     }
   } else {

@@ -28,7 +28,7 @@ void dijkstraFIFO(const GasGraph& graph, uint originCity, vector<ulong>& realMin
       uint j = edge_ij.destination;
       ulong cost_j = minCost[i] + edge_ij.cost;
 
-      if (cost_j <= minCost[j]) {
+      if (cost_j < minCost[j]) {
         minCost[j] = cost_j;
         costs.push(make_tuple(cost_j, j));
 
@@ -46,6 +46,3 @@ void dijkstraFIFO(const GasGraph& graph, uint originCity, vector<ulong>& realMin
 
 
 #endif
-
-
-int i[5];

@@ -101,3 +101,38 @@ TEST_F(SegmentationAlgorithmTest, image3x3pixelsWith3Areas){
     ASSERT_TRUE(disjointSet->find(3) != disjointSet->find(6) );
     ASSERT_TRUE(disjointSet->find(4) != disjointSet->find(1) );
 }
+
+
+TEST_F(SegmentationAlgorithmTest, matrizImagenAGrafo){
+    vector<vector<int> > imagen;
+
+    vector<int> fila0 = {0,0,0};
+    vector<int> fila1 = {0,0,0};
+    vector<int> fila2 = {0,0,0};
+    vector<int> fila3 = {0,0,0};
+    imagen = {fila0,fila1,fila2,fila3};
+    int ancho =3;
+    int alto =4;
+
+    AdjacencyListGraph* imageGraph = segmentationAlgorithm->imageToGraph(&imagen,ancho,alto);
+
+    ASSERT_TRUE(imageGraph->getVertex()==12); // cantidad de vertices
+    ASSERT_TRUE(imageGraph->getTotalCost()==0);
+    ASSERT_TRUE(imageGraph->getEdges()->size()==29); // todos los ejes que hay
+}
+
+TEST_F(SegmentationAlgorithmTest, matrizImagenAGrafoPesosTest){
+    vector<vector<int> > imagen;
+
+    vector<int> fila0 = {0,0,30};
+    vector<int> fila1 = {0,100,0};
+    vector<int> fila2 = {0,50,0};
+    vector<int> fila3 = {0,0,0};
+    imagen = {fila0,fila1,fila2,fila3};
+    int ancho =3;
+    int alto =4;
+
+    AdjacencyListGraph* imageGraph = segmentationAlgorithm->imageToGraph(&imagen,ancho,alto);
+    ASSERT_TRUE(imageGraph->getVertex()==12);
+    ASSERT_TRUE(imageGraph->getTotalCost()==(50+30)); // no sabe que estoy agregando el mismo eje muchas veces
+}

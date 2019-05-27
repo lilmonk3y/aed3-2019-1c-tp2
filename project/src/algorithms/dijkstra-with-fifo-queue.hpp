@@ -10,7 +10,7 @@
 
 using namespace std;
 
-void dijkstraFIFO(const GasGraph& graph, uint originCity, vector<ulong>& realMin) {
+void dijkstraFifoQueue(const GasGraph& graph, uint originCity, vector<ulong>& realMin) {
   vector<ulong> minCost(graph.getVertices(), infinity);
   for (uint i = originCity; i < graph.getVertices(); i += graph.getCities()) minCost[i] = 0;
   
@@ -24,7 +24,7 @@ void dijkstraFIFO(const GasGraph& graph, uint originCity, vector<ulong>& realMin
   while (not costs.empty()) {
     tie(cost_i, i) = costs.front();
     costs.pop();
-    
+
     if (cost_i > minCost[i]) continue;
 
     for (const auto& edge_ij : graph.getNeighbors(i)) {

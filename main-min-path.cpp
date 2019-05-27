@@ -1,9 +1,10 @@
 #include <iostream>
 #include <vector>
 #include "project/src/entity/GasGraph.h"
-#include "project/src/algorithms/gas-graph-dijkstra-with-fifo-queue.hpp"
+#include "project/src/algorithms/dijkstra-with-fifo-queue.hpp"
+#include "project/src/algorithms/dijkstra-with-priority-queue.hpp"
 #include "project/src/algorithms/floyd-warshall.hpp"
-#include "project/src/algorithms/gas-graph-bellman-ford.hpp"
+#include "project/src/algorithms/bellman-ford.hpp"
 
 using namespace std;
 
@@ -38,8 +39,8 @@ int main(int argc, char* argv[]) {
 
     vector<ulong> min;
     f_minCostOneToMany_t* f_algorithm;
-    if (algorithm == "df") f_algorithm = dijkstraFIFO;
-    else if (algorithm == "dp") f_algorithm = NULL;
+    if (algorithm == "df") f_algorithm = dijkstraFifoQueue;
+    else if (algorithm == "dp") f_algorithm = dijkstraPriorityQueue;
     else if (algorithm == "bf") f_algorithm = bellmanFord::bellmanFord;
 
     for(uint originCity = 0; originCity < graph.getCities(); ++originCity) {

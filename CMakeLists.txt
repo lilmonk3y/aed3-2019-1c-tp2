@@ -41,8 +41,9 @@ add_executable(aed3_2019_1c_tp2 main.cpp ${SOURCE_FILES})
 target_link_libraries(aed3_2019_1c_tp2 gtest gtest_main)
 
 set(SOURCE_FILES_MIN_PATH
-    project/src/algorithms/gas-graph-bellman-ford.hpp
-    project/src/algorithms/gas-graph-dijkstra-with-fifo-queue.hpp
+    project/src/algorithms/bellman-ford.hpp
+    project/src/algorithms/dijkstra-with-fifo-queue.hpp
+    project/src/algorithms/dijkstra-with-priority-queue.hpp
     project/src/algorithms/floyd-warshall.hpp
     project/src/algorithms/edge-weighted-graph-bellman-ford.hpp
     project/src/entity/EdgeWeightedGraph.h

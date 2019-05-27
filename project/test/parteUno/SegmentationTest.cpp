@@ -25,6 +25,26 @@ struct SegmentationAlgorithmTest : testing::Test{
 
 TEST_F(SegmentationAlgorithmTest, simpleSegmentationWorks){
     AdjacencyListGraph* grafo =  new AdjacencyListGraph(4);
+    grafo->addEdge(0, 1, 2);
+    grafo->addEdge(1, 2, 180);
+    grafo->addEdge(2, 3, 160);
+    grafo->addEdge(3, 1, 200);
+
+
+    int segmentationScale = 2; // con 1 falla,con 100 anda bien, con 1000 falla
+    segmentationAlgorithm = new SegmentationAlgorithm(grafo,segmentationScale);
+    DisjoinSet* disjointSet = segmentationAlgorithm->graphSementationIntoSets();
+
+    ASSERT_TRUE(disjointSet->find(0) == disjointSet->find(1) );
+    ASSERT_TRUE(disjointSet->find(1) != disjointSet->find(2) &&  disjointSet->find(2) != disjointSet->find(3));
+}
+
+TEST_F(SegmentationAlgorithmTest, image3x3pixelsWith3Areas){
+    AdjacencyListGraph* grafo =  new AdjacencyListGraph(9);
+
+
+    // 20 aristas:
+
     //0:
     grafo->addEdge(0, 1, 174);
     grafo->addEdge(0, 3, 5);
@@ -61,19 +81,7 @@ TEST_F(SegmentationAlgorithmTest, simpleSegmentationWorks){
     //8:
     grafo->addEdge(8,4 , 160);
 
-    int segmentationScale = 2; // con 1 falla,con 100 anda bien, con 1000 falla
-    segmentationAlgorithm = new SegmentationAlgorithm(grafo,segmentationScale);
-    DisjoinSet* disjointSet = segmentationAlgorithm->graphSementationIntoSets();
-
-    ASSERT_TRUE(disjointSet->find(0) == disjointSet->find(1) );
-    ASSERT_TRUE(disjointSet->find(1) != disjointSet->find(2) &&  disjointSet->find(2) != disjointSet->find(3));
-}
-
-TEST_F(SegmentationAlgorithmTest, image3x3pixelsWith3Areas){
-    AdjacencyListGraph* grafo =  new AdjacencyListGraph(9);
-    grafo->addEdge(0, 1, 2);
-
-    int segmentationScale = 2; // con 1 falla,con 100 anda bien, con 1000 falla
+    int segmentationScale = 2;
     segmentationAlgorithm = new SegmentationAlgorithm(grafo,segmentationScale);
     DisjoinSet* disjointSet = segmentationAlgorithm->graphSementationIntoSets();
 

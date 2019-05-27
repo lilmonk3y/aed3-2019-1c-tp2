@@ -81,7 +81,8 @@ TEST_F(SegmentationAlgorithmTest, image3x3pixelsWith3Areas){
     //8:
     grafo->addEdge(8,4 , 160);
 
-    int segmentationScale = 200; // esto es la diferencia entre componentes visto generalmente
+    int segmentationScale = 50; // esto es la diferencia minima entre componentes para diferenciarse 50 anda bien
+    // 199 se rompe
     segmentationAlgorithm = new SegmentationAlgorithm(grafo,segmentationScale);
     DisjoinSet* disjointSet = segmentationAlgorithm->graphSementationIntoSets();
 
@@ -93,4 +94,10 @@ TEST_F(SegmentationAlgorithmTest, image3x3pixelsWith3Areas){
     ASSERT_TRUE(disjointSet->find(6) == disjointSet->find(7) );
 
     ASSERT_TRUE(disjointSet->find(5) == disjointSet->find(8) );
+
+    ASSERT_TRUE(disjointSet->find(0) != disjointSet->find(1) );
+    ASSERT_TRUE(disjointSet->find(2) != disjointSet->find(5) );
+    ASSERT_TRUE(disjointSet->find(8) != disjointSet->find(7) );
+    ASSERT_TRUE(disjointSet->find(3) != disjointSet->find(6) );
+    ASSERT_TRUE(disjointSet->find(4) != disjointSet->find(1) );
 }

@@ -9,14 +9,15 @@ void GasGraph::addEdges(uint city1, uint city2, ulong gasRequired, ulong gasPric
   // the combination of initial and final gas is possible - taking into consideration the gas
   // required to travel.
   for (ulong initialGas = 0; initialGas <= tankCapacity; ++initialGas) {
-    uint offsetOrigin = initialGas * cities;
     ulong minimumRefill = gasRequired > initialGas ? gasRequired - initialGas : 0;
     for (ulong refill = minimumRefill; refill <= tankCapacity - initialGas; ++refill) {
       ulong gasAfterTrip = initialGas + refill - gasRequired;
-      uint offsetDest = gasAfterTrip * cities;
-
-      adjacencyList[city1 + offsetOrigin].push_back(Trip(city2 + offsetDest, refill * gasPrice1));
-      adjacencyList[city2 + offsetOrigin].push_back(Trip(city1 + offsetDest, refill * gasPrice2));
+      
+      adjacencyList[getVertex(city1, initialGas)].push_back(
+        Edge(getVertex(city2, gasAfterTrip), refill * gasPrice1));
+      
+      adjacencyList[getVertex(city2, initialGas)].push_back(
+        Edge(getVertex(city1, gasAfterTrip), refill * gasPrice2));
     }
   }
 }
@@ -60,7 +61,7 @@ uint GasGraph::getVertices() const {
 }
 
 // Prerequisite: vertex < getVertices()
-const vector<Trip>& GasGraph::getNeighbors(uint vertex) const {
+const vector<GasGraph::Edge>& GasGraph::getNeighbors(uint vertex) const {
   return adjacencyList[vertex];
 }
 
@@ -70,7 +71,7 @@ uint GasGraph::getCities() const {
 
 // Prerequisite: vertex < getVertices()
 uint GasGraph::getCity(uint vertex) const {
-  return vertex % getCities();
+  return vertex % cities;
 }
 
 uint GasGraph::getTankCapacity() const {
@@ -79,5 +80,5 @@ uint GasGraph::getTankCapacity() const {
 
 // Prerequisite: city < getCities() and gasCharge <= getTankCapacity()
 uint GasGraph::getVertex(uint city, uint gasCharge) const {
-  return city + gasCharge*(getTankCapacity()+1);
+  return city + gasCharge * cities;
 }

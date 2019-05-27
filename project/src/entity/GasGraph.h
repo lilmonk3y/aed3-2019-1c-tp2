@@ -28,27 +28,27 @@
 #include <istream>
 #include "../utils/types.h"
 
-typedef struct s_Trip {
-    uint destination; // vertex id
-    ulong cost;
-
-    s_Trip(uint destination, ulong cost) : destination(destination), cost(cost) {};
-} Trip;
-
 using namespace std;
 
 class GasGraph {
 public:
+    typedef struct s_Edge {
+        uint destination; // vertex id
+        ulong cost;
+
+        s_Edge(uint destination, ulong cost) : destination(destination), cost(cost) {};
+    } Edge;
+    
     GasGraph(istream& istream, ulong tankCapacity);
     uint getVertices() const;
     uint getCities() const;
-    const vector<Trip>& getNeighbors(uint vertex) const;
+    const vector<Edge>& getNeighbors(uint vertex) const;
     uint getCity(uint vertex) const;
     uint getTankCapacity() const;
     uint getVertex(uint city, uint gasCharge) const;
 
 private:
-    vector<vector<Trip>> adjacencyList;
+    vector<vector<Edge>> adjacencyList;
     uint cities;
     const ulong tankCapacity;
 

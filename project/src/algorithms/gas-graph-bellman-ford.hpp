@@ -28,7 +28,7 @@ namespace bellmanFord {
       for(uint vertex = 0; vertex <= lastVertex; ++vertex) {
         if(not changed[vertex]) continue;
         changed[vertex] = false;
-        for(const Trip& trip : graph.getNeighbors(vertex)) {
+        for(const GasGraph::Edge& trip : graph.getNeighbors(vertex)) {
 
           if(min[vertex] + trip.cost < min[trip.destination]) {
             changed[trip.destination] = anyChange = true;

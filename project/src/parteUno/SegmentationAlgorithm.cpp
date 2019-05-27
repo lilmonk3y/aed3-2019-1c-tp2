@@ -16,7 +16,13 @@ DisjoinSet* SegmentationAlgorithm::graphSementationIntoSets() {
     disjoinSet->create(grafo); // crear lista de conjuntos disjunto del grafo original
 
     vector<Edge>* edges = grafo->getEdges(); // obtener E de G=(V,E)
-    sort(edges->begin(),edges->end()); // ordenar con merge sort, de manera no-decreciente la lista de todos los ejes
+    // lo siguiente ordena los ejes de manera creciente respecto de sus pesos:
+    sort(edges->begin(),edges->end()); // ordenar con quick sort, de manera no-decreciente la lista de todos los ejes
+    cout << edges->at(0).getEdgeCost() << endl;
+    cout << edges->at(1).getEdgeCost() << endl;
+    cout << edges->at(2).getEdgeCost() << endl;
+    cout << edges->at(3).getEdgeCost() << endl;
+
     for(vector <Edge> :: iterator edge = edges->begin(); edge != edges->end(); ++edge) {// itero todos los ejes.
         int indiceComponenteI = disjoinSet->find(edge->getLeftVertex()); // busco componente vertice i, extremo del eje
         int indicecomponenteJ = disjoinSet->find(edge->getRigthVertex());// busco componente vertice j, extremo del eje

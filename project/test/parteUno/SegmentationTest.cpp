@@ -24,10 +24,10 @@ struct SegmentationAlgorithmTest : testing::Test{
 
 TEST_F(SegmentationAlgorithmTest, simpleSegmentationWorks){
     AdjacencyListGraph* grafo =  new AdjacencyListGraph(4);
-    grafo->addEdge(0, 1, 0);
-    grafo->addEdge(1, 2, 255);
-    grafo->addEdge(2, 3, 255);
-    grafo->addEdge(3, 1, 255);
+    grafo->addEdge(0, 1, 2);
+    grafo->addEdge(1, 2, 180);
+    grafo->addEdge(2, 3, 160);
+    grafo->addEdge(3, 1, 200);
 
     segmentationAlgorithm = new SegmentationAlgorithm(grafo);
     DisjoinSet* disjointSet = segmentationAlgorithm->graphSementationIntoSets();

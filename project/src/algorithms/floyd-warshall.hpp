@@ -1,18 +1,13 @@
 #include <iostream>
 #include <vector>
-#include <limits>
-#include <iomanip>
 #include "../entity/GasGraph.h"
-
+#include "../utils/types.h"
 
 using namespace std;
 
-const ulong infty = numeric_limits<ulong>::max() / 2 - 1; //valor apropiado
-
-
 void floydWarshall(const GasGraph& graph, vector< vector<ulong> >& D){
   //transformacion de aristas a adyacencias
-  //vector< vector<ulong> > D(graph.getVertices(), vector<ulong>(graph.getVertices(), infty));  //Matriz de pesos
+  //vector< vector<ulong> > D(graph.getVertices(), vector<ulong>(graph.getVertices(), infinity));  //Matriz de pesos
 
   for(uint vertex = 0; vertex < graph.getVertices(); ++vertex){
     for (const auto& edge : graph.getNeighbors(vertex)) {

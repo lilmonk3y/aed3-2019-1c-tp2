@@ -39,20 +39,20 @@ using namespace std;
 
 class GasGraph {
 public:
-    GasGraph(istream& input);
-    size_t getVertices() const;
-    size_t getCities() const;
-    //bool adjacent(Vertex v, Vertex u) const;
+    GasGraph(istream& istream, ulong tankCapacity);
+    uint getVertices() const;
+    uint getCities() const;
     const vector<Trip>& getNeighbors(uint vertex) const;
-
-    const ulong TANK_CAPACITY = 60;
+    uint getCity(uint vertex) const;
+    uint getTankCapacity() const;
 
 private:
     vector<vector<Trip>> adjacencyList;
-    vector<ulong> gas;
-    size_t cities;
+    uint cities;
+    const ulong tankCapacity;
 
-    void addEdges(uint originCity, uint destinationCity, ulong gasRequired, ulong gasPrice);
+    void addEdges(uint originCity, uint destinationCity, ulong gasRequired, ulong gasPrice1,
+        ulong gasPrice2);
 };
 
 #endif

@@ -116,13 +116,13 @@ AdjacencyListGraph* SegmentationAlgorithm::imageToGraph(vector<vector<int> >* im
                 int indiceVerticeAbajo = (i+1) * ancho + j; // mismo calculo que vertice actual
                 imageGraph->addEdge(indiceVerticeActual,indiceVerticeAbajo,peso);
             }
-
+            /*
             if (i-1>=0) {
                 int valorArriba = (*imagen)[i-1][j];
                 int peso = abs(valorActual-valorArriba);
                 int indiceVerticeArriba = (i-1) * ancho + j;
                 imageGraph->addEdge(indiceVerticeActual,indiceVerticeArriba,peso);
-            }
+            }*/
 
             if(j+1<ancho) {
                 int valorDerecha = (*imagen)[i][j+1];
@@ -130,27 +130,28 @@ AdjacencyListGraph* SegmentationAlgorithm::imageToGraph(vector<vector<int> >* im
                 int indiceVerticeDerecha = i * ancho + j+1;
                 imageGraph->addEdge(indiceVerticeActual,indiceVerticeDerecha,peso);
             }
-
+            /*
             if (j-1>=0) {
                 int valorIzquierda = (*imagen)[i][j-1];
                 int peso = abs(valorActual-valorIzquierda);
                 int indiceVerticeIzquierda = i * ancho + j-1;
                 imageGraph->addEdge(indiceVerticeActual,indiceVerticeIzquierda,peso);
-            }
-
+            }*/
+            /*
             if(i-1>=0 && j+1<ancho) {
                 int valorDiagonalArribaDerecha = (*imagen)[i-1][j+1];
                 int peso = abs(valorActual-valorDiagonalArribaDerecha);
                 int indiceVerticeDiagonalArribaDerecha = (i-1)*ancho+(j+1);
                 imageGraph->addEdge(indiceVerticeActual,indiceVerticeDiagonalArribaDerecha,peso);
             }
-
+            */
+            /*
             if(i-1>=0 && j-1>=0) {
                 int valorDiagonalArribaIzquierda = (*imagen)[i-1][j-1];
                 int peso = abs(valorActual-valorDiagonalArribaIzquierda);
                 int indiceVerticeDiagonalArribaIzquierda = (i-1)*ancho+(j-1);
                 imageGraph->addEdge(indiceVerticeActual,indiceVerticeDiagonalArribaIzquierda,peso);
-            }
+            }*/
 
             if(i+1<alto && j+1<ancho) {
                 int valorDiagonalAbajoDerecha = (*imagen)[i+1][j+1];

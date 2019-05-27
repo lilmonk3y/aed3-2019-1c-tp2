@@ -134,5 +134,10 @@ TEST_F(SegmentationAlgorithmTest, matrizImagenAGrafoPesosTest){
 
     AdjacencyListGraph* imageGraph = segmentationAlgorithm->imageToGraph(&imagen,ancho,alto);
     ASSERT_TRUE(imageGraph->getVertex()==12);
-    ASSERT_TRUE(imageGraph->getTotalCost()==(50+30)); // no sabe que estoy agregando el mismo eje muchas veces
+    cout << imageGraph->getTotalCost() << endl;
+    int sumValues = 100+100+70+100+100+100+50+100; // vertex 100
+    sumValues = sumValues + 30+30; // vertex 30 (70 ya esta en la linea anterior)
+    sumValues = sumValues + 50+50+50+50+50+50+50;
+
+    ASSERT_TRUE(imageGraph->getTotalCost()==sumValues); // no sabe que estoy agregando el mismo eje muchas veces
 }

@@ -63,7 +63,6 @@ long AdjacencyListGraph::getTotalCost() {
     return totalCost;
 }
 
-// no compara valores, sino direcciones en memoria, ojo
 bool AdjacencyListGraph::alreadyInserted(std::vector<Edge> *edges, Edge *edge) {
     for(auto inEdge : *edges){
         if(inEdge == *edge){

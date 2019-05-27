@@ -5,40 +5,36 @@
 
 using namespace std;
 
-void floydWarshall(const GasGraph& graph, vector< vector<ulong> >& D, vector< vector<ulong> >& R){
-  //transformacion de aristas a adyacencias
-  //vector< vector<ulong> > D(graph.getVertices(), vector<ulong>(graph.getVertices(), infinity));  //Matriz de pesos
-  D.assign(graph.getVertices(), vector<ulong>(graph.getVertices(), infinity));
-  R.assign(graph.getCities(), vector<ulong>(graph.getCities(), infinity)); //El -1 es para no contar el (v, v)
-
-  for(uint vertex = 0; vertex < graph.getVertices(); ++vertex){
-    for (const auto& edge : graph.getNeighbors(vertex)) {
-      //if (edge.destination < vertex) continue;
-      D[vertex][edge.destination] = edge.cost;
+void floydWarshall(const GasGraph& graph, vector<vector<ulong>>& cityMinCost){
+  vector<vector<ulong>> minCost(graph.getVertices());
+  for (uint vertex_i = 0; vertex_i < graph.getVertices(); ++vertex_i) {
+    minCost[vertex_i].assign(graph.getVertices(), infinity);
+    minCost[vertex_i][vertex_i] = 0;
+    for (const auto& edge_ij : graph.getNeighbors(vertex_i)) {
+      uint vertex_j = edge_ij.destination;
+      minCost[vertex_i][vertex_j] = edge_ij.cost;
     }
   }
 
-  for(uint v = 0; v < graph.getVertices(); ++v){
-    D[v][v] = 0;
-  }
-
-  for(uint city = 0; city < graph.getCities(); ++city){
-    R[city][city] = 0;
+  cityMinCost.resize(graph.getCities());
+  for (uint city = 0; city < graph.getCities(); ++city) {
+    cityMinCost[city].assign(graph.getCities(), infinity);
+    cityMinCost[city][city] = 0;
   }
   
   //Algoritmo de Floyd-Warshall
-  for(uint k = 0; k < graph.getVertices(); ++k){
-      for(uint i = 0; i < graph.getVertices(); ++i) {
-          for(uint j = 0; j < graph.getVertices(); ++j){
-              if(D[i][j] >= D[i][k] + D[k][j]) {
-                  D[i][j] = D[i][k] + D[k][j];
-                  uint origin = i % graph.getCities();
-                  uint destination = j % graph.getCities();
-                  if(i == origin and D[i][j] < R[origin][destination] and origin != destination){
-                      R[origin][destination] = D[i][j];
-                  }
-              }
+  for (uint k = 0; k < graph.getVertices(); ++k) {
+    for (uint i = 0; i < graph.getVertices(); ++i) {
+      for (uint j = 0; j < graph.getVertices(); ++j) {
+        if (minCost[i][j] >= minCost[i][k] + minCost[k][j]) {
+          minCost[i][j] = minCost[i][k] + minCost[k][j];
+          uint origin = graph.getCity(i),
+               destination = graph.getCity(j);
+          if (i == origin and minCost[i][j] < cityMinCost[origin][destination]) {
+            cityMinCost[origin][destination] = minCost[i][j];
           }
+        }
       }
+    }
   }
 }

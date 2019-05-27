@@ -53,12 +53,11 @@ int main(int argc, char* argv[]) {
   } else if (algorithm == "fw") {
     // Many-to-many algorithms:
 
-    vector<vector<ulong>> D;  //Matriz de pesos
-    vector<vector<ulong>> R; //Matríz de resultado
-    floydWarshall(graph, D, R);
+    vector<vector<ulong>> minCost; //Matríz de resultado
+    floydWarshall(graph, minCost);
     for (uint originCity = 0; originCity < graph.getCities(); ++originCity) {
       for (uint destCity = 0; destCity < graph.getCities(); ++destCity) {
-        cout << originCity << " " << destCity << " " << R[originCity][destCity] << endl;
+        cout << originCity << " " << destCity << " " << minCost[originCity][destCity] << endl;
       }
     }
   } else {

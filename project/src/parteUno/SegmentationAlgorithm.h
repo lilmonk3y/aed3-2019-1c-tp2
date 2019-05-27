@@ -30,8 +30,6 @@ private:
     int min(int a ,int b);
     int cardinal(DisjoinSet* disjoinSet, int component);
     int tau(DisjoinSet* disjoinSet,int component);
-    //vector<vector<int> >& segmentate(Graph& graph); // grafo es la imagen hecha grafo con adyacencias
-    //Graph& imageToGraph(vector<vector<int> >& imagen);
 };
 
 

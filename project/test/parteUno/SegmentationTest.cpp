@@ -81,10 +81,16 @@ TEST_F(SegmentationAlgorithmTest, image3x3pixelsWith3Areas){
     //8:
     grafo->addEdge(8,4 , 160);
 
-    int segmentationScale = 2;
+    int segmentationScale = 200; // esto es la diferencia entre componentes visto generalmente
     segmentationAlgorithm = new SegmentationAlgorithm(grafo,segmentationScale);
     DisjoinSet* disjointSet = segmentationAlgorithm->graphSementationIntoSets();
 
-    ASSERT_TRUE(disjointSet->find(0) == disjointSet->find(1) );
-    ASSERT_TRUE(disjointSet->find(1) != disjointSet->find(2) &&  disjointSet->find(2) != disjointSet->find(3));
+    ASSERT_TRUE(disjointSet->find(0) == disjointSet->find(3) );
+
+    ASSERT_TRUE(disjointSet->find(1) == disjointSet->find(2) );
+
+    ASSERT_TRUE(disjointSet->find(4) == disjointSet->find(6) );
+    ASSERT_TRUE(disjointSet->find(6) == disjointSet->find(7) );
+
+    ASSERT_TRUE(disjointSet->find(5) == disjointSet->find(8) );
 }

@@ -19,10 +19,6 @@ DisjoinSet* SegmentationAlgorithm::graphSementationIntoSets() {
     vector<Edge>* edges = grafo->getEdges(); // obtener E de G=(V,E)
     // lo siguiente ordena los ejes de manera creciente respecto de sus pesos:
     sort(edges->begin(),edges->end()); // ordenar con quick sort, de manera no-decreciente la lista de todos los ejes
-    cout << edges->at(0).getEdgeCost() << endl;
-    cout << edges->at(1).getEdgeCost() << endl;
-    cout << edges->at(2).getEdgeCost() << endl;
-    cout << edges->at(3).getEdgeCost() << endl;
 
     for(vector <Edge> :: iterator edge = edges->begin(); edge != edges->end(); ++edge) {// itero todos los ejes.
         int indiceComponenteI = disjoinSet->find(edge->getLeftVertex()); // busco componente vertice i, extremo del eje
@@ -104,9 +100,72 @@ int SegmentationAlgorithm::pesoMaximo(Graph* subgrafo) {
     return pesoMaximo;
 }
 
-/*
-Graph& imageToGraph(vector<vector<int> >& imagen) {
-    for(auto pixel:imagen) {
+AdjacencyListGraph* SegmentationAlgorithm::imageToGraph(vector<vector<int> >* imagen,int ancho, int alto) {
+    AdjacencyListGraph* imageGraph =  new AdjacencyListGraph(ancho*alto);
+    // VERTICES= i * ancho + j (posiciones de la matriz de pixeles)
+    // ver si agregando dos veces mismo eje ya sabe que fue agregado previamente!!!!!!!!!!!!!!!
+    for(int i = 0; i < alto; i = i + 1) {
+        for(int j = 0; j < ancho; j = j + 1) {
 
+            int valorActual = (*imagen)[i][j];
+            int indiceVerticeActual =  i * ancho + j;
+
+            if(i+1<alto) {
+                int valorAbajo = (*imagen)[i+1][j];
+                int peso = abs(valorActual-valorAbajo);
+                int indiceVerticeAbajo = (i+1) * ancho + j; // mismo calculo que vertice actual
+                imageGraph->addEdge(indiceVerticeActual,indiceVerticeAbajo,peso);
+            }
+
+            if (i-1>=0) {
+                int valorArriba = (*imagen)[i-1][j];
+                int peso = abs(valorActual-valorArriba);
+                int indiceVerticeArriba = (i-1) * ancho + j;
+                imageGraph->addEdge(indiceVerticeActual,indiceVerticeArriba,peso);
+            }
+
+            if(j+1<ancho) {
+                int valorDerecha = (*imagen)[i][j+1];
+                int peso = abs(valorActual-valorDerecha);
+                int indiceVerticeDerecha = i * ancho + j+1;
+                imageGraph->addEdge(indiceVerticeActual,indiceVerticeDerecha,peso);
+            }
+
+            if (j-1>=0) {
+                int valorIzquierda = (*imagen)[i][j-1];
+                int peso = abs(valorActual-valorIzquierda);
+                int indiceVerticeIzquierda = i * ancho + j-1;
+                imageGraph->addEdge(indiceVerticeActual,indiceVerticeIzquierda,peso);
+            }
+
+            if(i-1>=0 && j+1<ancho) {
+                int valorDiagonalArribaDerecha = (*imagen)[i-1][j+1];
+                int peso = abs(valorActual-valorDiagonalArribaDerecha);
+                int indiceVerticeDiagonalArribaDerecha = (i-1)*ancho+(j+1);
+                imageGraph->addEdge(indiceVerticeActual,indiceVerticeDiagonalArribaDerecha,peso);
+            }
+
+            if(i-1>=0 && j-1>=0) {
+                int valorDiagonalArribaIzquierda = (*imagen)[i-1][j-1];
+                int peso = abs(valorActual-valorDiagonalArribaIzquierda);
+                int indiceVerticeDiagonalArribaIzquierda = (i-1)*ancho+(j-1);
+                imageGraph->addEdge(indiceVerticeActual,indiceVerticeDiagonalArribaIzquierda,peso);
+            }
+
+            if(i+1<alto && j+1<ancho) {
+                int valorDiagonalAbajoDerecha = (*imagen)[i+1][j+1];
+                int peso = abs(valorActual-valorDiagonalAbajoDerecha);
+                int indiceVerticeDiagonalAbajoDerecha = (i+1)*ancho+(j+1);
+                imageGraph->addEdge(indiceVerticeActual,indiceVerticeDiagonalAbajoDerecha,peso);
+            }
+
+            if(i+1<alto && j-1>=0) {
+                int valorDiagonalAbajoIzquierda = (*imagen)[i+1][j-1];
+                int peso = abs(valorActual-valorDiagonalAbajoIzquierda);
+                int indiceVerticeDiagonalAbajoIzquierda = (i+1)*ancho+(j-1);
+                imageGraph->addEdge(indiceVerticeActual,indiceVerticeDiagonalAbajoIzquierda,peso);
+            }
+        }
     }
-}*/
+    return imageGraph;
+}

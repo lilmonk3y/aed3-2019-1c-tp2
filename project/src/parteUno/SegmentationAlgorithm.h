@@ -18,11 +18,11 @@ class SegmentationAlgorithm {
 public:
     SegmentationAlgorithm(AdjacencyListGraph* graph,int scale); // introducir imagen y genera adyacencias
     DisjoinSet* graphSementationIntoSets(); // referencia
+    AdjacencyListGraph* imageToGraph(vector<vector<int> >* imagen,int ancho, int alto);
 
 private:
     AdjacencyListGraph* grafo;
     int scaleProportion;
-    //DisjoinSet& graphSementationIntoSets(Graph& graph); // referencia
     int minInternalDifference(DisjoinSet* disjoinSet,int componenteI, int componenteJ);
     int internalDifference(DisjoinSet* disjoinSet,int indiceDeComponente);
     set<int> construirComponente(DisjoinSet* disjoinSet, int componenteIndice);

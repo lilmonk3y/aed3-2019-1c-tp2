@@ -100,6 +100,7 @@ int SegmentationAlgorithm::pesoMaximo(Graph* subgrafo) {
     return pesoMaximo;
 }
 
+// input
 AdjacencyListGraph* SegmentationAlgorithm::imageToGraph(vector<vector<int> >* imagen,int ancho, int alto) {
     AdjacencyListGraph* imageGraph =  new AdjacencyListGraph(ancho*alto);
     // VERTICES= i * ancho + j (posiciones de la matriz de pixeles)
@@ -169,4 +170,40 @@ AdjacencyListGraph* SegmentationAlgorithm::imageToGraph(vector<vector<int> >* im
         }
     }
     return imageGraph;
+}
+
+// output
+vector<vector<int> >  SegmentationAlgorithm::toSegmentationImage(DisjoinSet* componentes,int ancho, int alto) {
+    vector<vector<int> > matrixOutput(alto, vector<int>(ancho,0) ); // inicializo todos en cero
+    for(int i = 0; i < alto; i = i + 1) {
+        for(int j = 0; j < ancho; j = j + 1) {
+            int indiceVertice = i * ancho + j;
+            matrixOutput[i][j] = componentes->find(indiceVertice);
+            cout << matrixOutput[i][j] << "    ";
+        }
+        cout << endl;
+    }
+    return matrixOutput;
+}
+
+vector<vector<int> > SegmentationAlgorithm::imageToSegmentation(vector<vector<int> > imageInput,int ancho, int alto) {
+    AdjacencyListGraph* grafoDeLaImagen = imageToGraph(&imageInput,ancho,alto);
+    SegmentationAlgorithm* segmentationAlgorithm = new SegmentationAlgorithm(grafoDeLaImagen,100);
+    DisjoinSet* componentes = segmentationAlgorithm->graphSementationIntoSets();
+    return toSegmentationImage(componentes,ancho,alto);
+}
+
+int SegmentationAlgorithm::cantidadDeComponentes(vector<vector<int> > imageInput,int ancho, int alto) {
+    std::list<int> indicesDeLasAreasEnLaSegmentacion;
+    for(int i = 0; i < alto; i = i + 1) {
+        for(int j = 0; j < ancho; j = j + 1) {
+            int indiceComponente = imageInput[i][j];
+            bool indiceEstaMarcada = (std::find(indicesDeLasAreasEnLaSegmentacion.begin(), indicesDeLasAreasEnLaSegmentacion.end(), indiceComponente) != indicesDeLasAreasEnLaSegmentacion.end());
+            if(!indiceEstaMarcada) {
+                cout << indiceComponente << endl; // MOSTRAR LOS VALORES
+                indicesDeLasAreasEnLaSegmentacion.push_back(indiceComponente);
+            }
+        }
+    }
+    return indicesDeLasAreasEnLaSegmentacion.size();
 }

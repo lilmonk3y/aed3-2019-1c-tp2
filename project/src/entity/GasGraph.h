@@ -28,33 +28,33 @@
 #include <istream>
 #include "../utils/types.h"
 
-using ulong = unsigned long;
-
-typedef struct s_Trip {
-    uint destination; // vertex id
-    ulong cost;
-
-    s_Trip(uint destination, ulong cost) : destination(destination), cost(cost) {};
-} Trip;
-
 using namespace std;
 
 class GasGraph {
 public:
-    GasGraph(istream& input);
-    size_t getVertices() const;
-    size_t getCities() const;
-    //bool adjacent(Vertex v, Vertex u) const;
-    const vector<Trip>& getNeighbors(uint vertex) const;
+    typedef struct s_Edge {
+        uint destination; // vertex id
+        ulong cost;
 
-    const ulong TANK_CAPACITY = 60;
+        s_Edge(uint destination, ulong cost) : destination(destination), cost(cost) {};
+    } Edge;
+    
+    GasGraph(istream& istream, ulong tankCapacity);
+    uint getVertices() const;
+    uint getCities() const;
+    const vector<Edge>& getNeighbors(uint vertex) const;
+    uint getCity(uint vertex) const;
+    uint getTankCapacity() const;
+    uint getVertex(uint city, ulong gasCharge) const;
+    uint getGasCharge(uint vertex) const;
 
 private:
-    vector<vector<Trip>> adjacencyList;
-    vector<ulong> gas;
-    size_t cities;
+    vector<vector<Edge>> adjacencyList;
+    uint cities;
+    const ulong tankCapacity;
 
-    void addEdges(uint city1, uint city2, ulong gasRequired, ulong gasPrice1, ulong gasPrice2);
+    void addEdges(uint originCity, uint destinationCity, ulong gasRequired, ulong gasPrice1,
+        ulong gasPrice2);
 };
 
 #endif

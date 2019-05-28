@@ -1,12 +1,12 @@
 //
 // Created by Christian nahuel Rivera on 12/5/19.
 //
-#include "../ArrayDisjoinSet.h"
+#include "../ArrayDisjoinSet.h" 
 
 void ArrayDisjoinSet::create(Graph *graph) {
     std::vector<int> components;
     components.resize(graph->getVertex());
-    for(size_t index = 0; index < components.size(); index++){
+    for(std::size_t index = 0; index < components.size(); index++){
         components.at(index) = index;
     }
     this->components = components;

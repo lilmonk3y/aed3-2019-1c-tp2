@@ -3,23 +3,27 @@
 #include "../../algorithms/edge-weighted-graph-bellman-ford.hpp"
 #include <utility>
 
-void GasGraph::addEdges(uint city1, uint city2, ulong gasRequired,
-    ulong gasPrice1, ulong gasPrice2) {
-  for (ulong initialGas = 0; initialGas <= TANK_CAPACITY; ++initialGas) {
-    uint vertex1 = city1 + initialGas * cities;
+void GasGraph::addEdges(uint city1, uint city2, ulong gasRequired, ulong gasPrice1, ulong gasPrice2) {
+  // There is one vertex for each initial charge of gas in the origin city and one vertex for each
+  // final gas charge in the destination city. These two vertices are connected with an edge only if
+  // the combination of initial and final gas is possible - taking into consideration the gas
+  // required to travel.
+  for (ulong initialGas = 0; initialGas <= tankCapacity; ++initialGas) {
     ulong minimumRefill = gasRequired > initialGas ? gasRequired - initialGas : 0;
-    for (ulong refill = minimumRefill; refill <= TANK_CAPACITY - initialGas; ++refill) {
-      ulong refillCost = refill * gasPrice1;
+    for (ulong refill = minimumRefill; refill <= tankCapacity - initialGas; ++refill) {
       ulong gasAfterTrip = initialGas + refill - gasRequired;
-      uint vertex2 = city2 + gasAfterTrip * cities;
-
-      adjacencyList[vertex1].push_back(Trip(vertex2, refillCost));
+      
+      adjacencyList[getVertex(city1, initialGas)].push_back(
+        Edge(getVertex(city2, gasAfterTrip), refill * gasPrice1));
+      
+      adjacencyList[getVertex(city2, initialGas)].push_back(
+        Edge(getVertex(city1, gasAfterTrip), refill * gasPrice2));
     }
   }
 }
 
-GasGraph::GasGraph(istream& istream) {
-  size_t routes; // number of routes
+GasGraph::GasGraph(istream& istream, ulong tankCapacity) : tankCapacity(tankCapacity) {
+  uint routes; // number of routes
   istream >> cities >> routes;
 
   // Read weight of vertices:
@@ -33,34 +37,53 @@ GasGraph::GasGraph(istream& istream) {
 
   // Calculate minimum distance between all vertices:
 
-  vector<vector<uint>> min(cities);
+  vector<vector<ulong>> min(cities);
   for (uint city = 0; city < cities; ++city) {
     bellmanFordAux::bellmanFord(cities, city, min[city], graph.getAdjacencyList());
   }
 
   // Finally construct this graph:
 
-  adjacencyList.resize(cities*(TANK_CAPACITY+1));
+  adjacencyList.resize(getVertices());
 
-  for (uint city1 = 0; city1 < cities; ++city1) {
-    for (uint city2 = 0; city2 < cities; ++city2) {
-      auto const * const edge = graph.getEdge(city1, city2);
+  for (uint city1 = 0; city1 < cities - 1; ++city1) {
+    for (uint city2 = city1 + 1; city2 < cities; ++city2) {
+      const auto& edge = graph.getEdge(city1, city2);
       ulong gasRequired = edge != NULL ? edge->second : min[city1][city2];
+      if (gasRequired > tankCapacity) continue;
       addEdges(city1, city2, gasRequired, price[city1], price[city2]);
-      addEdges(city2, city1, gasRequired, price[city2], price[city1]);
     }
   }
 }
 
-size_t GasGraph::getVertices() const {
-  return adjacencyList.size();
+uint GasGraph::getVertices() const {
+  return cities * (tankCapacity + 1);
 }
 
-// Prerequisite: v < getNumberOfVertices()
-const vector<Trip>& GasGraph::getNeighbors(uint vertex) const {
+// Prerequisite: vertex < getVertices()
+const vector<GasGraph::Edge>& GasGraph::getNeighbors(uint vertex) const {
   return adjacencyList[vertex];
 }
 
-size_t GasGraph::getCities() const {
+uint GasGraph::getCities() const {
   return cities;
+}
+
+// Prerequisite: vertex < getVertices()
+uint GasGraph::getCity(uint vertex) const {
+  return vertex % cities;
+}
+
+uint GasGraph::getTankCapacity() const {
+  return tankCapacity;
+}
+
+// Prerequisite: vertex < getVertices() and gasCharge <= getTankCapacity()
+uint GasGraph::getVertex(uint vertex, ulong gasCharge) const {
+  return getCity(vertex) + gasCharge * cities;
+}
+
+// Prerequisite: vertex < getVertices()
+uint GasGraph::getGasCharge(uint vertex) const {
+  return vertex / cities;
 }

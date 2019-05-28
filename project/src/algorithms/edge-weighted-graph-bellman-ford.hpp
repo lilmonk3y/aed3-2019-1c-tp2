@@ -3,20 +3,19 @@
 
 #include <iostream>
 #include <vector>
-#include <limits>
 #include <utility>
+#include "../utils/types.h"
 
 using namespace std;
 
 namespace bellmanFordAux {
-  const uint infinity = numeric_limits<uint>::max() / 2 - 1;
 
   #define weight(edge) edge.second
   #define vertex(edge) edge.first
 
-  void bellmanFord(uint numberOfVertices, uint sourceVertex, vector<uint>& min,
+  void bellmanFord(uint numberOfVertices, uint sourceVertex, vector<ulong>& min,
       const vector<vector<pair<uint, ulong>>>& adjacencyList) {
-    vector<int> changed(numberOfVertices, false);
+    vector<bool> changed(numberOfVertices, false);
     min.assign(numberOfVertices, infinity);
 
     min[sourceVertex] = 0;

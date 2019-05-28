@@ -5,6 +5,7 @@ CMakeFiles/
 Makefile
 aed3_2019_1c_tp2
 main-bellman-ford
+main-min-path
 cmake_install.cmake
 lib/googletest/CMakeFiles/
 lib/googletest/CTestTestfile.cmake
@@ -17,3 +18,5 @@ lib/googletest/googlemock/cmake_install.cmake
 lib/googletest/googlemock/gtest/
 lib/googletest/googlemock/libgmock.a
 lib/googletest/googlemock/libgmock_main.a
+lib/googletest/googlemock/libgmock_maind.a
+lib/googletest/googlemock/libgmockd.a

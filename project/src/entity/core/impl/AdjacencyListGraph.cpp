@@ -3,6 +3,7 @@
 //
 
 #include "../AdjacencyListGraph.h"
+#include "../../../utils/types.h"
 
 AdjacencyListGraph::AdjacencyListGraph(int vertexAmount) {
     this->resetSize(vertexAmount);
@@ -11,7 +12,7 @@ AdjacencyListGraph::AdjacencyListGraph(int vertexAmount) {
 // crea el tamaño de vertices para luego agregarle las adyacencias
 void AdjacencyListGraph::resetSize(int newVerticesSize) {
     this->vertexAdjacents = std::vector<std::list<AdjacencyNode*>>(newVerticesSize);
-    for(int index = 0; index < this->vertexAdjacents.size(); index++){
+    for(std::size_t index = 0; index < this->vertexAdjacents.size(); index++){
         this->vertexAdjacents.at(index) = std::list<AdjacencyNode*>();
     }
 }
@@ -43,7 +44,7 @@ int AdjacencyListGraph::getVertex() {
 // vector de ejes
 std::vector<Edge> *AdjacencyListGraph::getEdges() {
     std::vector<Edge> *edges = new std::vector<Edge>();
-    for(size_t vertex = 0; vertex < this->vertexAdjacents.size(); vertex++){
+    for(std::size_t vertex = 0; vertex < this->vertexAdjacents.size(); vertex++){
         for(auto iterator = this->vertexAdjacents.at(vertex).begin(); iterator != this->vertexAdjacents.at(vertex).end(); iterator++){
             Edge edge = Edge(vertex,(*iterator)->getVertex(),(*iterator)->getEdgeCost());
             if(! this->alreadyInserted(edges, &edge)){

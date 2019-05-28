@@ -9,6 +9,7 @@ AdjacencyListGraph::AdjacencyListGraph(int vertexAmount) {
     this->resetSize(vertexAmount);
 }
 
+// crea el tamaño de vertices para luego agregarle las adyacencias
 void AdjacencyListGraph::resetSize(int newVerticesSize) {
     this->vertexAdjacents = std::vector<std::list<AdjacencyNode*>>(newVerticesSize);
     for(std::size_t index = 0; index < this->vertexAdjacents.size(); index++){
@@ -18,7 +19,6 @@ void AdjacencyListGraph::resetSize(int newVerticesSize) {
 
 bool AdjacencyListGraph::adjacent(int vertexIndex1, int vertexIndex2) {
     return isAdjacent(vertexIndex1, vertexIndex2) && isAdjacent(vertexIndex2, vertexIndex1);
-
 }
 
 bool AdjacencyListGraph::isAdjacent(int origin, int destiny) {
@@ -36,10 +36,12 @@ void AdjacencyListGraph::addEdge(int vertexIndex1, int vertexIndex2, long edgeCo
     this->vertexAdjacents.at(vertexIndex2).push_back(new AdjacencyNode(vertexIndex1, edgeCost));
 }
 
+// esto sirve para obtener la cantidad de ejes
 int AdjacencyListGraph::getVertex() {
     return static_cast<int>(this->vertexAdjacents.size());
 }
 
+// vector de ejes
 std::vector<Edge> *AdjacencyListGraph::getEdges() {
     std::vector<Edge> *edges = new std::vector<Edge>();
     for(std::size_t vertex = 0; vertex < this->vertexAdjacents.size(); vertex++){
@@ -77,4 +79,38 @@ AdjacencyListGraph::~AdjacencyListGraph() {
             delete node;
         }
     }
+}
+
+
+/// metodos nuevos que agregó axel:
+
+// para construir el subgrafo G'=(C,E), donde G=(V,E) y C incluido en E
+AdjacencyListGraph* AdjacencyListGraph::adjacencyListInducedSubGraph(AdjacencyListGraph* graph,set<int> componente) {
+    int cantidadVertices = graph->getVertex(); // cantidad vertices V
+    AdjacencyListGraph* subGraph = new AdjacencyListGraph(cantidadVertices);// estructura vacia subgrafo
+    // agregar solo ejes que inciden en los vertices de la componente:
+    vector<Edge> ejesG = *graph->getEdges(); // desrreferencio
+    for(const auto& iter : ejesG) { // O(M), ver si usar getNeighbors
+        int iVertex = iter.getLeftVertex();
+        int jVertex = iter.getRigthVertex();
+        int pesoArista = iter.getEdgeCost();
+        const bool i_vertex_is_in  = componente.find(iVertex) != componente.end();
+        const bool j_vertex_is_in = componente.find(jVertex) != componente.end();
+
+        if(i_vertex_is_in &&  j_vertex_is_in) {
+            subGraph->addEdge(iVertex,jVertex,pesoArista);
+        }
+
+    }
+    return subGraph;
+}
+
+set<int> AdjacencyListGraph::getNeighbors(int indiceVertice) { // costo O(n)
+    set<int> neighbors;
+    list<AdjacencyNode*> adyacentes = vertexAdjacents.at(indiceVertice);// adyacentes del indice actual
+    for(const auto& iter : adyacentes) { // itero los adyacentes
+        int indexFromNeighborVertex = iter->getVertex(); // vertice adyacente
+        neighbors.insert(indexFromNeighborVertex);
+    }
+    return neighbors;
 }

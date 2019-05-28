@@ -8,6 +8,7 @@ include_directories(lib/googletest/googletest/include)
 include_directories(lib/googletest/googlemock/include)
 
 
+
 set(SOURCE_FILES
     prueba_integracion_con_gtest/test/factorialTest.cpp
     prueba_integracion_con_gtest/src/factorial.cpp
@@ -35,7 +36,11 @@ set(SOURCE_FILES
     project/src/utils/impl/TreeDisjoinSet.cpp
     project/src/utils/TreeDisjoinSet.h
     project/src/utils/impl/TreeCompressedDisjoinSet.cpp
-    project/src/utils/TreeCompressedDisjoinSet.h)
+    project/src/utils/TreeCompressedDisjoinSet.h
+    project/src/parteUno/SegmentationAlgorithm.h
+    project/src/parteUno/SegmentationAlgorithm.cpp
+    project/test/parteUno/SegmentationTest.cpp
+    )
 
 add_executable(aed3_2019_1c_tp2 main.cpp ${SOURCE_FILES})
 target_link_libraries(aed3_2019_1c_tp2 gtest gtest_main)

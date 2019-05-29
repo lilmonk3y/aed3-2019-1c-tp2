@@ -42,7 +42,9 @@ set(SOURCE_FILES
     project/test/parteUno/SegmentationTest.cpp
     )
 
-add_executable(aed3_2019_1c_tp2 main.cpp ${SOURCE_FILES})
+#add_executable(aed3_2019_1c_tp2 main.cpp ${SOURCE_FILES})
+add_executable(aed3_2019_1c_tp2 RunSegmentacion.cpp ${SOURCE_FILES})
+
 target_link_libraries(aed3_2019_1c_tp2 gtest gtest_main)
 
 set(SOURCE_FILES_MIN_PATH

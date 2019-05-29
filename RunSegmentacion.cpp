@@ -35,7 +35,7 @@ int main(){
         image.push_back(fila);
     }
 
-    int scale = 100;
+    int scale = 200;
     SegmentationAlgorithm* algoritmo = new SegmentationAlgorithm(image, scale,w,h); // configuracion algoritmo
     vector<vector<int> > imagenSegmentada = algoritmo->imageToSegmentation(); // llamda al algoritmo
     cout << endl;

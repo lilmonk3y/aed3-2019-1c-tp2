@@ -306,5 +306,5 @@ TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillas){
     cout << "cantidad componentes: " << endl ;
     cout << segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto) << endl;
     cout << "--------" << endl ;
-    ASSERT_TRUE(segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto)==2);
+    ASSERT_TRUE(segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto)==3);
 }

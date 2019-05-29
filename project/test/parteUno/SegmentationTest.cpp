@@ -298,7 +298,7 @@ TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillas){
 
     int ancho = 44;
     int alto = 33;
-    int segmentationScale = 150;
+    int segmentationScale = 200; // con 150 hay 43 componentes
     // union del disjoint set tiene costo N
 
     segmentationAlgorithm = new SegmentationAlgorithm(imagen, segmentationScale, ancho, alto);

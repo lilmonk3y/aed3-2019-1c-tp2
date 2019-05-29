@@ -3,15 +3,6 @@
 #include "project/src/parteUno/SegmentationAlgorithm.h"
 
 using namespace std;
-/*
-double callSolution(std::vector<Request> *elements, double objectiveValue) {
-    //Knapsack* knapsack = new KnapsackDesitionTree(new BruteForce());
-    Knapsack* knapsack = new KnapsackDesitionTree(new Backtracking());
-    //Knapsack* knapsack = new MeetInTheMiddle();
-    //Knapsack* knapsack = new DynamicProgrammingAlgorithm();
-    double response = knapsack->maximumBenefit(objectiveValue,elements);
-    return response;
-}*/
 
 int main(){
      /*
@@ -45,8 +36,8 @@ int main(){
     }
 
     int scale = 100;
-    SegmentationAlgorithm* algoritmo = new SegmentationAlgorithm(image, scale,w,h);
-    vector<vector<int> > imagenSegmentada = algoritmo->imageToSegmentation();
+    SegmentationAlgorithm* algoritmo = new SegmentationAlgorithm(image, scale,w,h); // configuracion algoritmo
+    vector<vector<int> > imagenSegmentada = algoritmo->imageToSegmentation(); // llamda al algoritmo
     cout << endl;
     for(int fila = 0; fila < h ; fila ++) {
         for(int columna = 0; columna < w ; columna ++) {

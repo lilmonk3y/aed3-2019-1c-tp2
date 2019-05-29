@@ -6,23 +6,33 @@
 #include <set>
 #include <iostream>
 
-SegmentationAlgorithm::SegmentationAlgorithm(AdjacencyListGraph* graph, int scale) {
-   this->grafo = graph;
+SegmentationAlgorithm::SegmentationAlgorithm(vector<vector<int> > imageInput,int scale,int ancho, int alto) {
+   this->grafo = this->imageToGraph(&imageInput,ancho, alto);;
    this->scaleProportion = scale;
+   this->ancho=ancho;
+   this->alto=alto;
 }
-
 
 DisjoinSet* SegmentationAlgorithm::graphSementationIntoSets() {
     DisjoinSet* disjoinSet = new ArrayDisjoinSet();
-    disjoinSet->create(grafo); // crear lista de conjuntos disjunto del grafo original
+    disjoinSet->create(this->grafo); // crear lista de conjuntos disjunto del grafo original
 
-    vector<Edge>* edges = grafo->getEdges(); // obtener E de G=(V,E)
+    cout << "componentes disjuntas creadas"  << endl; //QUITAR
+
+    vector<Edge>* edges = this->grafo->getEdges(); // obtener E de G=(V,E)
     // lo siguiente ordena los ejes de manera creciente respecto de sus pesos:
     sort(edges->begin(),edges->end()); // ordenar con quick sort, de manera no-decreciente la lista de todos los ejes
+
+    cout << "ejes ordenados"  << endl; //QUITAR
+    cout << "cantidad de ejes:" << edges->size() << endl; //QUITAR
+    int cont = 1; //QUITAR
 
     for(vector <Edge> :: iterator edge = edges->begin(); edge != edges->end(); ++edge) {// itero todos los ejes.
         int indiceComponenteI = disjoinSet->find(edge->getLeftVertex()); // busco componente vertice i, extremo del eje
         int indicecomponenteJ = disjoinSet->find(edge->getRigthVertex());// busco componente vertice j, extremo del eje
+
+        cout << "eje iterado numero" << cont << endl; //QUITAR
+        cont = cont +1; //QUITAR
 
         if( indiceComponenteI !=  indicecomponenteJ ) {
             if( edge->getEdgeCost() <= minInternalDifference(disjoinSet,indiceComponenteI,indicecomponenteJ) ) {
@@ -45,7 +55,7 @@ int SegmentationAlgorithm::internalDifference(DisjoinSet* disjoinSet,int indiceD
 
     Graph* subGrafoComponente = AdjacencyListGraph::adjacencyListInducedSubGraph(this->grafo,componente);// G=(C,E)
     GetMST kruskal = GetMST(new ArrayDisjoinSet());// elijo la estrategia del disjoint set
-    Graph* arbolRecubridorMinimoDeLaComponente = kruskal.getMST(subGrafoComponente); // type AdjacencyListGraph
+    Graph* arbolRecubridorMinimoDeLaComponente = kruskal.getMST(subGrafoComponente);
 
     return pesoMaximo(arbolRecubridorMinimoDeLaComponente);
 }
@@ -179,20 +189,20 @@ vector<vector<int> >  SegmentationAlgorithm::toSegmentationImage(DisjoinSet* com
         for(int j = 0; j < ancho; j = j + 1) {
             int indiceVertice = i * ancho + j;
             matrixOutput[i][j] = componentes->find(indiceVertice);
-            cout << matrixOutput[i][j] << "    ";
+            cout << matrixOutput[i][j] << "    "; //QUITAR
         }
-        cout << endl;
+        cout << endl; //QUITAR
     }
     return matrixOutput;
 }
 
-vector<vector<int> > SegmentationAlgorithm::imageToSegmentation(vector<vector<int> > imageInput,int ancho, int alto) {
-    AdjacencyListGraph* grafoDeLaImagen = imageToGraph(&imageInput,ancho,alto);
-    SegmentationAlgorithm* segmentationAlgorithm = new SegmentationAlgorithm(grafoDeLaImagen,100);
-    DisjoinSet* componentes = segmentationAlgorithm->graphSementationIntoSets();
-    return toSegmentationImage(componentes,ancho,alto);
+// end 2 end
+vector<vector<int> > SegmentationAlgorithm::imageToSegmentation() {
+    DisjoinSet* componentes = this->graphSementationIntoSets();
+    return toSegmentationImage(componentes,this->ancho,this->alto);
 }
 
+// funcion solo para testeo
 int SegmentationAlgorithm::cantidadDeComponentes(vector<vector<int> > imageInput,int ancho, int alto) {
     std::list<int> indicesDeLasAreasEnLaSegmentacion;
     for(int i = 0; i < alto; i = i + 1) {
@@ -200,10 +210,29 @@ int SegmentationAlgorithm::cantidadDeComponentes(vector<vector<int> > imageInput
             int indiceComponente = imageInput[i][j];
             bool indiceEstaMarcada = (std::find(indicesDeLasAreasEnLaSegmentacion.begin(), indicesDeLasAreasEnLaSegmentacion.end(), indiceComponente) != indicesDeLasAreasEnLaSegmentacion.end());
             if(!indiceEstaMarcada) {
-                cout << indiceComponente << endl; // MOSTRAR LOS VALORES
+                cout << indiceComponente << endl; // QUITAR: MOSTRAR LOS VALORES
                 indicesDeLasAreasEnLaSegmentacion.push_back(indiceComponente);
             }
         }
     }
     return indicesDeLasAreasEnLaSegmentacion.size();
+}
+
+void SegmentationAlgorithm::setGrafo(AdjacencyListGraph* graph) {
+    this->grafo = graph;
+}
+
+void SegmentationAlgorithm::setScaleProportion(int scaleP) {
+    this->scaleProportion = scaleP;
+
+}
+
+void SegmentationAlgorithm::setAlto(int al)  {
+    this->alto = al;
+
+}
+
+void SegmentationAlgorithm::setAncho(int an)  {
+    this->ancho = an;
+
 }

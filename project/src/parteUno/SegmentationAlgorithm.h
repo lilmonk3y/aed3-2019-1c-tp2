@@ -9,6 +9,9 @@
 #include "../utils/DisjoinSet.h"
 #include "../entity/core/AdjacencyListGraph.h"
 #include "../utils/ArrayDisjoinSet.h"
+#include "../utils/TreeDisjoinSet.h"
+#include "../utils/ArrayCompressedDisjoinSet.h"
+#include "../utils/TreeCompressedDisjoinSet.h"
 #include "../utils/GetMST.h"
 #include <set>
 #include <map>

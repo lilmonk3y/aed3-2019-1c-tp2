@@ -8,7 +8,6 @@ include_directories(lib/googletest/googletest/include)
 include_directories(lib/googletest/googlemock/include)
 
 
-
 set(SOURCE_FILES
     prueba_integracion_con_gtest/test/factorialTest.cpp
     prueba_integracion_con_gtest/src/factorial.cpp
@@ -44,8 +43,6 @@ set(SOURCE_FILES
 
 add_executable(aed3_2019_1c_tp2 main.cpp ${SOURCE_FILES})
 
-target_link_libraries(aed3_2019_1c_tp2 gtest gtest_main)
-
         set(SEGMENTACION_FILES
         project/src/entity/core/Graph.h
         project/src/entity/core/AdjacencyListGraph.h
@@ -74,9 +71,10 @@ target_link_libraries(aed3_2019_1c_tp2 gtest gtest_main)
         #project/test/parteUno/SegmentationTest.cpp
         )
 
-add_executable(RunSegmentacion RunSegmentacion.cpp ${SEGMENTACION_FILES})
+add_executable(runSegmentacion RunSegmentacion.cpp ${SEGMENTACION_FILES})
 #add_executable(segmentacion RunSegmentacion.cpp ${SEGMENTACION_FILES})
 
+#target_link_libraries(RunSegmentation segLib)
 
 set(SOURCE_FILES_MIN_PATH
     project/src/algorithms/bellman-ford.hpp
@@ -89,3 +87,18 @@ set(SOURCE_FILES_MIN_PATH
     project/src/entity/impl/EdgeWeightedGraph.cpp
     project/src/entity/impl/GasGraph.cpp)
 add_executable(main-min-path main-min-path.cpp ${SOURCE_FILES_MIN_PATH})
+
+
+#target_link_libraries(aed3_2019_1c_tp2 gtest gtest_main runSegmentacion)
+target_link_libraries(aed3_2019_1c_tp2 gtest gtest_main)
+
+
+
+add_library( YourLib ${SEGMENTACION_FILES} )
+
+#
+#foreach( testsourcefile ${APP_SOURCES} )
+#        add_executable( ${testname} ${testsourcefile} )
+#        # Make sure YourLib is linked to each app
+#        target_link_libraries( ${testname} YourLib )
+#endforeach( testsourcefile ${APP_SOURCES} )

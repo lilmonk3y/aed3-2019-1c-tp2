@@ -6,6 +6,7 @@
 #include <set>
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 
 SegmentationAlgorithm::SegmentationAlgorithm(vector<vector<int> > imageInput,int scale,int ancho, int alto,DisjoinSet* disjoinSetInstance) {
    this->grafo = this->imageToGraph(&imageInput,ancho, alto);;

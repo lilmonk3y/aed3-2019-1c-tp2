@@ -216,9 +216,9 @@ void SegmentationAlgorithm::setDisjointSet(DisjoinSet* disjoinSetInstance) {
 }
 
 // en realidad es una funcion estatica
-void SegmentationAlgorithm::generarFileOutput(vector<vector<int> > imageInput,int ancho, int alto) {
+void SegmentationAlgorithm::generarFileOutput(vector<vector<int> > imageInput,int ancho, int alto, string fileNameOutput) {
     std::ofstream fileImagenSegmentada;
-    fileImagenSegmentada.open("imagen-segmentada",std::ios::out);
+    fileImagenSegmentada.open(fileNameOutput,std::ios::out);
     fileImagenSegmentada << "[" ;
     for(int i = 0; i < alto; i = i + 1) {
         fileImagenSegmentada << "(" ;

@@ -50,22 +50,22 @@ add_executable(aed3_2019_1c_tp2 main.cpp ${SOURCE_FILES})
         project/src/entity/auxiliar/impl/AdjacencyNode.cpp
         project/src/entity/auxiliar/AdjacencyNode.h
         project/src/utils/ArrayDisjoinSet.h
-        #project/src/utils/ArrayCompressedDisjoinSet.h
+        project/src/utils/ArrayCompressedDisjoinSet.h
         project/src/utils/DisjoinSet.h
         project/src/utils/impl/ArrayDisjoinSet.cpp
-        #project/src/utils/impl/ArrayCompressedDisjoinSet.cpp
+        project/src/utils/impl/ArrayCompressedDisjoinSet.cpp
         project/src/utils/GetMST.h
         project/src/utils/impl/GetMST.cpp
         project/src/entity/core/Edge.h
         project/src/entity/core/impl/Edge.cpp
-        #project/src/entity/auxiliar/impl/DirectedTreeGraph.cpp
-        #project/src/entity/auxiliar/DirectedTreeGraph.h
-        #project/src/entity/auxiliar/impl/TreeNode.cpp
-        #project/src/entity/auxiliar/TreeNode.h
-        #project/src/utils/impl/TreeDisjoinSet.cpp
-        #project/src/utils/TreeDisjoinSet.h
-        #project/src/utils/impl/TreeCompressedDisjoinSet.cpp
-        #project/src/utils/TreeCompressedDisjoinSet.h
+        project/src/entity/auxiliar/impl/DirectedTreeGraph.cpp
+        project/src/entity/auxiliar/DirectedTreeGraph.h
+        project/src/entity/auxiliar/impl/TreeNode.cpp
+        project/src/entity/auxiliar/TreeNode.h
+        project/src/utils/impl/TreeDisjoinSet.cpp
+        project/src/utils/TreeDisjoinSet.h
+        project/src/utils/impl/TreeCompressedDisjoinSet.cpp
+        project/src/utils/TreeCompressedDisjoinSet.h
         project/src/parteUno/SegmentationAlgorithm.h
         project/src/parteUno/SegmentationAlgorithm.cpp
         #project/test/parteUno/SegmentationTest.cpp

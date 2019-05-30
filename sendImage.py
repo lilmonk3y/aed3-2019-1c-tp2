@@ -1,7 +1,6 @@
 import cv2
 
-# INPUT: strategia de kruskal,nom.
-# echo "array 12003.jpg" | python sendImage.py
+# echo "array 3096.jpg" | python sendImage.py | ./runSegmentacion | python createSegmentatedImage.py 
 # OUTPUT is: width, height and all the pixels from first to last (the pixel as an integer in range [0,255])
 inputVar = raw_input("Please enter image name and disjoinset:\n").split(' ', 2)
 disjoinset = inputVar[0]

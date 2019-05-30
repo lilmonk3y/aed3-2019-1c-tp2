@@ -44,12 +44,18 @@ int main(){
     SegmentationAlgorithm* algoritmo = new SegmentationAlgorithm(image, scale,w,h,disjoinSet); // configuracion algoritmo
     vector<vector<int> > imagenSegmentada = algoritmo->imageToSegmentation(); // llamda al algoritmo
     cout << endl;
+
+
+
+
+
+    cout << h << endl;
+    cout << w << endl;
+
     for(int fila = 0; fila < h ; fila ++) {
         for(int columna = 0; columna < w ; columna ++) {
-            cout << imagenSegmentada[fila][columna];
-            if((columna+1)<w) {
-                cout << " ";
-            }
+            cout << imagenSegmentada[fila][columna] << endl;
+
         }
         cout << endl;
     }

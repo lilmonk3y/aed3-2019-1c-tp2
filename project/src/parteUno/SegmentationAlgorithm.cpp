@@ -19,50 +19,50 @@ DisjoinSet* SegmentationAlgorithm::graphSementationIntoSets() {
 
     cout << "componentes disjuntas creadas"  << endl; //QUITAR
 
-    vector<Edge>* edges = this->grafo->getEdges(); // obtener E de G=(V,E)
+    //vector<Edge>* edges = this->grafo->getEdges(); // obtener E de G=(V,E)
     // lo siguiente ordena los ejes de manera creciente respecto de sus pesos:
-    sort(edges->begin(),edges->end()); // ordenar con quick sort, de manera no-decreciente la lista de todos los ejes
+    //sort(edges->begin(),edges->end()); // ordenar con quick sort, de manera no-decreciente la lista de todos los ejes
+
+    set<Edge>* edges = this->grafo->getEdgeSet(); // O(1), obtener E de G=(V,E)
 
     cout << "ejes ordenados"  << endl; //QUITAR
     cout << "cantidad de ejes:" << edges->size() << endl; //QUITAR
     int cont = 1; //QUITAR
 
-    for(vector <Edge> :: iterator edge = edges->begin(); edge != edges->end(); ++edge) {// itero todos los ejes.
-        int indiceComponenteI = disjoinSet->find(edge->getLeftVertex()); // busco componente vertice i, extremo del eje
-        int indicecomponenteJ = disjoinSet->find(edge->getRigthVertex());// busco componente vertice j, extremo del eje
+    for(auto edge : *edges) {// itero todos los ejes. (estan ordenados de manera creciente)
+    //for(vector <Edge> :: iterator edge = edges->begin(); edge != edges->end(); ++edge) {// itero todos los ejes.
+        int indiceComponenteI = disjoinSet->find(edge.getLeftVertex()); // O(1),busco componente vertice i, extremo del eje
+        int indicecomponenteJ = disjoinSet->find(edge.getRigthVertex());// O(1),busco componente vertice j, extremo del eje
 
         cout << "eje iterado numero" << cont << endl; //QUITAR
         cont = cont +1; //QUITAR
 
         if( indiceComponenteI !=  indicecomponenteJ ) {
-            if( edge->getEdgeCost() <= minInternalDifference(disjoinSet,indiceComponenteI,indicecomponenteJ) ) {
-                disjoinSet->join(indiceComponenteI, indicecomponenteJ); // union componentes a las cuales pertenece los vertices
+            if( edge.getEdgeCost() <= minInternalDifference(disjoinSet,indiceComponenteI,indicecomponenteJ) ) {
+                disjoinSet->join(indiceComponenteI, indicecomponenteJ); // O(join del disjointSet),union componentes a las cuales pertenece los vertices
             }
         }
     }
     return disjoinSet;
 }
 
-int SegmentationAlgorithm::minInternalDifference(DisjoinSet* disjoinSet,int componenteI, int componenteJ) {
-    int difCompI = internalDifference(disjoinSet,componenteI) + tau(disjoinSet, componenteI) ;
-    int difCompJ = internalDifference(disjoinSet,componenteJ) + tau(disjoinSet, componenteJ) ;
-    return min(difCompI , difCompJ);
+int SegmentationAlgorithm::minInternalDifference(DisjoinSet* disjoinSet,int indiceComponenteI, int indicecomponenteJ) {
+    set<int> componenteI = construirComponente(disjoinSet,indiceComponenteI); // VER SI SE PUEDE REDUCIR MAS
+    set<int> componenteJ = construirComponente(disjoinSet,indicecomponenteJ); // VER SI SE PUEDE REDUCIR MAS
+    int difCompI = internalDifference(componenteI) + tau(componenteI.size()) ;// O(KRUSKAL + grafo inducido)
+    int difCompJ = internalDifference(componenteJ) + tau(componenteJ.size()) ;// O(KRUSKAL + grafo inducido)
+    return min(difCompI , difCompJ); // O(1)
 }
 
-// implementar max(conjuntoDeLosPesos, eso solo
-int SegmentationAlgorithm::internalDifference(DisjoinSet* disjoinSet,int indiceDeComponente) {
-    set<int> componente = construirComponente(disjoinSet,indiceDeComponente);
-
-    Graph* subGrafoComponente = AdjacencyListGraph::adjacencyListInducedSubGraph(this->grafo,componente);// G=(C,E)
+int SegmentationAlgorithm::internalDifference(set<int> componente) {// O(KRUSKAL + creacion del grafo inducido)
+    Graph* subGrafoComponente = this->grafo->adjacencyListInducedSubGraph(componente);// G=(C,E) O(n)+O(m) // REDUJE COMPLEX
     GetMST kruskal = GetMST(new ArrayDisjoinSet());// elijo la estrategia del disjoint set
-    Graph* arbolRecubridorMinimoDeLaComponente = kruskal.getMST(subGrafoComponente);
-
-    return pesoMaximo(arbolRecubridorMinimoDeLaComponente);
+    Graph* arbolRecubridorMinimoDeLaComponente = kruskal.getMST(subGrafoComponente); // REDUJE COMPLEX
+    return arbolRecubridorMinimoDeLaComponente->getMaxWeight();// O(1) // REDUJE COMPLEX
 }
 
 // esto lo deberia hacer el disjoint set, reconstruir un conjunto disjunto
 // queda desprolijo el imageGraph
-// esto esta bien implementado:
 set<int> SegmentationAlgorithm::construirComponente(DisjoinSet* disjoinSet, int indiceDeComponente) {
     std::set<int>  componenteVertices;
     int quantityVertex = this->grafo->getVertex(); // cantidad de vertices
@@ -74,22 +74,9 @@ set<int> SegmentationAlgorithm::construirComponente(DisjoinSet* disjoinSet, int 
     return componenteVertices;
 }
 
-int SegmentationAlgorithm::tau(DisjoinSet* disjoinSet, int component) {
+int SegmentationAlgorithm::tau(int cardinal) {
     int k = this->scaleProportion; // eso se setea a mano
-    return k/cardinal(disjoinSet,component);
-}
-
-// no deberia implementarse esto aca, sino dentro del disjoint set
-// Graph se usa solo para el cardinal de vertices
-int SegmentationAlgorithm::cardinal(DisjoinSet* disjoinSet,int component) {
-    int quantityVertex = this->grafo->getVertex();
-    int cardinal = 0;
-    for(int indexVertex=0; indexVertex<quantityVertex; indexVertex++) {
-        if  (disjoinSet->find(indexVertex) == component) {
-            cardinal = cardinal +1;
-        }
-    }
-    return cardinal;
+    return k/cardinal;
 }
 
 int SegmentationAlgorithm::min(int a ,int b) {
@@ -97,17 +84,6 @@ int SegmentationAlgorithm::min(int a ,int b) {
         return a;
     }
     return b;
-}
-
-int SegmentationAlgorithm::pesoMaximo(Graph* subgrafo) {
-    int pesoMaximo = 0;
-    vector<Edge>* ejes = subgrafo->getEdges();
-    for(auto eje : *ejes) {
-        if( pesoMaximo < eje.getEdgeCost() ) {
-            pesoMaximo = eje.getEdgeCost();
-        }
-    }
-    return pesoMaximo;
 }
 
 // input

@@ -46,14 +46,12 @@ public:
 
     // metodos del algoritmo del paper:
     int minInternalDifference(DisjoinSet* disjoinSet,int componenteI, int componenteJ);
-    int internalDifference(DisjoinSet* disjoinSet,int indiceDeComponente);
-    int tau(DisjoinSet* disjoinSet,int component);
+    int internalDifference(set<int> componente);
+    int tau(int cardinal);
 
     // metodos que deberian pertenecer a otras clases:
     set<int> construirComponente(DisjoinSet* disjoinSet, int componenteIndice);
-    int pesoMaximo(Graph* graph);
     int min(int a ,int b);
-    int cardinal(DisjoinSet* disjoinSet, int component);
 };
 
 #endif //AED3_2019_1C_TP2_SEGMENTATIONALGORITHM_H

@@ -44,5 +44,12 @@ void dijkstraFifoQueue(const GasGraph& graph, uint originCity, vector<ulong>& ci
   }
 }
 
+void fullDijkstraFifoQueue(const GasGraph& graph, vector<vector<ulong>>& cityMinCost,
+    ulong initialGasCharge, ulong finalGasCharge) {
+  for(uint originCity = 0; originCity < graph.getCities(); ++originCity) {
+    dijkstraFifoQueue(graph, originCity, cityMinCost[originCity], initialGasCharge, finalGasCharge);
+  }
+}
+
 
 #endif

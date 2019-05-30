@@ -43,5 +43,11 @@ void bellmanFord(const GasGraph& graph, uint originCity, vector<ulong>& cityMinC
   }
 }
 
+void fullBellmanFord(const GasGraph& graph, vector<vector<ulong>>& cityMinCost,
+    ulong initialGasCharge, ulong finalGasCharge) {
+  for(uint originCity = 0; originCity < graph.getCities(); ++originCity) {
+    bellmanFord(graph, originCity, cityMinCost[originCity], initialGasCharge, finalGasCharge);
+  }
+}
 
 #endif

@@ -21,7 +21,7 @@ private:
 };
 
 bool operator==(const Edge first, const Edge other);
-bool operator<(const Edge first, const Edge other);
+bool operator<(const Edge first, const Edge other); // ES UN MENOR IGUAL EN REALIDAD
 
 /*
 struct

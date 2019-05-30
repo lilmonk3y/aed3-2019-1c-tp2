@@ -83,11 +83,6 @@ TEST_F(SegmentationAlgorithmTest, image3x3pixelsWith3Areas){
 
 
     set<Edge>* edges = grafo->getEdgeSet();
-    int h = 1;
-    for(auto edge : *edges) {
-        cout << h << endl;
-        h++;
-    }
     ASSERT_TRUE(grafo->getEdges()->size()==20);
 
     int segmentationScale = 50; // esto es la diferencia minima entre componentes para diferenciarse 50 anda bien
@@ -143,7 +138,6 @@ TEST_F(SegmentationAlgorithmTest, matrizImagenAGrafoPesosTest){
 
     AdjacencyListGraph* imageGraph = segmentationAlgorithm->imageToGraph(&imagen,ancho,alto);
     ASSERT_TRUE(imageGraph->getVertex()==12);
-    cout << imageGraph->getTotalCost() << endl;
     int sumValues = 100+100+70+100+100+100+50+100; // vertex 100
     sumValues = sumValues + 30+30; // vertex 30 (70 ya esta en la linea anterior)
     sumValues = sumValues + 50+50+50+50+50+50+50; // valores asociado al vertice 50
@@ -318,8 +312,5 @@ TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillas){
 
     segmentationAlgorithm = new SegmentationAlgorithm(imagen, segmentationScale, ancho, alto);
     vector<vector<int> > imagenSegmentada = segmentationAlgorithm->imageToSegmentation();
-    cout << "cantidad componentes: " << endl ;
-    cout << segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto) << endl;
-    cout << "--------" << endl ;
     ASSERT_TRUE(segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto)==5);
 }

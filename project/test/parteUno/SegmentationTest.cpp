@@ -312,5 +312,6 @@ TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillas){
 
     segmentationAlgorithm = new SegmentationAlgorithm(imagen, segmentationScale, ancho, alto);
     vector<vector<int> > imagenSegmentada = segmentationAlgorithm->imageToSegmentation();
+    segmentationAlgorithm->generarFileOutput(imagenSegmentada,ancho, alto); // genera el csv
     ASSERT_TRUE(segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto)==5);
 }

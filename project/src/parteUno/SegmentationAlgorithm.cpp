@@ -5,6 +5,7 @@
 #include "SegmentationAlgorithm.h"
 #include <set>
 #include <iostream>
+#include <fstream>
 
 SegmentationAlgorithm::SegmentationAlgorithm(vector<vector<int> > imageInput,int scale,int ancho, int alto) {
    this->grafo = this->imageToGraph(&imageInput,ancho, alto);;
@@ -214,4 +215,28 @@ void SegmentationAlgorithm::setAlto(int al)  {
 void SegmentationAlgorithm::setAncho(int an)  {
     this->ancho = an;
 
+}
+
+// en realidad es una funcion estatica
+void SegmentationAlgorithm::generarFileOutput(vector<vector<int> > imageInput,int ancho, int alto) {
+    std::ofstream fileImagenSegmentada;
+    fileImagenSegmentada.open("imagen-segmentada",std::ios::out);
+    fileImagenSegmentada << "[" ;
+    for(int i = 0; i < alto; i = i + 1) {
+        fileImagenSegmentada << "(" ;
+        for(int j = 0; j < ancho; j = j + 1) {
+            int indiceComponente = imageInput[i][j];
+            fileImagenSegmentada << indiceComponente;
+            if(j+1<ancho) {
+                fileImagenSegmentada << "," ;
+            }
+        }
+        fileImagenSegmentada << ")" ;
+        if(i+1<alto) {
+            fileImagenSegmentada << "," ;
+        }
+        //fileImagenSegmentada << endl;
+    }
+    fileImagenSegmentada << "]" ;
+    fileImagenSegmentada.close();
 }

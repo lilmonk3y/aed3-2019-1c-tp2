@@ -33,6 +33,7 @@ public:
     // solo para TESTEAR, contar la cantidad de componentes en la segmentacion:
     int cantidadDeComponentes(vector<vector<int> > imageInput,int ancho, int alto);
     list<int> componentesDeLaSegmentacion(vector<vector<int> > imageInput,int ancho, int alto);
+    void generarFileOutput(vector<vector<int> > imageInput,int ancho, int alto);
     void setGrafo(AdjacencyListGraph* graph);
     void setScaleProportion(int scaleP);
     void setAlto(int al);

@@ -34,6 +34,6 @@ void ArrayDisjoinSet::join(int alreadyIn, int newNode) {
     }
 }
 
-std::set<int>* getSet(int vertexIndex) {
+std::set<int>* ArrayDisjoinSet::getSet(int vertexIndex) {
     return this->sets->at(vertexIndex);
 }

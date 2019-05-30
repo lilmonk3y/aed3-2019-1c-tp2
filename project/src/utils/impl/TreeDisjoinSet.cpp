@@ -27,5 +27,10 @@ void TreeDisjoinSet::join(int alreadyIn, int newNode) { // creo que log(n)
 }
 
 std::set<int>* TreeDisjoinSet::getSet(int vertexIndex) {
+
+    for(auto index: *(this->components)) {// NO SEEEEEEEEE como generr el conjunto
+
+    }
+
     return this->sets->at(vertexIndex);
 }

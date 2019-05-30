@@ -45,6 +45,6 @@ void TreeCompressedDisjoinSet::join(int alreadyIn, int newNode) {
     }
 }
 
-std::set<int>* getSet(int vertexIndex) {
+std::set<int>* TreeCompressedDisjoinSet::getSet(int vertexIndex) {
     return this->sets->at(vertexIndex);
 }

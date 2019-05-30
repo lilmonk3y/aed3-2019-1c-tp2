@@ -48,6 +48,6 @@ void ArrayCompressedDisjoinSet::join(int alreadyIn, int newNode) {
     }
 }
 
-std::set<int>* getSet(int vertexIndex) {
+std::set<int>* ArrayCompressedDisjoinSet::getSet(int vertexIndex) {
     return this->sets->at(vertexIndex);
 }

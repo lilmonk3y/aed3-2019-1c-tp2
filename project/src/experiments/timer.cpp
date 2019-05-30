@@ -9,7 +9,7 @@
 #include <chrono>
 
 int main(int argc, char const* argv[]) {
-  int numberOfRuns = argc < 2 ? 20 : stoi(argv[1]),
+  int numberOfRuns = argc < 2 ? 10 : stoi(argv[1]),
       numberOfGraphs;
 
   cin >> numberOfGraphs;

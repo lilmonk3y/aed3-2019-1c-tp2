@@ -14,11 +14,12 @@ public:
     int find(int vertex) override;
     void join(int alreadyIn, int newNode) override;
     void create(Graph *graph) override;
-    std::set<int>* getSet(int vertexIndex);
+    std::set<int>* getSet(int indexComponent);
 
 private:
     DirectedTreeGraph *components;
     std::vector<std::set<int>*>* sets;
+    void unionSetLeft(std::set<int>* aSet ,std::set<int>* bSet);
 };
 
 

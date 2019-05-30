@@ -53,8 +53,8 @@ set<int> SegmentationAlgorithm::construirComponente(DisjoinSet* disjoinSet, int 
     std::set<int>  componenteVertices;
     int quantityVertex = this->grafo->getVertex(); // cantidad de vertices
     for(int indexVertex=0; indexVertex < quantityVertex; indexVertex++) {
-        if  (disjoinSet->find(indexVertex) == indiceDeComponente) {
-            componenteVertices.insert(indexVertex);
+        if  (disjoinSet->find(indexVertex) == indiceDeComponente) { // costo del find
+            componenteVertices.insert(indexVertex);// o(1) amortizado, sino o(log n)
         }
     }
     return componenteVertices;

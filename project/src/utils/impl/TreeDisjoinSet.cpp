@@ -24,13 +24,21 @@ int TreeDisjoinSet::find(int vertex) {
 
 void TreeDisjoinSet::join(int alreadyIn, int newNode) { // creo que log(n)
     this->components->addToComponent(alreadyIn, newNode);
+
+    std::set<int>* alreadyInSet = this->getSet(alreadyIn);// O(1)
+    std::set<int>* newNodeSet = this->getSet(newNode);// O(1)
+    unionSetLeft(alreadyInSet,newNodeSet); // o(n) de los conjuntos
+    this->sets->at(alreadyIn) = alreadyInSet;// o(1)
+    this->sets->at(newNode) = NULL;// conjunto vacio
 }
 
-std::set<int>* TreeDisjoinSet::getSet(int vertexIndex) {
-
-    for(auto index: *(this->components)) {// NO SEEEEEEEEE como generr el conjunto
-
+void TreeDisjoinSet::unionSetLeft(std::set<int>* aSet ,std::set<int>* bSet) { // O(n), itero elementos de bSet
+    for(auto element: *bSet) {
+        aSet->insert(element);
     }
+}
 
-    return this->sets->at(vertexIndex);
+
+std::set<int>* TreeDisjoinSet::getSet(int indexComponent) {
+    return this->sets->at(indexComponent);
 }

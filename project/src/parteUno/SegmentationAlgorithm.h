@@ -17,7 +17,7 @@ using namespace std;
 class SegmentationAlgorithm {
 public:
     // constructor (configuraciones):
-    SegmentationAlgorithm(vector<vector<int> > imageInput,int scale,int ancho, int alto);
+    SegmentationAlgorithm(vector<vector<int> > imageInput,int scale,int ancho, int alto,DisjoinSet* disjoinSetInstance);
 
     // algoritmo end to end:
     vector<vector<int> > imageToSegmentation();
@@ -32,10 +32,13 @@ public:
 
     // solo para TESTEAR, contar la cantidad de componentes en la segmentacion:
     int cantidadDeComponentes(vector<vector<int> > imageInput,int ancho, int alto);
+    list<int> componentesDeLaSegmentacion(vector<vector<int> > imageInput,int ancho, int alto);
+    void generarFileOutput(vector<vector<int> > imageInput,int ancho, int alto);
     void setGrafo(AdjacencyListGraph* graph);
     void setScaleProportion(int scaleP);
     void setAlto(int al);
     void setAncho(int an);
+    void setDisjointSet(DisjoinSet* disjoinSetInstance);
 
 //private: // comentar para los test
     // atributos:
@@ -43,17 +46,16 @@ public:
     int scaleProportion;
     int ancho;
     int alto;
+    DisjoinSet* disjoinSet;
 
     // metodos del algoritmo del paper:
     int minInternalDifference(DisjoinSet* disjoinSet,int componenteI, int componenteJ);
-    int internalDifference(DisjoinSet* disjoinSet,int indiceDeComponente);
-    int tau(DisjoinSet* disjoinSet,int component);
+    int internalDifference(set<int> componente);
+    int tau(int cardinal);
 
     // metodos que deberian pertenecer a otras clases:
     set<int> construirComponente(DisjoinSet* disjoinSet, int componenteIndice);
-    int pesoMaximo(Graph* graph);
     int min(int a ,int b);
-    int cardinal(DisjoinSet* disjoinSet, int component);
 };
 
 #endif //AED3_2019_1C_TP2_SEGMENTATIONALGORITHM_H

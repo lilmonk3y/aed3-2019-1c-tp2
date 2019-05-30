@@ -37,6 +37,9 @@ bool operator==(const Edge first, const Edge other) {
     || (first.getLeftVertex() == other.getRigthVertex() && first.getRigthVertex()== other.getLeftVertex() /*&& first.getEdgeCost()== other.getEdgeCost()*/);
 }
 
-bool operator<(const Edge first, const Edge other) {
+bool operator<(const Edge first, const Edge other) { // ES UN MENOR IGUAL
+    if(first.getEdgeCost() == other.getEdgeCost()) { // ES UN MENOR IGUAL, sino el iterador de set quita los ejes de igual peso
+        return true;
+    }
     return first.getEdgeCost() < other.getEdgeCost();
 }

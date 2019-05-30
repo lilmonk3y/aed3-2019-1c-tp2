@@ -1,14 +1,17 @@
 import cv2
 
-# INPUT: name of image.
-# echo "12003.jpg" | python sendImage.py
+# INPUT: strategia de kruskal,nom.
+# echo "array 12003.jpg" | python sendImage.py
 # OUTPUT is: width, height and all the pixels from first to last (the pixel as an integer in range [0,255])
-var = raw_input("Please enter image name:\n")
+inputVar = raw_input("Please enter image name and disjoinset:\n").split(' ', 2)
+disjoinset = inputVar[0]
+imageName = str(inputVar[1])
 
-img = cv2.imread(var,cv2.IMREAD_GRAYSCALE)
+img = cv2.imread(imageName,cv2.IMREAD_GRAYSCALE)
 
 height, width = img.shape[:2]
 
+print disjoinset
 print height
 print width
 

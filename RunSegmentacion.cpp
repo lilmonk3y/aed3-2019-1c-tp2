@@ -36,7 +36,8 @@ int main(){
     }
 
     int scale = 200;
-    SegmentationAlgorithm* algoritmo = new SegmentationAlgorithm(image, scale,w,h); // configuracion algoritmo
+    DisjoinSet* disjoinSet = new ArrayDisjoinSet();
+    SegmentationAlgorithm* algoritmo = new SegmentationAlgorithm(image, scale,w,h,disjoinSet); // configuracion algoritmo
     vector<vector<int> > imagenSegmentada = algoritmo->imageToSegmentation(); // llamda al algoritmo
     cout << endl;
     for(int fila = 0; fila < h ; fila ++) {

@@ -51,12 +51,12 @@ public:
     DisjoinSet* disjoinSet;
 
     // metodos del algoritmo del paper:
-    int minInternalDifference(DisjoinSet* disjoinSet,int componenteI, int componenteJ);
+    int minInternalDifference(int componenteI, int componenteJ);
     int internalDifference(set<int> componente);
     int tau(int cardinal);
 
     // metodos que deberian pertenecer a otras clases:
-    set<int> construirComponente(DisjoinSet* disjoinSet, int componenteIndice);
+    set<int> construirComponente(int componenteIndice);
     int min(int a ,int b);
 };
 

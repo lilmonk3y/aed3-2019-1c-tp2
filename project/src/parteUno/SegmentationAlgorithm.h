@@ -26,11 +26,11 @@ public:
 
 //protected: // comentar para los test
     // algoritmo core:
-    DisjoinSet* graphSementationIntoSets(); // referencia
+    DisjoinSet* graphSementationIntoSets(); // puede ser void
 
     // imagen a grafo, DisjoinSet a imagen (input y output):
-    AdjacencyListGraph* imageToGraph(vector<vector<int> >* imagen,int ancho, int alto);
-    vector<vector<int> > toSegmentationImage(DisjoinSet* componentes,int ancho, int alto);
+    AdjacencyListGraph* imageToGraph(vector<vector<int> >* imagen,int ancho, int alto);// puede ser void y sin parametros
+    vector<vector<int> > toSegmentationImage(DisjoinSet* componentes,int ancho, int alto);//puede ser sin parametros
 
     // solo para TESTEAR, contar la cantidad de componentes en la segmentacion:
     int cantidadDeComponentes(vector<vector<int> > imageInput,int ancho, int alto);
@@ -51,12 +51,12 @@ public:
     DisjoinSet* disjoinSet;
 
     // metodos del algoritmo del paper:
-    int minInternalDifference(DisjoinSet* disjoinSet,int componenteI, int componenteJ);
+    int minInternalDifference(int componenteI, int componenteJ);
     int internalDifference(set<int> componente);
     int tau(int cardinal);
 
     // metodos que deberian pertenecer a otras clases:
-    set<int> construirComponente(DisjoinSet* disjoinSet, int componenteIndice);
+    set<int> construirComponente(int componenteIndice);
     int min(int a ,int b);
 };
 

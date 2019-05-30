@@ -17,26 +17,26 @@ SegmentationAlgorithm::SegmentationAlgorithm(vector<vector<int> > imageInput,int
 }
 
 DisjoinSet* SegmentationAlgorithm::graphSementationIntoSets() {
-    disjoinSet->create(this->grafo); // crear lista de conjuntos disjunto del grafo original
+    this->disjoinSet->create(this->grafo); // crear lista de conjuntos disjunto del grafo original
 
     set<Edge>* edges = this->grafo->getEdgeSet(); // O(1), obtener E de G=(V,E)
 
     for(auto edge : *edges) { // itero todos los ejes. (estan ordenados de manera creciente)
-        int indiceComponenteI = disjoinSet->find(edge.getLeftVertex()); // O(1),busco componente vertice i, extremo del eje
-        int indicecomponenteJ = disjoinSet->find(edge.getRigthVertex());// O(1),busco componente vertice j, extremo del eje
+        int indiceComponenteI = this->disjoinSet->find(edge.getLeftVertex()); // O(1),busco componente vertice i, extremo del eje
+        int indicecomponenteJ = this->disjoinSet->find(edge.getRigthVertex());// O(1),busco componente vertice j, extremo del eje
 
         if( indiceComponenteI !=  indicecomponenteJ ) {
-            if( edge.getEdgeCost() <= minInternalDifference(disjoinSet,indiceComponenteI,indicecomponenteJ) ) {
-                disjoinSet->join(indiceComponenteI, indicecomponenteJ); // O(join del disjointSet),union componentes a las cuales pertenece los vertices
+            if( edge.getEdgeCost() <= minInternalDifference(indiceComponenteI,indicecomponenteJ) ) {
+                this->disjoinSet->join(indiceComponenteI, indicecomponenteJ); // O(join del disjointSet),union componentes a las cuales pertenece los vertices
             }
         }
     }
-    return disjoinSet;
+    return this->disjoinSet;
 }
 
-int SegmentationAlgorithm::minInternalDifference(DisjoinSet* disjoinSet,int indiceComponenteI, int indicecomponenteJ) {
-    set<int> componenteI = construirComponente(disjoinSet,indiceComponenteI); // VER SI SE PUEDE REDUCIR MAS
-    set<int> componenteJ = construirComponente(disjoinSet,indicecomponenteJ); // VER SI SE PUEDE REDUCIR MAS
+int SegmentationAlgorithm::minInternalDifference(int indiceComponenteI, int indicecomponenteJ) {
+    set<int> componenteI = construirComponente(indiceComponenteI); // VER SI SE PUEDE REDUCIR MAS
+    set<int> componenteJ = construirComponente(indicecomponenteJ); // VER SI SE PUEDE REDUCIR MAS
     int difCompI = internalDifference(componenteI) + tau(componenteI.size()) ;// O(KRUSKAL + grafo inducido)
     int difCompJ = internalDifference(componenteJ) + tau(componenteJ.size()) ;// O(KRUSKAL + grafo inducido)
     return min(difCompI , difCompJ); // O(1)
@@ -49,12 +49,12 @@ int SegmentationAlgorithm::internalDifference(set<int> componente) { // O(KRUSKA
     return arbolRecubridorMinimoDeLaComponente->getMaxWeight();// O(1) // REDUJE COMPLEX
 }
 
-// esto lo deberia hacer el disjoint set, reconstruir un conjunto disjunto
-set<int> SegmentationAlgorithm::construirComponente(DisjoinSet* disjoinSet, int indiceDeComponente) {
+// esto lo deberia hacer el disjoint set, reconstruir un conjunto disjunto dado un indice de una componente
+set<int> SegmentationAlgorithm::construirComponente(int indiceDeComponente) {
     std::set<int>  componenteVertices;
     int quantityVertex = this->grafo->getVertex(); // O(1), cantidad de vertices del grafo
     for(int indexVertex=0; indexVertex < quantityVertex; indexVertex++) {
-        if  (disjoinSet->find(indexVertex) == indiceDeComponente) {
+        if  (this->disjoinSet->find(indexVertex) == indiceDeComponente) {
             componenteVertices.insert(indexVertex);
         }
     }
@@ -144,7 +144,7 @@ AdjacencyListGraph* SegmentationAlgorithm::imageToGraph(vector<vector<int> >* im
     return imageGraph;
 }
 
-// output
+// output (componentes es el campo this->disjointSet)
 vector<vector<int> >  SegmentationAlgorithm::toSegmentationImage(DisjoinSet* componentes,int ancho, int alto) {
     vector<vector<int> > matrixOutput(alto, vector<int>(ancho,0) ); // inicializo todos en cero
     for(int i = 0; i < alto; i = i + 1) {
@@ -156,7 +156,7 @@ vector<vector<int> >  SegmentationAlgorithm::toSegmentationImage(DisjoinSet* com
     return matrixOutput;
 }
 
-// end 2 end
+// end 2 end (componentes es el campo this->disjointSet)
 vector<vector<int> > SegmentationAlgorithm::imageToSegmentation() {
     DisjoinSet* componentes = this->graphSementationIntoSets();
     return toSegmentationImage(componentes,this->ancho,this->alto);

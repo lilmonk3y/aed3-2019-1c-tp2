@@ -16,19 +16,13 @@ SegmentationAlgorithm::SegmentationAlgorithm(vector<vector<int> > imageInput,int
 }
 
 DisjoinSet* SegmentationAlgorithm::graphSementationIntoSets() {
-    //DisjoinSet* disjoinSet = new ArrayDisjoinSet();
     disjoinSet->create(this->grafo); // crear lista de conjuntos disjunto del grafo original
 
     set<Edge>* edges = this->grafo->getEdgeSet(); // O(1), obtener E de G=(V,E)
 
-    //int cont = 1; //QUITAR
-
-    for(auto edge : *edges) {// itero todos los ejes. (estan ordenados de manera creciente)
+    for(auto edge : *edges) { // itero todos los ejes. (estan ordenados de manera creciente al usar el tipo set)
         int indiceComponenteI = disjoinSet->find(edge.getLeftVertex()); // O(1),busco componente vertice i, extremo del eje
         int indicecomponenteJ = disjoinSet->find(edge.getRigthVertex());// O(1),busco componente vertice j, extremo del eje
-
-        //cout << "eje iterado numero" << cont << endl; //QUITAR
-        //cont = cont +1; //QUITAR
 
         if( indiceComponenteI !=  indicecomponenteJ ) {
             if( edge.getEdgeCost() <= minInternalDifference(disjoinSet,indiceComponenteI,indicecomponenteJ) ) {
@@ -40,14 +34,14 @@ DisjoinSet* SegmentationAlgorithm::graphSementationIntoSets() {
 }
 
 int SegmentationAlgorithm::minInternalDifference(DisjoinSet* disjoinSet,int indiceComponenteI, int indicecomponenteJ) {
-    set<int> componenteI = construirComponente(disjoinSet,indiceComponenteI); // VER SI SE PUEDE REDUCIR MAS
-    set<int> componenteJ = construirComponente(disjoinSet,indicecomponenteJ); // VER SI SE PUEDE REDUCIR MAS
-    int difCompI = internalDifference(componenteI) + tau(componenteI.size()) ;// O(KRUSKAL + grafo inducido)
-    int difCompJ = internalDifference(componenteJ) + tau(componenteJ.size()) ;// O(KRUSKAL + grafo inducido)
+    set<int>* componenteI = disjoinSet->getSet(indiceComponenteI);//construirComponente(disjoinSet,indiceComponenteI); // VER SI SE PUEDE REDUCIR MAS
+    set<int>* componenteJ = disjoinSet->getSet(indicecomponenteJ);//construirComponente(disjoinSet,indicecomponenteJ); // VER SI SE PUEDE REDUCIR MAS
+    int difCompI = internalDifference(componenteI) + tau(componenteI->size()) ;// O(KRUSKAL + grafo inducido)
+    int difCompJ = internalDifference(componenteJ) + tau(componenteJ->size()) ;// O(KRUSKAL + grafo inducido)
     return min(difCompI , difCompJ); // O(1)
 }
 
-int SegmentationAlgorithm::internalDifference(set<int> componente) {// O(KRUSKAL + creacion del grafo inducido)
+int SegmentationAlgorithm::internalDifference(set<int>* componente) {// O(KRUSKAL + creacion del grafo inducido)
     Graph* subGrafoComponente = this->grafo->adjacencyListInducedSubGraph(componente);// G=(C,E) O(n)+O(m) // REDUJE COMPLEX
     GetMST kruskal = GetMST(new ArrayDisjoinSet());// elijo la estrategia del disjoint set
     Graph* arbolRecubridorMinimoDeLaComponente = kruskal.getMST(subGrafoComponente); // REDUJE COMPLEX
@@ -55,7 +49,6 @@ int SegmentationAlgorithm::internalDifference(set<int> componente) {// O(KRUSKAL
 }
 
 // esto lo deberia hacer el disjoint set, reconstruir un conjunto disjunto
-// queda desprolijo el imageGraph
 set<int> SegmentationAlgorithm::construirComponente(DisjoinSet* disjoinSet, int indiceDeComponente) {
     std::set<int>  componenteVertices;
     int quantityVertex = this->grafo->getVertex(); // cantidad de vertices
@@ -83,7 +76,6 @@ int SegmentationAlgorithm::min(int a ,int b) {
 AdjacencyListGraph* SegmentationAlgorithm::imageToGraph(vector<vector<int> >* imagen,int ancho, int alto) {
     AdjacencyListGraph* imageGraph =  new AdjacencyListGraph(ancho*alto);
     // VERTICES= i * ancho + j (posiciones de la matriz de pixeles)
-    // ver si agregando dos veces mismo eje ya sabe que fue agregado previamente!!!!!!!!!!!!!!!
     for(int i = 0; i < alto; i = i + 1) {
         for(int j = 0; j < ancho; j = j + 1) {
 

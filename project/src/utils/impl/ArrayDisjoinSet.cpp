@@ -10,6 +10,15 @@ void ArrayDisjoinSet::create(Graph *graph) {
         components.at(index) = index;
     }
     this->components = components;
+
+    std::vector<std::set<int>*>* diccSetsInstance = new std::vector<std::set<int>*>();
+    diccSetsInstance->resize(graph->getVertex());// O(n)
+    for(std::size_t index = 0; index < diccSetsInstance->size(); index++){
+        std::set<int>* setsInstance = new std::set<int>();
+        setsInstance->insert(index);
+        diccSetsInstance->at(index) = setsInstance;
+    }
+    this->sets = diccSetsInstance;
 }
 
 int ArrayDisjoinSet::find(int vertex) {
@@ -23,4 +32,8 @@ void ArrayDisjoinSet::join(int alreadyIn, int newNode) {
             iter = find(alreadyIn);
         }
     }
+}
+
+std::set<int>* getSet(int vertexIndex) {
+    return this->sets->at(vertexIndex);
 }

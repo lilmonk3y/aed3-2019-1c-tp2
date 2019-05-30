@@ -14,9 +14,11 @@ public:
     int find(int vertex);
     void join(int alreadyIn, int newNode);
     void create(Graph *graph);
+    std::set<int>* getSet(int vertexIndex);
 
 private:
     std::vector<int> components;
     std::vector<int> heights;
+    std::vector<std::set<int>*>* sets;
 };
 #endif //AED3_2019_1C_TP2_COMPRESSEDDISJOINSET_H

@@ -13,6 +13,7 @@ public:
     virtual int find(int vertexIndex) = 0;
     virtual void join(int alreadyIn, int newNode) = 0;
     virtual void create(Graph *graph) = 0;
+    virtual std::set<int>* getSet(int vertexIndex) = 0; // O(1). conjunto al cual pertenece ese vertice
     virtual ~DisjoinSet() { };
 
 };

@@ -88,7 +88,7 @@ TEST_F(SegmentationAlgorithmTest, image3x3pixelsWith3Areas){
 
 
     set<Edge>* edges = grafo->getEdgeSet();
-    ASSERT_TRUE(grafo->getEdges()->size()==20);
+    ASSERT_TRUE(edges->size()==20);
 
     int segmentationScale = 50; // esto es la diferencia minima entre componentes para diferenciarse 50 anda bien
     // 199 se rompe

@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 #include "../entity/GasGraph.h"
-#include "../utils/types.h"
+#include "../misc/defines.h"
 
 using namespace std;
 

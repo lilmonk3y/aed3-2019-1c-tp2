@@ -89,3 +89,4 @@ set(SOURCE_FILES_MIN_PATH
     project/src/entity/impl/EdgeWeightedGraph.cpp
     project/src/entity/impl/GasGraph.cpp)
 add_executable(main-min-path main-min-path.cpp ${SOURCE_FILES_MIN_PATH})
+add_executable(timer project/src/experiments/timer.cpp ${SOURCE_FILES_MIN_PATH})

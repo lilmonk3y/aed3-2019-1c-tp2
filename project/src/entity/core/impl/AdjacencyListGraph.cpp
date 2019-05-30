@@ -3,7 +3,6 @@
 //
 
 #include "../AdjacencyListGraph.h"
-#include "../../../utils/types.h"
 
 AdjacencyListGraph::AdjacencyListGraph(int vertexAmount) {
     this->resetSize(vertexAmount);

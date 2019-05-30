@@ -7,15 +7,16 @@
 #include <iostream>
 #include <fstream>
 
-SegmentationAlgorithm::SegmentationAlgorithm(vector<vector<int> > imageInput,int scale,int ancho, int alto) {
+SegmentationAlgorithm::SegmentationAlgorithm(vector<vector<int> > imageInput,int scale,int ancho, int alto,DisjoinSet* disjoinSetInstance) {
    this->grafo = this->imageToGraph(&imageInput,ancho, alto);;
    this->scaleProportion = scale;
    this->ancho=ancho;
    this->alto=alto;
+   this->disjoinSet = disjoinSetInstance;
 }
 
 DisjoinSet* SegmentationAlgorithm::graphSementationIntoSets() {
-    DisjoinSet* disjoinSet = new ArrayDisjoinSet();
+    //DisjoinSet* disjoinSet = new ArrayDisjoinSet();
     disjoinSet->create(this->grafo); // crear lista de conjuntos disjunto del grafo original
 
     set<Edge>* edges = this->grafo->getEdgeSet(); // O(1), obtener E de G=(V,E)
@@ -215,6 +216,10 @@ void SegmentationAlgorithm::setAlto(int al)  {
 void SegmentationAlgorithm::setAncho(int an)  {
     this->ancho = an;
 
+}
+
+void SegmentationAlgorithm::setDisjointSet(DisjoinSet* disjoinSetInstance) {
+    this->disjoinSet = disjoinSetInstance;
 }
 
 // en realidad es una funcion estatica

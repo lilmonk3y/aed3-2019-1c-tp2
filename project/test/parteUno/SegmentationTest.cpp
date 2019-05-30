@@ -2,6 +2,8 @@
 #include "../../src/parteUno/SegmentationAlgorithm.h"
 #include "../../src/utils/DisjoinSet.h"
 #include "../../src/utils/ArrayDisjoinSet.h"
+#include "../../src/utils/TreeCompressedDisjoinSet.h"
+#include "../../src/utils/ArrayCompressedDisjoinSet.h"
 #include "../../src/utils/GetMST.h"
 #include <set>
 #include <map>
@@ -15,7 +17,8 @@ struct SegmentationAlgorithmTest : testing::Test{
         int segmentationScaleDefault = 2;
         int anchoDefault =1;
         int altoDefault =1;
-        segmentationAlgorithm = new SegmentationAlgorithm(imagen,segmentationScaleDefault,anchoDefault,altoDefault);
+        DisjoinSet* disjoinSet = new ArrayDisjoinSet();
+        segmentationAlgorithm = new SegmentationAlgorithm(imagen,segmentationScaleDefault,anchoDefault,altoDefault,disjoinSet);
     }
 
     ~SegmentationAlgorithmTest(){
@@ -33,6 +36,8 @@ TEST_F(SegmentationAlgorithmTest, simpleSegmentationWorks){
 
     //segmentationScale = 2; // con 1 falla,con 100 anda bien, con 1000 falla
     segmentationAlgorithm->setGrafo(grafo);
+    DisjoinSet* disjoinSet = new ArrayDisjoinSet();
+    segmentationAlgorithm->setDisjointSet(disjoinSet);
     DisjoinSet* disjointSet = segmentationAlgorithm->graphSementationIntoSets();
 
     ASSERT_TRUE(disjointSet->find(0) == disjointSet->find(1) );
@@ -89,6 +94,8 @@ TEST_F(SegmentationAlgorithmTest, image3x3pixelsWith3Areas){
     // 199 se rompe
     segmentationAlgorithm->setScaleProportion(segmentationScale);
     segmentationAlgorithm->setGrafo(grafo);
+    DisjoinSet* disjoinSet = new ArrayDisjoinSet();
+    segmentationAlgorithm->setDisjointSet(disjoinSet);
     DisjoinSet* disjointSet = segmentationAlgorithm->graphSementationIntoSets();
 
     ASSERT_TRUE(disjointSet->find(0) == disjointSet->find(3) );
@@ -118,6 +125,8 @@ TEST_F(SegmentationAlgorithmTest, matrizImagenAGrafo){
     int ancho =3;
     int alto =4;
 
+    DisjoinSet* disjoinSet = new ArrayDisjoinSet();
+    segmentationAlgorithm->setDisjointSet(disjoinSet);
     AdjacencyListGraph* imageGraph = segmentationAlgorithm->imageToGraph(&imagen,ancho,alto);
 
     ASSERT_TRUE(imageGraph->getVertex()==12); // cantidad de vertices
@@ -136,6 +145,8 @@ TEST_F(SegmentationAlgorithmTest, matrizImagenAGrafoPesosTest){
     int ancho =3;
     int alto =4;
 
+    DisjoinSet* disjoinSet = new ArrayDisjoinSet();
+    segmentationAlgorithm->setDisjointSet(disjoinSet);
     AdjacencyListGraph* imageGraph = segmentationAlgorithm->imageToGraph(&imagen,ancho,alto);
     ASSERT_TRUE(imageGraph->getVertex()==12);
     int sumValues = 100+100+70+100+100+100+50+100; // vertex 100
@@ -156,6 +167,8 @@ TEST_F(SegmentationAlgorithmTest, sumaDePesosCorrecta){
     int ancho =3;
     int alto =4;
 
+    DisjoinSet* disjoinSet = new ArrayDisjoinSet();
+    segmentationAlgorithm->setDisjointSet(disjoinSet);
     AdjacencyListGraph* imageGraph = segmentationAlgorithm->imageToGraph(&imagen,ancho,alto);
 
     ASSERT_TRUE(imageGraph->getVertex()==12); // cantidad de vertices
@@ -173,6 +186,8 @@ TEST_F(SegmentationAlgorithmTest, sumaDePesosCorrectaOtroTest){
     int ancho =3;
     int alto =3;
 
+    DisjoinSet* disjoinSet = new ArrayDisjoinSet();
+    segmentationAlgorithm->setDisjointSet(disjoinSet);
     AdjacencyListGraph* imageGraph = segmentationAlgorithm->imageToGraph(&imagen,ancho,alto);
 
     ASSERT_TRUE(imageGraph->getVertex()==9); // cantidad de vertices
@@ -194,7 +209,9 @@ TEST_F(SegmentationAlgorithmTest, segmentacionDeUnaImagenChiquita) {
     int ancho = 4;
     int alto = 7;
     int scale = 2;
-    segmentationAlgorithm = new SegmentationAlgorithm(imagen,scale,ancho,alto); // usar otra configuracion
+
+    DisjoinSet* disjoinSet = new ArrayDisjoinSet();
+    segmentationAlgorithm = new SegmentationAlgorithm(imagen,scale,ancho,alto,disjoinSet); // usar otra configuracion
     vector<vector<int> > imagenSegmentada = segmentationAlgorithm->imageToSegmentation();
     ASSERT_TRUE(segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto)==4); // el fondo, el puntito arriba, el puntito a la izquirda, y el palito en el medio
 }
@@ -208,7 +225,9 @@ TEST_F(SegmentationAlgorithmTest, segmentacionDeUnaImagenConUnaCruz) {
     int ancho = 3;
     int alto = 3;
     int scale = 2;
-    segmentationAlgorithm = new SegmentationAlgorithm(imagen,scale,ancho,alto); // usar otra configuracion
+
+    DisjoinSet* disjoinSet = new ArrayDisjoinSet();
+    segmentationAlgorithm = new SegmentationAlgorithm(imagen,scale,ancho,alto,disjoinSet); // usar otra configuracion
     vector<vector<int> > imagenSegmentada = segmentationAlgorithm->imageToSegmentation();
     ASSERT_TRUE(segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto)==2);
 }
@@ -310,8 +329,105 @@ TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillas){
 
     // union del disjoint set tiene costo N
 
-    segmentationAlgorithm = new SegmentationAlgorithm(imagen, segmentationScale, ancho, alto);
+    DisjoinSet* disjoinSet = new ArrayDisjoinSet();
+    segmentationAlgorithm = new SegmentationAlgorithm(imagen, segmentationScale, ancho, alto,disjoinSet);
     vector<vector<int> > imagenSegmentada = segmentationAlgorithm->imageToSegmentation();
-    segmentationAlgorithm->generarFileOutput(imagenSegmentada,ancho, alto); // genera el csv
+    segmentationAlgorithm->generarFileOutput(imagenSegmentada,ancho, alto); // genera el file con la imagen segmentada (pixeles componentes)
+    ASSERT_TRUE(segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto)==5);
+}
+
+
+
+
+TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillasOtroDisjointSet){
+    vector<vector<int> > imagen = {{248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,189,103,34,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,189,103,34,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,232,121,36,0,0,0,248,248,248,248,248,248,248,248,248,248,248,248,248,232,121,36,0,0,0,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,232,110,17,0,0,0,0,0,248,248,248,248,248,248,248,248,248,248,248,232,110,17,0,0,0,0,0,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,147,19,0,0,0,0,0,0,0,248,248,248,248,248,248,248,248,248,248,147,19,0,0,0,0,0,0,0,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,248,227,65,0,0,0,0,0,0,12,87,189,248,248,248,248,248,248,248,248,227,65,0,0,0,0,0,0,12,87,189,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,195,28,0,0,0,0,0,0,72,215,248,248,248,248,248,248,248,248,248,195,28,0,0,0,0,0,0,72,215,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,195,17,0,0,0,0,0,6,137,248,248,248,248,248,248,248,248,248,248,195,17,0,0,0,0,0,6,137,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,248,207,19,0,0,0,0,0,6,159,248,248,248,248,248,248,248,248,248,248,207,19,0,0,0,0,0,6,159,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,238,43,0,0,0,0,0,0,121,248,248,248,248,248,248,248,248,248,248,238,43,0,0,0,0,0,0,121,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,110,0,0,0,0,0,0,36,242,248,248,248,248,248,248,248,248,248,248,110,0,0,0,0,0,0,36,242,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,215,6,0,0,0,0,0,0,137,248,248,248,248,248,248,248,248,248,248,215,6,0,0,0,0,0,0,137,248,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,94,0,0,0,0,0,0,0,215,248,248,248,248,248,248,248,248,248,248,94,0,0,0,0,0,0,0,215,248,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,238,17,0,0,0,0,0,0,0,238,248,248,248,248,248,248,248,248,248,238,17,0,0,0,0,0,0,0,238,248,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,177,0,0,0,0,0,0,0,0,177,248,248,248,248,248,248,248,248,248,177,0,0,0,0,0,0,0,0,177,248,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,113,0,0,0,0,0,0,0,0,24,195,248,248,248,248,248,248,248,248,113,0,0,0,0,0,0,0,0,24,195,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,58,0,0,0,0,0,0,0,0,0,6,113,242,248,248,248,248,248,248,58,0,0,0,0,0,0,0,0,0,6,113,242,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,36,0,0,0,0,0,0,0,0,0,0,0,43,215,248,248,248,248,248,36,0,0,0,0,0,0,0,0,0,0,0,43,215,248,248,248,248,248,248},
+                                   {248,248,248,248,248,19,0,0,0,0,0,0,0,0,0,0,0,0,36,238,248,248,248,248,19,0,0,0,0,0,0,0,0,0,0,0,0,36,238,248,248,248,248,248},
+                                   {248,248,248,248,248,6,0,0,0,0,0,0,0,0,0,0,0,0,0,121,248,248,248,248,6,0,0,0,0,0,0,0,0,0,0,0,0,0,121,248,248,248,248,248},
+                                   {248,248,248,248,248,19,0,0,0,0,0,0,0,0,0,0,0,0,0,43,248,248,248,248,19,0,0,0,0,0,0,0,0,0,0,0,0,0,43,248,248,248,248,248},
+                                   {248,248,248,248,248,43,0,0,0,0,0,0,0,0,0,0,0,0,0,17,248,248,248,248,43,0,0,0,0,0,0,0,0,0,0,0,0,0,17,248,248,248,248,248},
+                                   {248,248,248,248,248,110,0,0,0,0,0,0,0,0,0,0,0,0,0,12,248,248,248,248,110,0,0,0,0,0,0,0,0,0,0,0,0,0,12,248,248,248,248,248},
+                                   {248,248,248,248,248,207,6,0,0,0,0,0,0,0,0,0,0,0,0,36,248,248,248,248,207,6,0,0,0,0,0,0,0,0,0,0,0,0,36,248,248,248,248,248},
+                                   {248,248,248,248,248,248,103,0,0,0,0,0,0,0,0,0,0,0,0,113,248,248,248,248,248,103,0,0,0,0,0,0,0,0,0,0,0,0,113,248,248,248,248,248},
+                                   {248,248,248,248,248,248,242,65,0,0,0,0,0,0,0,0,0,0,28,232,248,248,248,248,248,242,65,0,0,0,0,0,0,0,0,0,0,28,232,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,242,103,6,0,0,0,0,0,0,0,36,207,248,248,248,248,248,248,248,242,103,6,0,0,0,0,0,0,0,36,207,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,215,103,43,17,6,24,65,147,242,248,248,248,248,248,248,248,248,248,248,215,103,43,17,6,24,65,147,242,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248}};
+
+    int ancho = 44;
+    int alto = 33;
+    int segmentationScale = 900;
+
+    DisjoinSet* disjoinSet = new TreeCompressedDisjoinSet();
+    segmentationAlgorithm = new SegmentationAlgorithm(imagen, segmentationScale, ancho, alto,disjoinSet);
+    vector<vector<int> > imagenSegmentada = segmentationAlgorithm->imageToSegmentation();
+    segmentationAlgorithm->generarFileOutput(imagenSegmentada,ancho, alto); // genera el file
+    ASSERT_TRUE(segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto)==5);
+}
+
+
+TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillasConArrayCompressedDisjointSet){
+    vector<vector<int> > imagen = {{248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,189,103,34,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,189,103,34,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,232,121,36,0,0,0,248,248,248,248,248,248,248,248,248,248,248,248,248,232,121,36,0,0,0,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,232,110,17,0,0,0,0,0,248,248,248,248,248,248,248,248,248,248,248,232,110,17,0,0,0,0,0,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,147,19,0,0,0,0,0,0,0,248,248,248,248,248,248,248,248,248,248,147,19,0,0,0,0,0,0,0,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,248,227,65,0,0,0,0,0,0,12,87,189,248,248,248,248,248,248,248,248,227,65,0,0,0,0,0,0,12,87,189,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,195,28,0,0,0,0,0,0,72,215,248,248,248,248,248,248,248,248,248,195,28,0,0,0,0,0,0,72,215,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,195,17,0,0,0,0,0,6,137,248,248,248,248,248,248,248,248,248,248,195,17,0,0,0,0,0,6,137,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,248,207,19,0,0,0,0,0,6,159,248,248,248,248,248,248,248,248,248,248,207,19,0,0,0,0,0,6,159,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,238,43,0,0,0,0,0,0,121,248,248,248,248,248,248,248,248,248,248,238,43,0,0,0,0,0,0,121,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,110,0,0,0,0,0,0,36,242,248,248,248,248,248,248,248,248,248,248,110,0,0,0,0,0,0,36,242,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,215,6,0,0,0,0,0,0,137,248,248,248,248,248,248,248,248,248,248,215,6,0,0,0,0,0,0,137,248,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,94,0,0,0,0,0,0,0,215,248,248,248,248,248,248,248,248,248,248,94,0,0,0,0,0,0,0,215,248,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,238,17,0,0,0,0,0,0,0,238,248,248,248,248,248,248,248,248,248,238,17,0,0,0,0,0,0,0,238,248,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,177,0,0,0,0,0,0,0,0,177,248,248,248,248,248,248,248,248,248,177,0,0,0,0,0,0,0,0,177,248,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,113,0,0,0,0,0,0,0,0,24,195,248,248,248,248,248,248,248,248,113,0,0,0,0,0,0,0,0,24,195,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,58,0,0,0,0,0,0,0,0,0,6,113,242,248,248,248,248,248,248,58,0,0,0,0,0,0,0,0,0,6,113,242,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,36,0,0,0,0,0,0,0,0,0,0,0,43,215,248,248,248,248,248,36,0,0,0,0,0,0,0,0,0,0,0,43,215,248,248,248,248,248,248},
+                                   {248,248,248,248,248,19,0,0,0,0,0,0,0,0,0,0,0,0,36,238,248,248,248,248,19,0,0,0,0,0,0,0,0,0,0,0,0,36,238,248,248,248,248,248},
+                                   {248,248,248,248,248,6,0,0,0,0,0,0,0,0,0,0,0,0,0,121,248,248,248,248,6,0,0,0,0,0,0,0,0,0,0,0,0,0,121,248,248,248,248,248},
+                                   {248,248,248,248,248,19,0,0,0,0,0,0,0,0,0,0,0,0,0,43,248,248,248,248,19,0,0,0,0,0,0,0,0,0,0,0,0,0,43,248,248,248,248,248},
+                                   {248,248,248,248,248,43,0,0,0,0,0,0,0,0,0,0,0,0,0,17,248,248,248,248,43,0,0,0,0,0,0,0,0,0,0,0,0,0,17,248,248,248,248,248},
+                                   {248,248,248,248,248,110,0,0,0,0,0,0,0,0,0,0,0,0,0,12,248,248,248,248,110,0,0,0,0,0,0,0,0,0,0,0,0,0,12,248,248,248,248,248},
+                                   {248,248,248,248,248,207,6,0,0,0,0,0,0,0,0,0,0,0,0,36,248,248,248,248,207,6,0,0,0,0,0,0,0,0,0,0,0,0,36,248,248,248,248,248},
+                                   {248,248,248,248,248,248,103,0,0,0,0,0,0,0,0,0,0,0,0,113,248,248,248,248,248,103,0,0,0,0,0,0,0,0,0,0,0,0,113,248,248,248,248,248},
+                                   {248,248,248,248,248,248,242,65,0,0,0,0,0,0,0,0,0,0,28,232,248,248,248,248,248,242,65,0,0,0,0,0,0,0,0,0,0,28,232,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,242,103,6,0,0,0,0,0,0,0,36,207,248,248,248,248,248,248,248,242,103,6,0,0,0,0,0,0,0,36,207,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,215,103,43,17,6,24,65,147,242,248,248,248,248,248,248,248,248,248,248,215,103,43,17,6,24,65,147,242,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
+                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248}};
+
+    int ancho = 44;
+    int alto = 33;
+    int segmentationScale = 900;
+
+    DisjoinSet* disjoinSet = new ArrayCompressedDisjoinSet();
+    segmentationAlgorithm = new SegmentationAlgorithm(imagen, segmentationScale, ancho, alto,disjoinSet);
+    vector<vector<int> > imagenSegmentada = segmentationAlgorithm->imageToSegmentation();
+    segmentationAlgorithm->generarFileOutput(imagenSegmentada,ancho, alto); // genera el file
     ASSERT_TRUE(segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto)==5);
 }

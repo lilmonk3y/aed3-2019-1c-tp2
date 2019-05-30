@@ -17,7 +17,7 @@ using namespace std;
 class SegmentationAlgorithm {
 public:
     // constructor (configuraciones):
-    SegmentationAlgorithm(vector<vector<int> > imageInput,int scale,int ancho, int alto);
+    SegmentationAlgorithm(vector<vector<int> > imageInput,int scale,int ancho, int alto,DisjoinSet* disjoinSetInstance);
 
     // algoritmo end to end:
     vector<vector<int> > imageToSegmentation();
@@ -38,6 +38,7 @@ public:
     void setScaleProportion(int scaleP);
     void setAlto(int al);
     void setAncho(int an);
+    void setDisjointSet(DisjoinSet* disjoinSetInstance);
 
 //private: // comentar para los test
     // atributos:
@@ -45,6 +46,7 @@ public:
     int scaleProportion;
     int ancho;
     int alto;
+    DisjoinSet* disjoinSet;
 
     // metodos del algoritmo del paper:
     int minInternalDifference(DisjoinSet* disjoinSet,int componenteI, int componenteJ);

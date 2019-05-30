@@ -298,7 +298,7 @@ TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillas){
 
     int ancho = 44;
     int alto = 33;
-    int segmentationScale = 400; // con 150 hay 43 componentes, con 200 hay 27, con 400 hay 15 componentes, con 900 hay 5 componente
+    int segmentationScale = 900; // con 150 hay 43 componentes, con 200 hay 27, con 400 hay 15 componentes, con 900 hay 5 componente
     // con 1500 devuelve 15 mmmmm
     // con 700 da 7
     // si entre 400 y 1500 hay 15, el punto medio es 950

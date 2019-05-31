@@ -57,10 +57,14 @@ target_link_libraries(aed3_2019_1c_tp2 gtest gtest_main)
                 project/src/utils/impl/ArrayDisjoinSet.cpp
                 project/src/utils/ArrayCompressedDisjoinSet.h
                 project/src/utils/impl/ArrayCompressedDisjoinSet.cpp
-                #project/src/utils/TreeCompressedDisjoinSet.h
-                #project/src/utils/impl/TreeCompressedDisjoinSet.cpp
-                #project/src/utils/TreeDisjoinSet.h
-                #project/src/utils/impl/TreeDisjoinSet.cpp
+                project/src/utils/TreeCompressedDisjoinSet.h
+                project/src/utils/impl/TreeCompressedDisjoinSet.cpp
+                project/src/utils/TreeDisjoinSet.h
+                project/src/utils/impl/TreeDisjoinSet.cpp
+                project/src/entity/auxiliar/impl/DirectedTreeGraph.cpp
+                project/src/entity/auxiliar/DirectedTreeGraph.h
+                project/src/entity/auxiliar/impl/TreeNode.cpp
+                project/src/entity/auxiliar/TreeNode.h
         project/src/utils/GetMST.h
         project/src/utils/impl/GetMST.cpp
         project/src/entity/core/Edge.h
@@ -69,7 +73,7 @@ target_link_libraries(aed3_2019_1c_tp2 gtest gtest_main)
         project/src/parteUno/SegmentationAlgorithm.cpp
         )
 
-add_executable(RunSegmentacion RunSegmentacion.cpp ${SEGMENTACION_FILES})
+add_executable(runSegmentacion RunSegmentacion.cpp ${SEGMENTACION_FILES})
 
 target_link_libraries(aed3_2019_1c_tp2 gtest gtest_main)
 

@@ -26,7 +26,7 @@
 
 #include <vector>
 #include <istream>
-#include "../utils/types.h"
+#include "../misc/defines.h"
 
 using namespace std;
 
@@ -42,6 +42,7 @@ public:
     GasGraph(istream& istream, ulong tankCapacity);
     uint getVertices() const;
     uint getCities() const;
+    uint getRoutes() const;
     const vector<Edge>& getNeighbors(uint vertex) const;
     uint getCity(uint vertex) const;
     uint getTankCapacity() const;
@@ -51,6 +52,7 @@ public:
 private:
     vector<vector<Edge>> adjacencyList;
     uint cities;
+    uint routes;
     const ulong tankCapacity;
 
     void addEdges(uint originCity, uint destinationCity, ulong gasRequired, ulong gasPrice1,

@@ -20,3 +20,6 @@ lib/googletest/googlemock/libgmock.a
 lib/googletest/googlemock/libgmock_main.a
 lib/googletest/googlemock/libgmock_maind.a
 lib/googletest/googlemock/libgmockd.a
+RunSegmentacion
+timer
+project/src/experiments/.ipynb_checkpoints/

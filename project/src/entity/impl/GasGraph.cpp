@@ -23,7 +23,6 @@ void GasGraph::addEdges(uint city1, uint city2, ulong gasRequired, ulong gasPric
 }
 
 GasGraph::GasGraph(istream& istream, ulong tankCapacity) : tankCapacity(tankCapacity) {
-  uint routes; // number of routes
   istream >> cities >> routes;
 
   // Read weight of vertices:
@@ -67,6 +66,10 @@ const vector<GasGraph::Edge>& GasGraph::getNeighbors(uint vertex) const {
 
 uint GasGraph::getCities() const {
   return cities;
+}
+
+uint GasGraph::getRoutes() const {
+  return routes;
 }
 
 // Prerequisite: vertex < getVertices()

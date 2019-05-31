@@ -6,7 +6,7 @@
 #include <queue>
 #include <tuple>
 #include "../entity/GasGraph.h"
-#include "../utils/types.h"
+#include "../misc/defines.h"
 
 using namespace std;
 
@@ -41,6 +41,15 @@ void dijkstraPriorityQueue(const GasGraph& graph, uint originCity, vector<ulong>
           cityMinCost[graph.getCity(vertex_j)] = cost_j;
       }
     }
+  }
+}
+
+void fullDijkstraPriorityQueue(const GasGraph& graph, vector<vector<ulong>>& cityMinCost,
+    ulong initialGasCharge, ulong finalGasCharge) {
+  cityMinCost.resize(graph.getCities());
+  for(uint originCity = 0; originCity < graph.getCities(); ++originCity) {
+    dijkstraPriorityQueue(graph, originCity, cityMinCost[originCity], initialGasCharge,
+      finalGasCharge);
   }
 }
 

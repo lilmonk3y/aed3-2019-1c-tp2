@@ -49,6 +49,7 @@ add_executable(aed3_2019_1c_tp2 main.cpp ${SOURCE_FILES})
         project/src/entity/core/impl/AdjacencyListGraph.cpp
         project/src/entity/auxiliar/impl/AdjacencyNode.cpp
         project/src/entity/auxiliar/AdjacencyNode.h
+                project/src/utils/DisjoinSet.h
         project/src/utils/ArrayDisjoinSet.h
         project/src/utils/ArrayCompressedDisjoinSet.h
         project/src/utils/DisjoinSet.h
@@ -68,13 +69,13 @@ add_executable(aed3_2019_1c_tp2 main.cpp ${SOURCE_FILES})
         project/src/utils/TreeCompressedDisjoinSet.h
         project/src/parteUno/SegmentationAlgorithm.h
         project/src/parteUno/SegmentationAlgorithm.cpp
-        #project/test/parteUno/SegmentationTest.cpp
         )
 
 add_executable(runSegmentacion RunSegmentacion.cpp ${SEGMENTACION_FILES})
 #add_executable(segmentacion RunSegmentacion.cpp ${SEGMENTACION_FILES})
 
 #target_link_libraries(RunSegmentation segLib)
+add_executable(ExperimentacionSegmentacion project/src/experiments/segmentacion/experimento-segmentacion-1.cpp ${SEGMENTACION_FILES})
 
 set(SOURCE_FILES_MIN_PATH
     project/src/algorithms/bellman-ford.hpp
@@ -102,3 +103,4 @@ add_library( YourLib ${SEGMENTACION_FILES} )
 #        # Make sure YourLib is linked to each app
 #        target_link_libraries( ${testname} YourLib )
 #endforeach( testsourcefile ${APP_SOURCES} )
+add_executable(timer project/src/experiments/timer.cpp ${SOURCE_FILES_MIN_PATH})

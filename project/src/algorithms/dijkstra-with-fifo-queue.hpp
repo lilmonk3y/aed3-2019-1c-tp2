@@ -6,7 +6,7 @@
 #include <queue>
 #include <tuple>
 #include "../entity/GasGraph.h"
-#include "../utils/types.h"
+#include "../misc/defines.h"
 
 using namespace std;
 
@@ -41,6 +41,14 @@ void dijkstraFifoQueue(const GasGraph& graph, uint originCity, vector<ulong>& ci
           cityMinCost[graph.getCity(vertex_j)] = cost_j;
       }
     }
+  }
+}
+
+void fullDijkstraFifoQueue(const GasGraph& graph, vector<vector<ulong>>& cityMinCost,
+    ulong initialGasCharge, ulong finalGasCharge) {
+  cityMinCost.resize(graph.getCities());
+  for(uint originCity = 0; originCity < graph.getCities(); ++originCity) {
+    dijkstraFifoQueue(graph, originCity, cityMinCost[originCity], initialGasCharge, finalGasCharge);
   }
 }
 

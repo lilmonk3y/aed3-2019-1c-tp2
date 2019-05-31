@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 #include "../entity/GasGraph.h"
-#include "../utils/types.h"
+#include "../misc/defines.h"
 
 using namespace std;
 
@@ -43,5 +43,12 @@ void bellmanFord(const GasGraph& graph, uint originCity, vector<ulong>& cityMinC
   }
 }
 
+void fullBellmanFord(const GasGraph& graph, vector<vector<ulong>>& cityMinCost,
+    ulong initialGasCharge, ulong finalGasCharge) {
+  cityMinCost.resize(graph.getCities());
+  for(uint originCity = 0; originCity < graph.getCities(); ++originCity) {
+    bellmanFord(graph, originCity, cityMinCost[originCity], initialGasCharge, finalGasCharge);
+  }
+}
 
 #endif

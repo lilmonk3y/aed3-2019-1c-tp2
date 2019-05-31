@@ -44,6 +44,7 @@ public:
     void setAlto(int al);
     void setAncho(int an);
     void setDisjointSet(DisjoinSet* disjoinSetInstance);
+    std::map<int,std::set<int>*>* joinComponentsOnFather( int fatherIndex, int sonIndex);
 
 //private: // comentar para los test
     // atributos:
@@ -52,15 +53,18 @@ public:
     int ancho;
     int alto;
     DisjoinSet* disjoinSet;
+    std::map<int,std::set<int>*>* adyacentesPorComponente;
 
     // metodos del algoritmo del paper:
     int minInternalDifference(int componenteI, int componenteJ);
-    int internalDifference(set<int> componente);
+    int internalDifference(set<int> *componente);
     int tau(int cardinal);
 
     // metodos que deberian pertenecer a otras clases:
     set<int> construirComponente(int componenteIndice);
     int min(int a ,int b);
 };
+
+std::map<int,std::set<int>*>* inicializarMapaComoDisjoinSet(int tamaño);
 
 #endif //AED3_2019_1C_TP2_SEGMENTATIONALGORITHM_H

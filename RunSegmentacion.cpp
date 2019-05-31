@@ -16,11 +16,14 @@ int main(){
      Cada linea debeŕa contener w enteros.
      Dicho entero representar ́a el conjunto al que pertenece el pixel.
      */
-     string strategyName;
-    int w;
+    string strategyName;
+    int scale;
     int h;
+    int w;
+
 
     std::cin >> strategyName;
+    std::cin >> scale;
     std::cin >> h; // altura
     std::cin >> w; // ancho
 
@@ -42,8 +45,7 @@ int main(){
     }
 
 
-
-    int scale = 200;
+    
     DisjoinSet* disjoinSet = selectStrategy(strategyName);
     SegmentationAlgorithm* algoritmo = new SegmentationAlgorithm(image, scale,w,h,disjoinSet); // configuracion algoritmo
     vector<vector<int> > imagenSegmentada = algoritmo->imageToSegmentation(); // llamda al algoritmo

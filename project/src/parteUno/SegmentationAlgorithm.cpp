@@ -14,6 +14,7 @@ SegmentationAlgorithm::SegmentationAlgorithm(vector<vector<int> > imageInput,int
    this->ancho=ancho;
    this->alto=alto;
    this->disjoinSet = disjoinSetInstance;
+   this->adyacentesPorComponente = inicializarMapaComoDisjoinSet(ancho*alto);
 }
 
 DisjoinSet* SegmentationAlgorithm::graphSementationIntoSets() {
@@ -28,6 +29,8 @@ DisjoinSet* SegmentationAlgorithm::graphSementationIntoSets() {
         if( indiceComponenteI !=  indicecomponenteJ ) {
             if( edge.getEdgeCost() <= minInternalDifference(indiceComponenteI,indicecomponenteJ) ) {
                 this->disjoinSet->join(indiceComponenteI, indicecomponenteJ); // O(join del disjointSet),union componentes a las cuales pertenece los vertices
+
+                this->joinComponentsOnFather(indiceComponenteI, indicecomponenteJ);
             }
         }
     }
@@ -35,14 +38,14 @@ DisjoinSet* SegmentationAlgorithm::graphSementationIntoSets() {
 }
 
 int SegmentationAlgorithm::minInternalDifference(int indiceComponenteI, int indicecomponenteJ) {
-    set<int> componenteI = construirComponente(indiceComponenteI); // VER SI SE PUEDE REDUCIR MAS
-    set<int> componenteJ = construirComponente(indicecomponenteJ); // VER SI SE PUEDE REDUCIR MAS
-    int difCompI = internalDifference(componenteI) + tau(componenteI.size()) ;// O(KRUSKAL + grafo inducido)
-    int difCompJ = internalDifference(componenteJ) + tau(componenteJ.size()) ;// O(KRUSKAL + grafo inducido)
+    set<int>* componenteI = this->adyacentesPorComponente->at(indiceComponenteI);
+    set<int>* componenteJ = this->adyacentesPorComponente->at(indicecomponenteJ);
+    int difCompI = internalDifference(componenteI) + tau(componenteI->size()) ;// O(KRUSKAL + grafo inducido)
+    int difCompJ = internalDifference(componenteJ) + tau(componenteJ->size()) ;// O(KRUSKAL + grafo inducido)
     return min(difCompI , difCompJ); // O(1)
 }
 
-int SegmentationAlgorithm::internalDifference(set<int> componente) { // O(KRUSKAL + creacion del grafo inducido)
+int SegmentationAlgorithm::internalDifference(set<int> *componente) { // O(KRUSKAL + creacion del grafo inducido)
     Graph* subGrafoComponente = this->grafo->adjacencyListInducedSubGraph(componente);// G=(C,E) O(n)+O(m) // REDUJE COMPLEX
     GetMST kruskal = GetMST(new ArrayDisjoinSet()); // elijo la estrategia del disjoint set
     Graph* arbolRecubridorMinimoDeLaComponente = kruskal.getMST(subGrafoComponente); // REDUJE COMPLEX
@@ -65,6 +68,34 @@ int SegmentationAlgorithm::tau(int cardinal) {
     int k = this->scaleProportion; // eso se setea a mano
     return k/cardinal;
 }
+
+/*
+ * Este método hace un join de las dos componentes que le llegan por parámetro.
+ * Hacer un join de los elementos de cada componente nos ahorra mucha memoria y tiempo de cálculo en el método
+ * minInternalDifference podiendo hacerlo en O(1) y pagando el costo una sola vez.
+ */
+std::map<int,std::set<int>*>* SegmentationAlgorithm::joinComponentsOnFather( int fatherIndex, int sonIndex){
+    this->adyacentesPorComponente->at(fatherIndex)->insert(this->adyacentesPorComponente->at(sonIndex)->begin(), this->adyacentesPorComponente->at(sonIndex)->end());
+    return this->adyacentesPorComponente;
+}
+
+std::map<int,std::set<int>*>* inicializarMapaComoDisjoinSet(int tamaño){
+    auto adyacentesPorComponente = new std::map<int,std::set<int>*>();
+    for(int vertex = 0; vertex < tamaño; vertex++){
+        auto component = new std::set<int>();
+        component->insert(vertex);
+        adyacentesPorComponente->insert(std::pair<int,std::set<int>*>(vertex,component));
+    }
+}
+
+
+
+
+
+
+
+
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++FIN CORE DEL ALGORITMO+++++++++++++++++++++++++++++++*/
 
 int SegmentationAlgorithm::min(int a ,int b) {
     if(a<b){

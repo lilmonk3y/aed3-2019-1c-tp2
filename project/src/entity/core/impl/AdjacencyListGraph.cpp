@@ -98,7 +98,7 @@ AdjacencyListGraph::~AdjacencyListGraph() {
 /// metodos nuevos que agregó axel:
 
 // para construir el subgrafo G'=(componente,E), donde G=(V,E) y componente incluido en V
-AdjacencyListGraph* AdjacencyListGraph::adjacencyListInducedSubGraph(set<int> componente) {
+AdjacencyListGraph* AdjacencyListGraph::adjacencyListInducedSubGraph(set<int> *componente) {
     int cantidadVertices = this->getVertex(); // cantidad vertices V
     AdjacencyListGraph* subGraph = new AdjacencyListGraph(cantidadVertices);// O(n), estructura vacia subgrafo
 
@@ -109,8 +109,8 @@ AdjacencyListGraph* AdjacencyListGraph::adjacencyListInducedSubGraph(set<int> co
         int iVertex = iter.getLeftVertex();
         int jVertex = iter.getRigthVertex();
         int pesoArista = iter.getEdgeCost();
-        const bool i_vertex_is_in  = componente.find(iVertex) != componente.end();
-        const bool j_vertex_is_in = componente.find(jVertex) != componente.end();
+        const bool i_vertex_is_in  = componente->find(iVertex) != componente->end();
+        const bool j_vertex_is_in = componente->find(jVertex) != componente->end();
 
         // agregar solo ejes que inciden en los vertices de la componente:
         if(i_vertex_is_in &&  j_vertex_is_in) {

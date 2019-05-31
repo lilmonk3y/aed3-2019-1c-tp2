@@ -20,7 +20,7 @@ public:
     long getTotalCost();
     void resetSize(int newVerticesSize);
     set<int> getNeighbors(int indiceVertice);// metodo nuevo
-    AdjacencyListGraph* adjacencyListInducedSubGraph(set<int> componente);// metodo nuevo: G'=(componente,E)
+    AdjacencyListGraph* adjacencyListInducedSubGraph(set<int> *componente);// metodo nuevo: G'=(componente,E)
     long getMaxWeight(); // O(1), retorna el peso de la arista, cuyo peso es el mayor de todos
     ~AdjacencyListGraph();
 private:

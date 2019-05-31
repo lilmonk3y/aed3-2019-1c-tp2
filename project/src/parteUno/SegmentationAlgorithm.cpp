@@ -221,19 +221,19 @@ void SegmentationAlgorithm::generarFileOutput(vector<vector<int> > imageInput,in
     fileImagenSegmentada.open(fileNameOutput,std::ios::out);
     fileImagenSegmentada << "[" ;
     for(int i = 0; i < alto; i = i + 1) {
-        fileImagenSegmentada << "(" ;
+        //fileImagenSegmentada << "(" ;
         for(int j = 0; j < ancho; j = j + 1) {
             int indiceComponente = imageInput[i][j];
             fileImagenSegmentada << indiceComponente;
-            if(j+1<ancho) {
+            //if(j+1<ancho) {
                 fileImagenSegmentada << "," ;
-            }
+            //}
         }
-        fileImagenSegmentada << ")" ;
+        //fileImagenSegmentada << ")" ;
         if(i+1<alto) {
-            fileImagenSegmentada << "," ;
+            //fileImagenSegmentada << "," ;
         }
-        //fileImagenSegmentada << endl;
+        //fileImagenSegmentada << endl; // no
     }
     fileImagenSegmentada << "]" ;
     fileImagenSegmentada.close();

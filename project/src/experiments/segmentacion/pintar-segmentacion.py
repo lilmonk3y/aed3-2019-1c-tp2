@@ -13,7 +13,7 @@ newList = [106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,106,1
 nArray = array(newList)
 #covert array to "matrix"
 a11=nArray.reshape(alto,ancho)# alto y ancho
-plt.imshow(a11, cmap='hot') #mapa de rojos
+plt.imshow(a11, cmap='nipy_spectral') #mapa de rojos, opciones: 'hot', 'nipy_spectral'
 plt.colorbar()
 plt.show()
 

@@ -18,8 +18,8 @@ def create_blank(width, height, rgb_color=(0, 0, 0)):
 ADD_INTENSITY = 10
 segments = []
 
-height = int(raw_input("Please enter image height:\n"))
-width = int(raw_input("Please enter image width:\n"))
+height = int(raw_input())
+width = int(raw_input())
 pixelsRead = 0
 while pixelsRead < height * width:
 	segments.append(int(raw_input()))

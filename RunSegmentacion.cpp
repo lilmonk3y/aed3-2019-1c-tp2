@@ -19,9 +19,11 @@ int main(){
      string strategyName;
     int w;
     int h;
+
     std::cin >> strategyName;
-    std::cin >> w; // ancho
     std::cin >> h; // altura
+    std::cin >> w; // ancho
+
     // h lineas con w numeros enteros (pixel) entre 0 y 255:
     vector<vector<int> > image;
     for(int linea = 0; linea < h ; linea ++) {
@@ -39,11 +41,13 @@ int main(){
         image.push_back(fila);
     }
 
+
+
     int scale = 200;
     DisjoinSet* disjoinSet = selectStrategy(strategyName);
     SegmentationAlgorithm* algoritmo = new SegmentationAlgorithm(image, scale,w,h,disjoinSet); // configuracion algoritmo
     vector<vector<int> > imagenSegmentada = algoritmo->imageToSegmentation(); // llamda al algoritmo
-    cout << endl;
+
 
 
 
@@ -57,7 +61,6 @@ int main(){
             cout << imagenSegmentada[fila][columna] << endl;
 
         }
-        cout << endl;
     }
 
 }

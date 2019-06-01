@@ -66,15 +66,3 @@ int main(){
     }
 
 }
-
-DisjoinSet *selectStrategy(string basic_string) {
-    if(basic_string == "array"){
-        return new ArrayDisjoinSet();
-    }else if(basic_string == "tree"){
-        return new TreeDisjoinSet();
-    }else if( basic_string== "treeCompressed"){
-        return new TreeCompressedDisjoinSet();
-    }else{
-        return new ArrayCompressedDisjoinSet();
-    }
-}

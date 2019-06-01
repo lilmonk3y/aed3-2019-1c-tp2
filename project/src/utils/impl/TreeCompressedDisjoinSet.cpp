@@ -5,11 +5,11 @@
 #include "../TreeCompressedDisjoinSet.h"
 
 void TreeCompressedDisjoinSet::create(Graph *graph) {
-    this->components= new DirectedTreeGraph(graph->getVertex());
+    this->components= new DirectedTreeGraph(graph->getVertexSize());
 
     std::vector<int> heights;
-    heights.resize(graph->getVertex());
-    for(int index = 0; index < graph->getVertex(); index++){
+    heights.resize(graph->getVertexSize());
+    for(int index = 0; index < graph->getVertexSize(); index++){
         heights.at(index) = 1;
     }
     this->heights = heights;

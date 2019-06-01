@@ -11,8 +11,17 @@
 
 class TreeDisjoinSet : public DisjoinSet {
 public:
+    /*
+     * O(1)
+     */
     int find(int vertex) override;
+    /*
+     * O(n) por hacer update de todos los hijos del newNode
+     */
     void join(int alreadyIn, int newNode) override;
+    /*
+     * O(n)
+     */
     void create(Graph *graph) override;
 
 private:

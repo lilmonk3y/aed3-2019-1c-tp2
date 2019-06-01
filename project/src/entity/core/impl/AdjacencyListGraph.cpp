@@ -12,10 +12,7 @@ AdjacencyListGraph::AdjacencyListGraph(int vertexAmount) {
 
 // crea el tamaño de vertices para luego agregarle las adyacencias
 void AdjacencyListGraph::resetSize(int newVerticesSize) {
-    this->vertexAdjacents = std::vector<std::list<AdjacencyNode*>>(newVerticesSize);
-    for(std::size_t index = 0; index < this->vertexAdjacents.size(); index++){
-        this->vertexAdjacents.at(index) = std::list<AdjacencyNode*>();
-    }
+    this->graphSize = newVerticesSize;
 }
 
 bool AdjacencyListGraph::adjacent(int vertexIndex1, int vertexIndex2) {
@@ -31,13 +28,22 @@ bool AdjacencyListGraph::isAdjacent(int origin, int destiny) {
     }
     return response;
 }
+/*
+ *  O(1) amortizado + O(1) amortizado, sino log(n)
+ */
+void AdjacencyListGraph::addEdge(int vertexIndex1, int vertexIndex2, long edgeCost) {
+    if(this->vertexAdjacents.find(vertexIndex1) == this->vertexAdjacents.end()){
+        this->vertexAdjacents.insert(std::pair<int,std::list<AdjacencyNode*>>(vertexIndex1,std::list<AdjacencyNode*>()));
+    }
+    this->vertexAdjacents.at(vertexIndex1).push_back(new AdjacencyNode(vertexIndex2, edgeCost));
 
-void AdjacencyListGraph::addEdge(int vertexIndex1, int vertexIndex2, long edgeCost) { // O(1) amortizado + O(1) amortizado, sino log(n)
-    this->vertexAdjacents.at(vertexIndex1).push_back(new AdjacencyNode(vertexIndex2, edgeCost));// at:O(1), push_back: O(1) amortizado
+    if(this->vertexAdjacents.find(vertexIndex2) == this->vertexAdjacents.end()){
+        this->vertexAdjacents.insert(std::pair<int,std::list<AdjacencyNode*>>(vertexIndex2,std::list<AdjacencyNode*>()));
+    }
     this->vertexAdjacents.at(vertexIndex2).push_back(new AdjacencyNode(vertexIndex1, edgeCost));
+
     Edge edge(vertexIndex1,vertexIndex2,edgeCost); //O(1)
-    // en vez de un set podemos usar una lista y agregamos en O(1), pero hay que comprobar la pertenencia (suma costo):
-    this->edges->insert(edge);// O(1) amortizado, no recibe punteros, sino el valor real
+    this->edges->insert(edge);
 
     if(edgeCost > this->maxWeight) { // actualizo el peso maximo
         this->maxWeight = edgeCost;
@@ -45,31 +51,33 @@ void AdjacencyListGraph::addEdge(int vertexIndex1, int vertexIndex2, long edgeCo
 }
 
 // esto sirve para obtener la cantidad de ejes
-int AdjacencyListGraph::getVertex() {
-    return static_cast<int>(this->vertexAdjacents.size());
+int AdjacencyListGraph::getVertexSize() {
+    return this->graphSize;
 }
 
-// retornar el conjunto de ejes en O(1)
+/*
+ * Retornar el conjunto de ejes en O(1)
+ */
 set<Edge>* AdjacencyListGraph::getEdgeSet() {
     return this->edges;
 }
 
-// vector de ejes
-std::vector<Edge> *AdjacencyListGraph::getEdges() {
-    std::vector<Edge> *edges = new std::vector<Edge>();
-    for(std::size_t vertex = 0; vertex < this->vertexAdjacents.size(); vertex++){
-        for(auto iterator = this->vertexAdjacents.at(vertex).begin(); iterator != this->vertexAdjacents.at(vertex).end(); iterator++){
-            Edge edge = Edge(vertex,(*iterator)->getVertex(),(*iterator)->getEdgeCost());
-            if(! this->alreadyInserted(edges, &edge)){
-                edges->push_back(edge);
-            }
-        }
-    }
-    return edges;
-}
+//// vector de ejes
+//std::vector<Edge> *AdjacencyListGraph::getEdges() {
+//    std::vector<Edge> *edges = new std::vector<Edge>();
+//    for(auto vertex : this->vertexAdjacents){
+//        for(auto adyacent : vertex.second){
+//            Edge edge = Edge(vertex.first,adyacent->getVertex(),adyacent->getEdgeCost());
+//            if(! this->alreadyInserted(edges, &edge)){
+//                edges->push_back(edge);
+//            }
+//        }
+//    }
+//    return edges;
+//}
 
 long AdjacencyListGraph::getTotalCost() { // solo usado en test, pero puede ser O(1) si lo guardamos en un campo
-    std::vector<Edge> *edges = this->getEdges();
+    std::set<Edge> *edges = this->getEdgeSet();
     long totalCost = 0;
     for (auto edge : *edges) {
         totalCost += edge.getEdgeCost();
@@ -77,18 +85,18 @@ long AdjacencyListGraph::getTotalCost() { // solo usado en test, pero puede ser 
     return totalCost;
 }
 
-bool AdjacencyListGraph::alreadyInserted(std::vector<Edge> *edges, Edge *edge) { // puede tener costo O(log n) con el getEdgeSet
-    for(auto inEdge : *edges){
-        if(inEdge == *edge){
-            return true;
-        }
-    }
-    return false;
-}
+//bool AdjacencyListGraph::alreadyInserted(std::vector<Edge> *edges, Edge *edge) { // puede tener costo O(log n) con el getEdgeSet
+//    for(auto inEdge : *edges){
+//        if(inEdge == *edge){
+//            return true;
+//        }
+//    }
+//    return false;
+//}
 
 AdjacencyListGraph::~AdjacencyListGraph() {
     for (const auto& adjacencyList : vertexAdjacents) {
-        for (auto* node : adjacencyList) {
+        for (auto* node : adjacencyList.second) {
             delete node;
         }
     }
@@ -99,7 +107,7 @@ AdjacencyListGraph::~AdjacencyListGraph() {
 
 // para construir el subgrafo G'=(componente,E), donde G=(V,E) y componente incluido en V
 AdjacencyListGraph* AdjacencyListGraph::adjacencyListInducedSubGraph(set<int> *componente) {
-    int cantidadVertices = this->getVertex(); // cantidad vertices V
+    int cantidadVertices = this->getVertexSize(); // cantidad vertices V
     AdjacencyListGraph* subGraph = new AdjacencyListGraph(cantidadVertices);// O(n), estructura vacia subgrafo
 
     //vector<Edge> ejesG = *graph->getEdges(); // desrreferencio

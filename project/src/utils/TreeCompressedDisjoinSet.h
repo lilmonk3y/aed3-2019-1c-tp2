@@ -11,8 +11,17 @@
 
 class TreeCompressedDisjoinSet : public DisjoinSet {
 public:
+    /*
+     * O(n)
+     */
     void create(Graph *graph) override;
+    /*
+     * complejidad O(ahpha(n)) que es una función casi constante
+    */
     int find(int vertex) override;
+    /*
+     * complejidad O(ahpha(n)) que es una función casi constante
+    */
     void join(int alreadyIn, int newNode) override;
 
 private:

@@ -35,8 +35,8 @@ DisjoinSet* SegmentationAlgorithm::graphSementationIntoSets() {
 }
 
 int SegmentationAlgorithm::minInternalDifference(int indiceComponenteI, int indicecomponenteJ) {
-    set<int> componenteI = construirComponente(indiceComponenteI); // VER SI SE PUEDE REDUCIR MAS
-    set<int> componenteJ = construirComponente(indicecomponenteJ); // VER SI SE PUEDE REDUCIR MAS
+    set<int> componenteI = construirComponente(indiceComponenteI); // SIGMA(n),  VER SI SE PUEDE REDUCIR MAS
+    set<int> componenteJ = construirComponente(indicecomponenteJ); // SIGMA(n), VER SI SE PUEDE REDUCIR MAS
     int difCompI = internalDifference(componenteI) + tau(componenteI.size()) ;// O(KRUSKAL + grafo inducido)
     int difCompJ = internalDifference(componenteJ) + tau(componenteJ.size()) ;// O(KRUSKAL + grafo inducido)
     return min(difCompI , difCompJ); // O(1)

@@ -25,7 +25,6 @@ DisjoinSet* SegmentationAlgorithm::graphSementationIntoSets() {
     vector<Edge> edgesSortedByCost = vector<Edge>(edges->begin(), edges->end()); // O(E)
     sort(edgesSortedByCost.begin(), edgesSortedByCost.end(), edgeComparatorByCost); // O(E * log(E))
 
-
     for(auto edge : edgesSortedByCost) {
         int indiceComponenteI = this->disjoinSet->find(edge.getLeftVertex());
         int indicecomponenteJ = this->disjoinSet->find(edge.getRigthVertex());
@@ -57,16 +56,16 @@ int SegmentationAlgorithm::internalDifference(set<int> *componente) { // O(KRUSK
 }
 
 // esto lo deberia hacer el disjoint set, reconstruir un conjunto disjunto dado un indice de una componente
-set<int> SegmentationAlgorithm::construirComponente(int indiceDeComponente) {
-    std::set<int>  componenteVertices;
-    int quantityVertex = this->grafo->getVertexSize(); // O(1), cantidad de vertices del grafo
-    for(int indexVertex=0; indexVertex < quantityVertex; indexVertex++) {
-        if  (this->disjoinSet->find(indexVertex) == indiceDeComponente) {
-            componenteVertices.insert(indexVertex);
-        }
-    }
-    return componenteVertices;
-}
+//set<int> SegmentationAlgorithm::construirComponente(int indiceDeComponente) {
+//    std::set<int>  componenteVertices;
+//    int quantityVertex = this->grafo->getVertexSize(); // O(1), cantidad de vertices del grafo
+//    for(int indexVertex=0; indexVertex < quantityVertex; indexVertex++) {
+//        if  (this->disjoinSet->find(indexVertex) == indiceDeComponente) {
+//            componenteVertices.insert(indexVertex);
+//        }
+//    }
+//    return componenteVertices;
+//}
 
 int SegmentationAlgorithm::tau(int cardinal) {
     int k = this->scaleProportion; // eso se setea a mano

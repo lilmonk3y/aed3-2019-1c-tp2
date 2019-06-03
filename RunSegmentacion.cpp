@@ -2,6 +2,8 @@
 #include <vector>
 #include "project/src/parteUno/SegmentationAlgorithm.h"
 
+DisjoinSet *selectStrategy(string basic_string);
+
 using namespace std;
 
 int main(){
@@ -14,10 +16,14 @@ int main(){
      Cada linea debeŕa contener w enteros.
      Dicho entero representar ́a el conjunto al que pertenece el pixel.
      */
+     string strategyName;
     int w;
     int h;
-    std::cin >> w; // ancho
+
+    std::cin >> strategyName;
     std::cin >> h; // altura
+    std::cin >> w; // ancho
+
     // h lineas con w numeros enteros (pixel) entre 0 y 255:
     vector<vector<int> > image;
     for(int linea = 0; linea < h ; linea ++) {
@@ -35,19 +41,38 @@ int main(){
         image.push_back(fila);
     }
 
+
+
     int scale = 200;
-    DisjoinSet* disjoinSet = new ArrayDisjoinSet();
+    DisjoinSet* disjoinSet = selectStrategy(strategyName);
     SegmentationAlgorithm* algoritmo = new SegmentationAlgorithm(image, scale,w,h,disjoinSet); // configuracion algoritmo
     vector<vector<int> > imagenSegmentada = algoritmo->imageToSegmentation(); // llamda al algoritmo
-    cout << endl;
+
+
+
+
+
+
+    cout << h << endl;
+    cout << w << endl;
+
     for(int fila = 0; fila < h ; fila ++) {
         for(int columna = 0; columna < w ; columna ++) {
-            cout << imagenSegmentada[fila][columna];
-            if((columna+1)<w) {
-                cout << " ";
-            }
+            cout << imagenSegmentada[fila][columna] << endl;
+
         }
-        cout << endl;
     }
 
+}
+
+DisjoinSet *selectStrategy(string basic_string) {
+    if(basic_string == "array"){
+        return new ArrayDisjoinSet();
+    }else if(basic_string == "tree"){
+        return new TreeDisjoinSet();
+    }else if( basic_string== "treeCompressed"){
+        return new TreeCompressedDisjoinSet();
+    }else{
+        return new ArrayCompressedDisjoinSet();
+    }
 }

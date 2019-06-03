@@ -332,7 +332,7 @@ TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillas){
     DisjoinSet* disjoinSet = new ArrayDisjoinSet();
     segmentationAlgorithm = new SegmentationAlgorithm(imagen, segmentationScale, ancho, alto,disjoinSet);
     vector<vector<int> > imagenSegmentada = segmentationAlgorithm->imageToSegmentation();
-    segmentationAlgorithm->generarFileOutput(imagenSegmentada,ancho, alto); // genera el file con la imagen segmentada (pixeles componentes)
+    segmentationAlgorithm->generarFileOutput(imagenSegmentada,ancho, alto,"imagen-segmentada"); // genera el file con la imagen segmentada (pixeles componentes)
     ASSERT_TRUE(segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto)==5);
 }
 
@@ -381,7 +381,7 @@ TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillasOtroDisjointSet){
     DisjoinSet* disjoinSet = new TreeCompressedDisjoinSet();
     segmentationAlgorithm = new SegmentationAlgorithm(imagen, segmentationScale, ancho, alto,disjoinSet);
     vector<vector<int> > imagenSegmentada = segmentationAlgorithm->imageToSegmentation();
-    segmentationAlgorithm->generarFileOutput(imagenSegmentada,ancho, alto); // genera el file
+    segmentationAlgorithm->generarFileOutput(imagenSegmentada,ancho, alto,"imagen-segmentada"); // genera el file
     ASSERT_TRUE(segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto)==5);
 }
 
@@ -428,6 +428,6 @@ TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillasConArrayCompressedDi
     DisjoinSet* disjoinSet = new ArrayCompressedDisjoinSet();
     segmentationAlgorithm = new SegmentationAlgorithm(imagen, segmentationScale, ancho, alto,disjoinSet);
     vector<vector<int> > imagenSegmentada = segmentationAlgorithm->imageToSegmentation();
-    segmentationAlgorithm->generarFileOutput(imagenSegmentada,ancho, alto); // genera el file
+    segmentationAlgorithm->generarFileOutput(imagenSegmentada,ancho, alto,"imagen-segmentada"); // genera el file
     ASSERT_TRUE(segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto)==5);
 }

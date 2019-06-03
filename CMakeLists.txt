@@ -99,6 +99,7 @@ set(SOURCE_FILES_MIN_PATH
     project/src/entity/impl/GasGraph.cpp)
 add_executable(main-min-path main-min-path.cpp ${SOURCE_FILES_MIN_PATH})
 
+add_executable(timer project/src/experiments/minpath/timer.cpp ${SOURCE_FILES_MIN_PATH})
 
 #target_link_libraries(aed3_2019_1c_tp2 gtest gtest_main runSegmentacion)
 target_link_libraries(aed3_2019_1c_tp2 gtest gtest_main)
@@ -113,4 +114,3 @@ add_library( YourLib ${SEGMENTACION_FILES} )
 #        # Make sure YourLib is linked to each app
 #        target_link_libraries( ${testname} YourLib )
 #endforeach( testsourcefile ${APP_SOURCES} )
-add_executable(timer project/src/experiments/timer.cpp ${SOURCE_FILES_MIN_PATH})

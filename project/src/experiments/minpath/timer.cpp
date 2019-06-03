@@ -1,11 +1,11 @@
 #include <iostream>
 #include <vector>
 #include <cstdlib>
-#include "../entity/GasGraph.h"
-#include "../algorithms/dijkstra-with-fifo-queue.hpp"
-#include "../algorithms/dijkstra-with-priority-queue.hpp"
-#include "../algorithms/floyd-warshall.hpp"
-#include "../algorithms/bellman-ford.hpp"
+#include "../../entity/GasGraph.h"
+#include "../../algorithms/dijkstra-with-fifo-queue.hpp"
+#include "../../algorithms/dijkstra-with-priority-queue.hpp"
+#include "../../algorithms/floyd-warshall.hpp"
+#include "../../algorithms/bellman-ford.hpp"
 #include <chrono>
 
 int main(int argc, char const* argv[]) {

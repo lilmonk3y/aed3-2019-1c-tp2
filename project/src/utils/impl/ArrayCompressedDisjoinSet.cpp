@@ -7,8 +7,8 @@
 void ArrayCompressedDisjoinSet::create(Graph *graph) {
     std::vector<int> components;
     std::vector<int> heights;
-    components.resize(graph->getVertex());
-    heights.resize(graph->getVertex());
+    components.resize(graph->getVertexSize());
+    heights.resize(graph->getVertexSize());
     for(std::size_t index = 0; index < components.size(); index++){
         components.at(index) = index;
         heights.at(index) = 1;
@@ -16,6 +16,7 @@ void ArrayCompressedDisjoinSet::create(Graph *graph) {
     this->components = components;
     this->heights = heights;
 }
+
 
 int ArrayCompressedDisjoinSet::find(int vertex) {
     // Si soy hijo, voy a buscar a mi padre y actualizo

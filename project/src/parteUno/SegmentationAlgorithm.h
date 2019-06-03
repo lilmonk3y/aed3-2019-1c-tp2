@@ -15,6 +15,8 @@
 #include "../utils/GetMST.h"
 #include <set>
 #include <map>
+#include <string>
+
 using namespace std;
 
 class SegmentationAlgorithm {
@@ -22,7 +24,7 @@ public:
     // constructor (configuraciones):
     // LO UNICO QUE NO SE PUDO PARAMETRIZAR ES EL DISJOINT SET USADO EN KRUSKAL
     // (porque se llama cada rato esa instancia y hay que crearlo y borrarlo cada rato)
-    SegmentationAlgorithm(vector<vector<int> > imageInput,int scale,int ancho, int alto,DisjoinSet* disjoinSetInstance);
+    SegmentationAlgorithm(vector<vector<int> > imageInput,int scale,int ancho, int alto,string disjoinSetStrategy);
 
     // algoritmo end to end:
     vector<vector<int> > imageToSegmentation();
@@ -45,8 +47,9 @@ public:
     void setAncho(int an);
     void setDisjointSet(DisjoinSet* disjoinSetInstance);
     std::map<int,std::set<int>*>* joinComponentsOnFather( int fatherIndex, int sonIndex);
+    AdjacencyListGraph* adjacencyListInducedSubGraph( AdjacencyListGraph* graph, set<int> *componente);
 
-//private: // comentar para los test
+    //private: // comentar para los test
     // atributos:
     AdjacencyListGraph* grafo;
     int scaleProportion;
@@ -54,6 +57,7 @@ public:
     int alto;
     DisjoinSet* disjoinSet;
     std::map<int,std::set<int>*>* adyacentesPorComponente;
+    string disjointSetStrategy;
 
     // metodos del algoritmo del paper:
     int minInternalDifference(int componenteI, int componenteJ);
@@ -65,6 +69,7 @@ public:
     int min(int a ,int b);
 };
 
-std::map<int,std::set<int>*>* inicializarMapaComoDisjoinSet(int tamaño);
+std::map<int,std::set<int>*>* inicializarMapaComoDisjoinSet(int size);
+DisjoinSet *selectDisjoinSetStrategy(string strategy);
 
 #endif //AED3_2019_1C_TP2_SEGMENTATIONALGORITHM_H

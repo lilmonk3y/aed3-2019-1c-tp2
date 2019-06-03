@@ -10,8 +10,17 @@
 
 class ArrayDisjoinSet : public DisjoinSet {
 public:
+    /*
+     * complejidad O(1)
+     */
     int find(int vertex);
+    /*
+     * complejidad O(n)
+     */
     void join(int alreadyIn, int newNode);
+    /*
+     * complejidad O(n)
+     */
     void create(Graph *graph);
 
 

@@ -14,10 +14,10 @@ struct DisSetTest : testing::Test{
     DisjoinSet *disjoinSet;
 
     DisSetTest(){
-        //disjoinSet = new ArrayDisjoinSet();
+        disjoinSet = new ArrayDisjoinSet();
         //disjoinSet = new ArrayCompressedDisjoinSet();
         //disjoinSet = new TreeDisjoinSet();
-        disjoinSet = new TreeCompressedDisjoinSet();
+        //disjoinSet = new TreeCompressedDisjoinSet();
     }
     ~DisSetTest(){
         delete disjoinSet;

@@ -8,23 +8,26 @@
 #include <fstream>
 #include <algorithm>
 
-SegmentationAlgorithm::SegmentationAlgorithm(vector<vector<int> > imageInput,int scale,int ancho, int alto,DisjoinSet* disjoinSetInstance) {
+SegmentationAlgorithm::SegmentationAlgorithm(vector<vector<int> > imageInput,int scale,int ancho, int alto,string disjoinSetStrategy) {
    this->grafo = this->imageToGraph(&imageInput,ancho, alto);;
    this->scaleProportion = scale;
    this->ancho=ancho;
    this->alto=alto;
-   this->disjoinSet = disjoinSetInstance;
+   this->disjoinSet = selectDisjoinSetStrategy(disjoinSetStrategy);
    this->adyacentesPorComponente = inicializarMapaComoDisjoinSet(ancho*alto);
+   this->disjointSetStrategy = disjoinSetStrategy;
 }
 
 DisjoinSet* SegmentationAlgorithm::graphSementationIntoSets() {
     this->disjoinSet->create(this->grafo); // crear lista de conjuntos disjunto del grafo original
 
     set<Edge>* edges = this->grafo->getEdgeSet(); // O(1), obtener E de G=(V,E)
+    vector<Edge> edgesSortedByCost = vector<Edge>(edges->begin(), edges->end()); // O(E)
+    sort(edgesSortedByCost.begin(), edgesSortedByCost.end(), edgeComparatorByCost); // O(E * log(E))
 
-    for(auto edge : *edges) { // itero todos los ejes. (estan ordenados de manera creciente)
-        int indiceComponenteI = this->disjoinSet->find(edge.getLeftVertex()); // O(1),busco componente vertice i, extremo del eje
-        int indicecomponenteJ = this->disjoinSet->find(edge.getRigthVertex());// O(1),busco componente vertice j, extremo del eje
+    for(auto edge : edgesSortedByCost) {
+        int indiceComponenteI = this->disjoinSet->find(edge.getLeftVertex());
+        int indicecomponenteJ = this->disjoinSet->find(edge.getRigthVertex());
 
         if( indiceComponenteI !=  indicecomponenteJ ) {
             if( edge.getEdgeCost() <= minInternalDifference(indiceComponenteI,indicecomponenteJ) ) {
@@ -46,23 +49,23 @@ int SegmentationAlgorithm::minInternalDifference(int indiceComponenteI, int indi
 }
 
 int SegmentationAlgorithm::internalDifference(set<int> *componente) { // O(KRUSKAL + creacion del grafo inducido)
-    Graph* subGrafoComponente = this->grafo->adjacencyListInducedSubGraph(componente);// G=(C,E) O(n)+O(m) // REDUJE COMPLEX
-    GetMST kruskal = GetMST(new ArrayDisjoinSet()); // elijo la estrategia del disjoint set
+    Graph* subGrafoComponente = this->adjacencyListInducedSubGraph(this->grafo, componente);// G=(C,E) O(n)+O(m) // REDUJE COMPLEX
+    GetMST kruskal = GetMST(selectDisjoinSetStrategy(this->disjointSetStrategy)); // elijo la estrategia del disjoint set
     Graph* arbolRecubridorMinimoDeLaComponente = kruskal.getMST(subGrafoComponente); // REDUJE COMPLEX
-    return arbolRecubridorMinimoDeLaComponente->getMaxWeight();// O(1) // REDUJE COMPLEX
+    return arbolRecubridorMinimoDeLaComponente->getMaxWeight();// O(1)
 }
 
 // esto lo deberia hacer el disjoint set, reconstruir un conjunto disjunto dado un indice de una componente
-set<int> SegmentationAlgorithm::construirComponente(int indiceDeComponente) {
-    std::set<int>  componenteVertices;
-    int quantityVertex = this->grafo->getVertex(); // O(1), cantidad de vertices del grafo
-    for(int indexVertex=0; indexVertex < quantityVertex; indexVertex++) {
-        if  (this->disjoinSet->find(indexVertex) == indiceDeComponente) {
-            componenteVertices.insert(indexVertex);
-        }
-    }
-    return componenteVertices;
-}
+//set<int> SegmentationAlgorithm::construirComponente(int indiceDeComponente) {
+//    std::set<int>  componenteVertices;
+//    int quantityVertex = this->grafo->getVertexSize(); // O(1), cantidad de vertices del grafo
+//    for(int indexVertex=0; indexVertex < quantityVertex; indexVertex++) {
+//        if  (this->disjoinSet->find(indexVertex) == indiceDeComponente) {
+//            componenteVertices.insert(indexVertex);
+//        }
+//    }
+//    return componenteVertices;
+//}
 
 int SegmentationAlgorithm::tau(int cardinal) {
     int k = this->scaleProportion; // eso se setea a mano
@@ -79,13 +82,29 @@ std::map<int,std::set<int>*>* SegmentationAlgorithm::joinComponentsOnFather( int
     return this->adyacentesPorComponente;
 }
 
-std::map<int,std::set<int>*>* inicializarMapaComoDisjoinSet(int tamaño){
+std::map<int,std::set<int>*>* inicializarMapaComoDisjoinSet(int size){
     auto adyacentesPorComponente = new std::map<int,std::set<int>*>();
-    for(int vertex = 0; vertex < tamaño; vertex++){
+    for(int vertex = 0; vertex < size; vertex++){
         auto component = new std::set<int>();
         component->insert(vertex);
-        adyacentesPorComponente->insert(std::pair<int,std::set<int>*>(vertex,component));
+        adyacentesPorComponente->insert(std::make_pair(vertex,component));
     }
+    return adyacentesPorComponente;
+}
+
+// para construir el subgrafo G'=(componente,E'), donde G=(V,E) y componente incluido en V
+AdjacencyListGraph* SegmentationAlgorithm::adjacencyListInducedSubGraph( AdjacencyListGraph* graph, set<int> *componente) {
+    int cantidadVertices = graph->getVertexSize(); // cantidad vertices V
+    AdjacencyListGraph* subGraph = new AdjacencyListGraph(cantidadVertices);// O(n), estructura vacia subgrafo
+
+    for(int vertexInComponent : *componente) {
+        for (auto adyacentInOriginalGraph : *graph->getAdyacents(vertexInComponent)){
+            if (componente->find(adyacentInOriginalGraph->getVertex()) != componente->end()) {
+                subGraph->addEdge(vertexInComponent, adyacentInOriginalGraph->getVertex(), adyacentInOriginalGraph->getEdgeCost());
+            }
+        }
+    }
+    return subGraph;
 }
 
 
@@ -96,6 +115,18 @@ std::map<int,std::set<int>*>* inicializarMapaComoDisjoinSet(int tamaño){
 
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++FIN CORE DEL ALGORITMO+++++++++++++++++++++++++++++++*/
+
+DisjoinSet *selectDisjoinSetStrategy(string strategy) {
+    if(strategy == "array"){
+        return new ArrayDisjoinSet();
+    }else if(strategy == "tree"){
+        return new TreeDisjoinSet();
+    }else if( strategy == "treeCompressed"){
+        return new TreeCompressedDisjoinSet();
+    }else{
+        return new ArrayCompressedDisjoinSet();
+    }
+}
 
 int SegmentationAlgorithm::min(int a ,int b) {
     if(a<b){

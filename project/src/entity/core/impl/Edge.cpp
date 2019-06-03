@@ -36,8 +36,8 @@ bool operator==(const Edge first, const Edge other) {
     return first.getLeftVertex() == other.getLeftVertex() && first.getRigthVertex() == other.getRigthVertex() && first.getEdgeCost() == other.getEdgeCost();
 }
 
-bool operator<(const Edge first, const Edge other) { // ES UN MENOR IGUAL
-    return first.getRigthVertex() < other.getRigthVertex() || first.getLeftVertex() < other.getLeftVertex() /*|| first.getEdgeCost() < other.getEdgeCost()*/;
+bool operator<(const Edge first, const Edge other) {
+    return (first.getRigthVertex() < other.getRigthVertex() || first.getLeftVertex() < other.getLeftVertex()) /*|| first.getEdgeCost() < other.getEdgeCost()*/;
 }
 
 bool edgeComparatorByCost(const Edge first, const Edge second) {

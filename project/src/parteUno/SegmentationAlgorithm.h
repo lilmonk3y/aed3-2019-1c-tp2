@@ -47,8 +47,9 @@ public:
     void setAncho(int an);
     void setDisjointSet(DisjoinSet* disjoinSetInstance);
     std::map<int,std::set<int>*>* joinComponentsOnFather( int fatherIndex, int sonIndex);
+    AdjacencyListGraph* adjacencyListInducedSubGraph( AdjacencyListGraph* graph, set<int> *componente);
 
-//private: // comentar para los test
+    //private: // comentar para los test
     // atributos:
     AdjacencyListGraph* grafo;
     int scaleProportion;

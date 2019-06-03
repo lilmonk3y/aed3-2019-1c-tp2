@@ -164,4 +164,58 @@ TEST_F(GraphTest, sorting_testting1){
     ASSERT_EQ(Edge(1,3,2), iter.operator*());
     iter++;
     ASSERT_EQ(Edge(2,3,5), iter.operator*());
-    }
+}
+
+TEST_F(GraphTest, sortingByCost_testing1){
+    graph->resetSize(8);
+
+    graph->addEdge(0,1,11);
+    graph->addEdge(0,2,9);
+    graph->addEdge(0,3,6);
+    graph->addEdge(1,3,5);
+    graph->addEdge(1,4,7);
+    graph->addEdge(2,3,12);
+    graph->addEdge(2,5,6);
+    graph->addEdge(3,5,3);
+    graph->addEdge(3,4,4);
+    graph->addEdge(3,6,7);
+    graph->addEdge(4,6,2);
+    graph->addEdge(5,6,8);
+    graph->addEdge(5,7,10);
+    graph->addEdge(6,7,6);
+
+    set<Edge>* edges = graph->getEdgeSet();
+    vector<Edge> edgesSortedByCost = vector<Edge>(edges->begin(), edges->end()); // O(E)
+    sort(edgesSortedByCost.begin(), edgesSortedByCost.end(), edgeComparatorByCost); // O(E * log(E))
+
+    ASSERT_EQ(14, edgesSortedByCost.size());
+    auto iter = edgesSortedByCost.begin();
+    ASSERT_EQ(2, iter.operator*().getEdgeCost());
+    iter++;
+    ASSERT_EQ(3, iter.operator*().getEdgeCost());
+    iter++;
+    ASSERT_EQ(4, iter.operator*().getEdgeCost());
+    iter++;
+    ASSERT_EQ(5, iter.operator*().getEdgeCost());
+    iter++;
+    ASSERT_EQ(6, iter.operator*().getEdgeCost());
+    iter++;
+    ASSERT_EQ(6, iter.operator*().getEdgeCost());
+    iter++;
+    ASSERT_EQ(6, iter.operator*().getEdgeCost());
+    iter++;
+    ASSERT_EQ(7, iter.operator*().getEdgeCost());
+    iter++;
+    ASSERT_EQ(7, iter.operator*().getEdgeCost());
+    iter++;
+    ASSERT_EQ(8, iter.operator*().getEdgeCost());
+    iter++;
+    ASSERT_EQ(9, iter.operator*().getEdgeCost());
+    iter++;
+    ASSERT_EQ(10, iter.operator*().getEdgeCost());
+    iter++;
+    ASSERT_EQ(11, iter.operator*().getEdgeCost());
+    iter++;
+    ASSERT_EQ(12, iter.operator*().getEdgeCost());
+    iter++;
+}

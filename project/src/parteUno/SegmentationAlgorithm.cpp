@@ -25,7 +25,6 @@ DisjoinSet* SegmentationAlgorithm::graphSementationIntoSets() {
     vector<Edge> edgesSortedByCost = vector<Edge>(edges->begin(), edges->end()); // O(E)
     sort(edgesSortedByCost.begin(), edgesSortedByCost.end(), edgeComparatorByCost); // O(E * log(E))
 
-
     for(auto edge : edgesSortedByCost) {
         int indiceComponenteI = this->disjoinSet->find(edge.getLeftVertex());
         int indicecomponenteJ = this->disjoinSet->find(edge.getRigthVertex());
@@ -50,23 +49,23 @@ int SegmentationAlgorithm::minInternalDifference(int indiceComponenteI, int indi
 }
 
 int SegmentationAlgorithm::internalDifference(set<int> *componente) { // O(KRUSKAL + creacion del grafo inducido)
-    Graph* subGrafoComponente = this->grafo->adjacencyListInducedSubGraph(componente);// G=(C,E) O(n)+O(m) // REDUJE COMPLEX
+    Graph* subGrafoComponente = this->adjacencyListInducedSubGraph(this->grafo, componente);// G=(C,E) O(n)+O(m) // REDUJE COMPLEX
     GetMST kruskal = GetMST(selectDisjoinSetStrategy(this->disjointSetStrategy)); // elijo la estrategia del disjoint set
     Graph* arbolRecubridorMinimoDeLaComponente = kruskal.getMST(subGrafoComponente); // REDUJE COMPLEX
     return arbolRecubridorMinimoDeLaComponente->getMaxWeight();// O(1)
 }
 
 // esto lo deberia hacer el disjoint set, reconstruir un conjunto disjunto dado un indice de una componente
-set<int> SegmentationAlgorithm::construirComponente(int indiceDeComponente) {
-    std::set<int>  componenteVertices;
-    int quantityVertex = this->grafo->getVertexSize(); // O(1), cantidad de vertices del grafo
-    for(int indexVertex=0; indexVertex < quantityVertex; indexVertex++) {
-        if  (this->disjoinSet->find(indexVertex) == indiceDeComponente) {
-            componenteVertices.insert(indexVertex);
-        }
-    }
-    return componenteVertices;
-}
+//set<int> SegmentationAlgorithm::construirComponente(int indiceDeComponente) {
+//    std::set<int>  componenteVertices;
+//    int quantityVertex = this->grafo->getVertexSize(); // O(1), cantidad de vertices del grafo
+//    for(int indexVertex=0; indexVertex < quantityVertex; indexVertex++) {
+//        if  (this->disjoinSet->find(indexVertex) == indiceDeComponente) {
+//            componenteVertices.insert(indexVertex);
+//        }
+//    }
+//    return componenteVertices;
+//}
 
 int SegmentationAlgorithm::tau(int cardinal) {
     int k = this->scaleProportion; // eso se setea a mano
@@ -91,6 +90,21 @@ std::map<int,std::set<int>*>* inicializarMapaComoDisjoinSet(int size){
         adyacentesPorComponente->insert(std::make_pair(vertex,component));
     }
     return adyacentesPorComponente;
+}
+
+// para construir el subgrafo G'=(componente,E'), donde G=(V,E) y componente incluido en V
+AdjacencyListGraph* SegmentationAlgorithm::adjacencyListInducedSubGraph( AdjacencyListGraph* graph, set<int> *componente) {
+    int cantidadVertices = graph->getVertexSize(); // cantidad vertices V
+    AdjacencyListGraph* subGraph = new AdjacencyListGraph(cantidadVertices);// O(n), estructura vacia subgrafo
+
+    for(int vertexInComponent : *componente) {
+        for (auto adyacentInOriginalGraph : *graph->getAdyacents(vertexInComponent)){
+            if (componente->find(adyacentInOriginalGraph->getVertex()) != componente->end()) {
+                subGraph->addEdge(vertexInComponent, adyacentInOriginalGraph->getVertex(), adyacentInOriginalGraph->getEdgeCost());
+            }
+        }
+    }
+    return subGraph;
 }
 
 

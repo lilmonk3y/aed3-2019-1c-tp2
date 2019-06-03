@@ -16,7 +16,6 @@ public:
     int getVertexSize();
     bool adjacent(int vertexIndex1, int vertexIndex2);
     void addEdge(int vertexIndex1, int vertexIndex2, long edgeCost);
-    //std::vector<Edge> *getEdges();// O(M^2)
     set<Edge>* getEdgeSet();// O(1) (conjunto ordenado creciente al iterar)
     long getTotalCost();
     void resetSize(int newVerticesSize);
@@ -32,6 +31,4 @@ private:
     int graphSize;
 
     bool isAdjacent(int origin, int destiny) ;
-
-    bool alreadyInserted(std::vector<Edge> *edges, Edge *edge);
 };

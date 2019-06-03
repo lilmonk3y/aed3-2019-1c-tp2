@@ -19,23 +19,22 @@
 
 using namespace std;
 
-class SegmentationAlgorithm {
+class SegmentationAlgorithm{
 public:
-    // constructor (configuraciones):
-    // LO UNICO QUE NO SE PUDO PARAMETRIZAR ES EL DISJOINT SET USADO EN KRUSKAL
-    // (porque se llama cada rato esa instancia y hay que crearlo y borrarlo cada rato)
     SegmentationAlgorithm(vector<vector<int> > imageInput,int scale,int ancho, int alto,string disjoinSetStrategy);
 
     // algoritmo end to end:
     vector<vector<int> > imageToSegmentation();
-
-//protected: // comentar para los test
-    // algoritmo core:
-    DisjoinSet* graphSementationIntoSets(); // puede ser void
-
-    // imagen a grafo, DisjoinSet a imagen (input y output):
     AdjacencyListGraph* imageToGraph(vector<vector<int> >* imagen,int ancho, int alto);// puede ser void y sin parametros
     vector<vector<int> > toSegmentationImage(DisjoinSet* componentes,int ancho, int alto);//puede ser sin parametros
+
+    // algoritmo core:
+    DisjoinSet* graphSementationIntoSets(); // puede ser void
+    AdjacencyListGraph* adjacencyListInducedSubGraph( AdjacencyListGraph* graph, set<int> *componente);
+    int minInternalDifference(int componenteI, int componenteJ);
+    int internalDifference(set<int> *componente);
+    int tau(int cardinal);
+    std::map<int,std::set<int>*>* joinComponentsOnFather( int fatherIndex, int sonIndex);
 
     // solo para TESTEAR, contar la cantidad de componentes en la segmentacion:
     int cantidadDeComponentes(vector<vector<int> > imageInput,int ancho, int alto);
@@ -46,8 +45,6 @@ public:
     void setAlto(int al);
     void setAncho(int an);
     void setDisjointSet(DisjoinSet* disjoinSetInstance);
-    std::map<int,std::set<int>*>* joinComponentsOnFather( int fatherIndex, int sonIndex);
-    AdjacencyListGraph* adjacencyListInducedSubGraph( AdjacencyListGraph* graph, set<int> *componente);
 
     //private: // comentar para los test
     // atributos:
@@ -59,14 +56,6 @@ public:
     std::map<int,std::set<int>*>* adyacentesPorComponente;
     string disjointSetStrategy;
 
-    // metodos del algoritmo del paper:
-    int minInternalDifference(int componenteI, int componenteJ);
-    int internalDifference(set<int> *componente);
-    int tau(int cardinal);
-
-    // metodos que deberian pertenecer a otras clases:
-    set<int> construirComponente(int componenteIndice);
-    int min(int a ,int b);
 };
 
 std::map<int,std::set<int>*>* inicializarMapaComoDisjoinSet(int size);

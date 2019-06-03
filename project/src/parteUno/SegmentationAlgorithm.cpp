@@ -18,6 +18,12 @@ SegmentationAlgorithm::SegmentationAlgorithm(vector<vector<int> > imageInput,int
    this->disjointSetStrategy = disjoinSetStrategy;
 }
 
+// end 2 end (componentes es el campo this->disjointSet)
+vector<vector<int> > SegmentationAlgorithm::imageToSegmentation() {
+    DisjoinSet* componentes = this->graphSementationIntoSets();
+    return toSegmentationImage(componentes,this->ancho,this->alto);
+}
+
 DisjoinSet* SegmentationAlgorithm::graphSementationIntoSets() {
     this->disjoinSet->create(this->grafo); // crear lista de conjuntos disjunto del grafo original
 
@@ -45,27 +51,15 @@ int SegmentationAlgorithm::minInternalDifference(int indiceComponenteI, int indi
     set<int>* componenteJ = this->adyacentesPorComponente->at(indicecomponenteJ);
     int difCompI = internalDifference(componenteI) + tau(componenteI->size()) ;// O(KRUSKAL + grafo inducido)
     int difCompJ = internalDifference(componenteJ) + tau(componenteJ->size()) ;// O(KRUSKAL + grafo inducido)
-    return min(difCompI , difCompJ); // O(1)
+    return std::min(difCompI , difCompJ);
 }
 
 int SegmentationAlgorithm::internalDifference(set<int> *componente) { // O(KRUSKAL + creacion del grafo inducido)
     Graph* subGrafoComponente = this->adjacencyListInducedSubGraph(this->grafo, componente);// G=(C,E) O(n)+O(m) // REDUJE COMPLEX
     GetMST kruskal = GetMST(selectDisjoinSetStrategy(this->disjointSetStrategy)); // elijo la estrategia del disjoint set
-    Graph* arbolRecubridorMinimoDeLaComponente = kruskal.getMST(subGrafoComponente); // REDUJE COMPLEX
-    return arbolRecubridorMinimoDeLaComponente->getMaxWeight();// O(1)
+    Graph* arbolRecubridorMinimoDeLaComponente = kruskal.getMST(subGrafoComponente);
+    return arbolRecubridorMinimoDeLaComponente->getMaxWeight();
 }
-
-// esto lo deberia hacer el disjoint set, reconstruir un conjunto disjunto dado un indice de una componente
-//set<int> SegmentationAlgorithm::construirComponente(int indiceDeComponente) {
-//    std::set<int>  componenteVertices;
-//    int quantityVertex = this->grafo->getVertexSize(); // O(1), cantidad de vertices del grafo
-//    for(int indexVertex=0; indexVertex < quantityVertex; indexVertex++) {
-//        if  (this->disjoinSet->find(indexVertex) == indiceDeComponente) {
-//            componenteVertices.insert(indexVertex);
-//        }
-//    }
-//    return componenteVertices;
-//}
 
 int SegmentationAlgorithm::tau(int cardinal) {
     int k = this->scaleProportion; // eso se setea a mano
@@ -80,16 +74,6 @@ int SegmentationAlgorithm::tau(int cardinal) {
 std::map<int,std::set<int>*>* SegmentationAlgorithm::joinComponentsOnFather( int fatherIndex, int sonIndex){
     this->adyacentesPorComponente->at(fatherIndex)->insert(this->adyacentesPorComponente->at(sonIndex)->begin(), this->adyacentesPorComponente->at(sonIndex)->end());
     return this->adyacentesPorComponente;
-}
-
-std::map<int,std::set<int>*>* inicializarMapaComoDisjoinSet(int size){
-    auto adyacentesPorComponente = new std::map<int,std::set<int>*>();
-    for(int vertex = 0; vertex < size; vertex++){
-        auto component = new std::set<int>();
-        component->insert(vertex);
-        adyacentesPorComponente->insert(std::make_pair(vertex,component));
-    }
-    return adyacentesPorComponente;
 }
 
 // para construir el subgrafo G'=(componente,E'), donde G=(V,E) y componente incluido en V
@@ -116,6 +100,23 @@ AdjacencyListGraph* SegmentationAlgorithm::adjacencyListInducedSubGraph( Adjacen
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++FIN CORE DEL ALGORITMO+++++++++++++++++++++++++++++++*/
 
+
+
+
+
+
+
+
+std::map<int,std::set<int>*>* inicializarMapaComoDisjoinSet(int size){
+    auto adyacentesPorComponente = new std::map<int,std::set<int>*>();
+    for(int vertex = 0; vertex < size; vertex++){
+        auto component = new std::set<int>();
+        component->insert(vertex);
+        adyacentesPorComponente->insert(std::make_pair(vertex,component));
+    }
+    return adyacentesPorComponente;
+}
+
 DisjoinSet *selectDisjoinSetStrategy(string strategy) {
     if(strategy == "array"){
         return new ArrayDisjoinSet();
@@ -126,13 +127,6 @@ DisjoinSet *selectDisjoinSetStrategy(string strategy) {
     }else{
         return new ArrayCompressedDisjoinSet();
     }
-}
-
-int SegmentationAlgorithm::min(int a ,int b) {
-    if(a<b){
-        return a;
-    }
-    return b;
 }
 
 // input
@@ -216,12 +210,6 @@ vector<vector<int> >  SegmentationAlgorithm::toSegmentationImage(DisjoinSet* com
         }
     }
     return matrixOutput;
-}
-
-// end 2 end (componentes es el campo this->disjointSet)
-vector<vector<int> > SegmentationAlgorithm::imageToSegmentation() {
-    DisjoinSet* componentes = this->graphSementationIntoSets();
-    return toSegmentationImage(componentes,this->ancho,this->alto);
 }
 
 // funcion solo para testeo

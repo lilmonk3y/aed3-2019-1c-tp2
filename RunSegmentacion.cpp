@@ -6,6 +6,8 @@ DisjoinSet *selectStrategy(string basic_string);
 
 using namespace std;
 
+vector<vector<int>> getImagePixelsFromInput(int h, int w);
+
 int main(){
      /*
      La entrada consistiŕa de una primera ĺınea con dos enteros w y h,
@@ -28,26 +30,11 @@ int main(){
     std::cin >> w; // ancho
 
     // h lineas con w numeros enteros (pixel) entre 0 y 255:
-    vector<vector<int> > image;
-    for(int linea = 0; linea < h ; linea ++) {
-        vector<int> fila;
-        for(int pixel = 0; pixel < w ; pixel ++) { // valores de grises de cada pixel
-            int intensidadGris;
-            std::cin >> intensidadGris; // valor entre 0 y 255
-            if(0>intensidadGris || intensidadGris>255) {
-                std::cout << "Hay un valor de un pixel que no esta entre 0 y 255" << std::endl;
-                break;
-            }
-            fila.push_back(intensidadGris);
-        }
-
-        image.push_back(fila);
-    }
+    vector<vector<int> > image = getImagePixelsFromInput(h, w);
 
 
     
-    DisjoinSet* disjoinSet = selectStrategy(strategyName);
-    SegmentationAlgorithm* algoritmo = new SegmentationAlgorithm(image, scale,w,h,disjoinSet); // configuracion algoritmo
+    SegmentationAlgorithm* algoritmo = new SegmentationAlgorithm(image, scale,w,h,strategyName); // configuracion algoritmo
     vector<vector<int> > imagenSegmentada = algoritmo->imageToSegmentation(); // llamda al algoritmo
 
 
@@ -65,4 +52,25 @@ int main(){
         }
     }
 
+}
+
+
+vector<vector<int>> getImagePixelsFromInput(int h, int w){
+    // h lineas con w numeros enteros (pixel) entre 0 y 255:
+    vector<vector<int> > image;
+    for(int linea = 0; linea < h ; linea ++) {
+        vector<int> fila;
+        for(int pixel = 0; pixel < w ; pixel ++) { // valores de grises de cada pixel
+            int intensidadGris;
+            std::cin >> intensidadGris; // valor entre 0 y 255
+            if(0>intensidadGris || intensidadGris>255) {
+                std::cout << "Hay un valor de un pixel que no esta entre 0 y 255" << std::endl;
+                break;
+            }
+            fila.push_back(intensidadGris);
+        }
+
+        image.push_back(fila);
+    }
+    return image;
 }

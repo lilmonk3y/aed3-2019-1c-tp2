@@ -22,7 +22,7 @@ lib/googletest/googlemock/libgmock_maind.a
 lib/googletest/googlemock/libgmockd.a
 RunSegmentacion
 timer
-project/src/experiments/.ipynb_checkpoints/
+project/src/experiments/minpath/.ipynb_checkpoints/
 ExperimentacionSegmentacion
 libYourLib.a
 runSegmentacion

@@ -18,7 +18,7 @@ struct SegmentationAlgorithmTest : testing::Test{
         int anchoDefault =1;
         int altoDefault =1;
         DisjoinSet* disjoinSet = new ArrayDisjoinSet();
-        segmentationAlgorithm = new SegmentationAlgorithm(imagen,segmentationScaleDefault,anchoDefault,altoDefault,disjoinSet);
+        segmentationAlgorithm = new SegmentationAlgorithm(&imagen,segmentationScaleDefault,anchoDefault,altoDefault,disjoinSet);
     }
 
     ~SegmentationAlgorithmTest(){
@@ -211,7 +211,7 @@ TEST_F(SegmentationAlgorithmTest, segmentacionDeUnaImagenChiquita) {
     int scale = 2;
 
     DisjoinSet* disjoinSet = new ArrayDisjoinSet();
-    segmentationAlgorithm = new SegmentationAlgorithm(imagen,scale,ancho,alto,disjoinSet); // usar otra configuracion
+    segmentationAlgorithm = new SegmentationAlgorithm(&imagen,scale,ancho,alto,disjoinSet); // usar otra configuracion
     vector<vector<int> > imagenSegmentada = segmentationAlgorithm->imageToSegmentation();
     ASSERT_TRUE(segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto)==4); // el fondo, el puntito arriba, el puntito a la izquirda, y el palito en el medio
 }
@@ -227,7 +227,7 @@ TEST_F(SegmentationAlgorithmTest, segmentacionDeUnaImagenConUnaCruz) {
     int scale = 2;
 
     DisjoinSet* disjoinSet = new ArrayDisjoinSet();
-    segmentationAlgorithm = new SegmentationAlgorithm(imagen,scale,ancho,alto,disjoinSet); // usar otra configuracion
+    segmentationAlgorithm = new SegmentationAlgorithm(&imagen,scale,ancho,alto,disjoinSet); // usar otra configuracion
     vector<vector<int> > imagenSegmentada = segmentationAlgorithm->imageToSegmentation();
     ASSERT_TRUE(segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto)==2);
 }
@@ -284,7 +284,7 @@ TEST_F(SegmentationAlgorithmTest, imagenGrandeAGrafo){
 
 
 TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillas){
-    vector<vector<int> > imagen = {{248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
+    vector<vector<int> >* imagen = new vector<vector<int> >({{248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
                                    {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
                                    {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,189,103,34,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,189,103,34,248,248,248},
                                    {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,232,121,36,0,0,0,248,248,248,248,248,248,248,248,248,248,248,248,248,232,121,36,0,0,0,248,248,248},
@@ -316,10 +316,11 @@ TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillas){
                                    {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
                                    {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
                                    {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
-                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248}};
+                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248}});
 
     int ancho = 44;
     int alto = 33;
+    // 900 decia:
     int segmentationScale = 900; // con 150 hay 43 componentes, con 200 hay 27, con 400 hay 15 componentes, con 900 hay 5 componente
     // con 1500 devuelve 15 mmmmm
     // con 700 da 7
@@ -333,6 +334,7 @@ TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillas){
     segmentationAlgorithm = new SegmentationAlgorithm(imagen, segmentationScale, ancho, alto,disjoinSet);
     vector<vector<int> > imagenSegmentada = segmentationAlgorithm->imageToSegmentation();
     segmentationAlgorithm->generarFileOutput(imagenSegmentada,ancho, alto,"imagen-segmentada"); // genera el file con la imagen segmentada (pixeles componentes)
+    std::cout << "componentes: " << segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto) << endl;
     ASSERT_TRUE(segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto)==5);
 }
 
@@ -340,7 +342,7 @@ TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillas){
 
 
 TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillasOtroDisjointSet){
-    vector<vector<int> > imagen = {{248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
+    vector<vector<int> >* imagen = new vector<vector<int> >({{248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
                                    {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
                                    {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,189,103,34,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,189,103,34,248,248,248},
                                    {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,232,121,36,0,0,0,248,248,248,248,248,248,248,248,248,248,248,248,248,232,121,36,0,0,0,248,248,248},
@@ -372,7 +374,7 @@ TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillasOtroDisjointSet){
                                    {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
                                    {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
                                    {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
-                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248}};
+                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248}});
 
     int ancho = 44;
     int alto = 33;
@@ -387,7 +389,7 @@ TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillasOtroDisjointSet){
 
 
 TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillasConArrayCompressedDisjointSet){
-    vector<vector<int> > imagen = {{248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
+    vector<vector<int> >* imagen = new vector<vector<int> >({{248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
                                    {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
                                    {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,189,103,34,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,189,103,34,248,248,248},
                                    {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,232,121,36,0,0,0,248,248,248,248,248,248,248,248,248,248,248,248,248,232,121,36,0,0,0,248,248,248},
@@ -419,7 +421,7 @@ TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillasConArrayCompressedDi
                                    {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
                                    {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
                                    {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248},
-                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248}};
+                                   {248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248,248}});
 
     int ancho = 44;
     int alto = 33;

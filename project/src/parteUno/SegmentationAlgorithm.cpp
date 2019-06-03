@@ -8,13 +8,13 @@
 #include <fstream>
 #include <algorithm>
 
-SegmentationAlgorithm::SegmentationAlgorithm(vector<vector<int> > imageInput,int scale,int ancho, int alto,DisjoinSet* disjoinSetInstance) {
-   this->grafo = this->imageToGraph(&imageInput,ancho, alto);
+SegmentationAlgorithm::SegmentationAlgorithm(vector<vector<int> >* imageInput,int scale,int ancho, int alto,DisjoinSet* disjoinSetInstance) {
+   this->grafo = this->imageToGraph(imageInput,ancho, alto);
    this->scaleProportion = scale;
    this->ancho=ancho;
    this->alto=alto;
    this->disjoinSet = disjoinSetInstance;
-   this->imagen = &imageInput;// quitar referencia
+   this->imagen = imageInput;// quitar referencia
 }
 
 DisjoinSet* SegmentationAlgorithm::graphSementationIntoSets() {
@@ -44,8 +44,8 @@ int SegmentationAlgorithm::minInternalDifference(int indiceComponenteI, int indi
 }
 
 int SegmentationAlgorithm::internalDifference(set<int>* componente) { // O(KRUSKAL + creacion del grafo inducido)
-    //Graph* subGrafoComponente = this->grafo->adjacencyListInducedSubGraph(componente);// G=(C,E) O(n)+O(m) // REDUJE COMPLEX
-    Graph* subGrafoComponente = obtenerSubgrafo(componente,this->imagen,this->ancho,this->alto);
+    //Graph* subGrafoComponente = this->grafo->adjacencyListInducedSubGraph(*componente);// G=(C,E) O(n)+O(m) // REDUJE COMPLEX
+    Graph* subGrafoComponente = obtenerSubgrafo(componente,this->imagen,this->ancho,this->alto); // sigma de n (mal)
     GetMST kruskal = GetMST(new ArrayDisjoinSet()); // elijo la estrategia del disjoint set
     Graph* arbolRecubridorMinimoDeLaComponente = kruskal.getMST(subGrafoComponente); // REDUJE COMPLEX
     return arbolRecubridorMinimoDeLaComponente->getMaxWeight();// O(1) // REDUJE COMPLEX
@@ -247,11 +247,12 @@ Graph* SegmentationAlgorithm::obtenerSubgrafo(set<int>* componente,vector<vector
     // vertices vecinos que pertenezcan a la componente
     // con la imagen genero ejes con pesos
     // indiceVertice = i*ancho + j
-    AdjacencyListGraph* subgrafo = new AdjacencyListGraph(ancho*alto);
+    int cantidadVertices = this->grafo->getVertex();
+    AdjacencyListGraph* subgrafo = new AdjacencyListGraph(cantidadVertices);
 
     //set<Edge>* ejes = new set<Edge>();
 
-    for(auto vertice: *componente) {
+    for(int vertice: *componente) {
         int i = vertice/ancho;//cociente
         int j = vertice%ancho;//resto
         int  valorActual = (*imagen)[i][j];
@@ -304,7 +305,7 @@ Graph* SegmentationAlgorithm::obtenerSubgrafo(set<int>* componente,vector<vector
         }
 
         int indiceVerticeDiagonalArribaDerecha = (i-1)*ancho+(j+1);
-        const bool indiceVerticeDiagonalArribaDerecha_is_in  = componente->find(indiceVerticeIzquierda) != componente->end();
+        const bool indiceVerticeDiagonalArribaDerecha_is_in  = componente->find(indiceVerticeDiagonalArribaDerecha) != componente->end();
         if(i-1>=0 && j+1<ancho && indiceVerticeDiagonalArribaDerecha_is_in) {
             int valorDiagonalArribaDerecha = (*imagen)[i-1][j+1];
             int peso = abs(valorActual-valorDiagonalArribaDerecha);
@@ -316,7 +317,7 @@ Graph* SegmentationAlgorithm::obtenerSubgrafo(set<int>* componente,vector<vector
         }
 
         int indiceVerticeDiagonalArribaIzquierda = (i-1)*ancho+(j-1);
-        const bool indiceVerticeDiagonalArribaIzquierda_is_in  = componente->find(indiceVerticeIzquierda) != componente->end();
+        const bool indiceVerticeDiagonalArribaIzquierda_is_in  = componente->find(indiceVerticeDiagonalArribaIzquierda) != componente->end();
         if(i-1>=0 && j-1>=0 && indiceVerticeDiagonalArribaIzquierda_is_in) {
             int valorDiagonalArribaIzquierda = (*imagen)[i-1][j-1];
             int peso = abs(valorActual-valorDiagonalArribaIzquierda);
@@ -340,7 +341,7 @@ Graph* SegmentationAlgorithm::obtenerSubgrafo(set<int>* componente,vector<vector
         }
 
         int indiceVerticeDiagonalAbajoIzquierda = (i+1)*ancho+(j-1);
-        const bool indiceVerticeDiagonalAbajoIzquierda_is_in  = componente->find(indiceVerticeDiagonalAbajoDerecha) != componente->end();
+        const bool indiceVerticeDiagonalAbajoIzquierda_is_in  = componente->find(indiceVerticeDiagonalAbajoIzquierda) != componente->end();
         if(i+1<alto && j-1>=0 && indiceVerticeDiagonalAbajoIzquierda_is_in) {
             int valorDiagonalAbajoIzquierda = (*imagen)[i+1][j-1];
             int peso = abs(valorActual-valorDiagonalAbajoIzquierda);
@@ -350,7 +351,6 @@ Graph* SegmentationAlgorithm::obtenerSubgrafo(set<int>* componente,vector<vector
             //ejes->insert(e);
             subgrafo->addEdge(vertice,indiceVerticeDiagonalAbajoIzquierda,peso);
         }
-
 
     }
     //return ejes;

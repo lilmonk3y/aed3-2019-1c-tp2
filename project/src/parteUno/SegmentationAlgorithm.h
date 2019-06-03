@@ -22,7 +22,7 @@ public:
     // constructor (configuraciones):
     // LO UNICO QUE NO SE PUDO PARAMETRIZAR ES EL DISJOINT SET USADO EN KRUSKAL
     // (porque se llama cada rato esa instancia y hay que crearlo y borrarlo cada rato)
-    SegmentationAlgorithm(vector<vector<int> > imageInput,int scale,int ancho, int alto,DisjoinSet* disjoinSetInstance);
+    SegmentationAlgorithm(vector<vector<int> >* imageInput,int scale,int ancho, int alto,DisjoinSet* disjoinSetInstance);
 
     // algoritmo end to end:
     vector<vector<int> > imageToSegmentation();

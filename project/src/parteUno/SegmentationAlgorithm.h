@@ -52,15 +52,19 @@ public:
     int ancho;
     int alto;
     DisjoinSet* disjoinSet;
+    vector<vector<int> >* imagen;
 
     // metodos del algoritmo del paper:
     int minInternalDifference(int componenteI, int componenteJ);
-    int internalDifference(set<int> componente);
+    int internalDifference(set<int>* componente);
     int tau(int cardinal);
 
     // metodos que deberian pertenecer a otras clases:
-    set<int> construirComponente(int componenteIndice);
+    set<int>* construirComponente(int componenteIndice);
     int min(int a ,int b);
+
+    // metodo nuevo
+    Graph* obtenerSubgrafo(set<int>* componente,vector<vector<int> >* imagen,int ancho,int alto);
 };
 
 #endif //AED3_2019_1C_TP2_SEGMENTATIONALGORITHM_H

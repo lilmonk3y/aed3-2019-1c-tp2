@@ -22,6 +22,7 @@ public:
     set<int> getNeighbors(int indiceVertice);// metodo nuevo
     AdjacencyListGraph* adjacencyListInducedSubGraph(set<int> componente);// metodo nuevo: G'=(componente,E)
     long getMaxWeight(); // O(1), retorna el peso de la arista, cuyo peso es el mayor de todos
+    //set<Edge>* obtenerEjes(int indiceVertice,set<int>* componente,vector<vector<int> >* imagen,int ancho,int alto);
     ~AdjacencyListGraph();
 private:
     std::vector<std::list<AdjacencyNode*>> vertexAdjacents;

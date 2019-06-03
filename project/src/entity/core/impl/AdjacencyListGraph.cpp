@@ -104,31 +104,6 @@ AdjacencyListGraph::~AdjacencyListGraph() {
 
 
 /// metodos nuevos que agregó axel:
-
-// para construir el subgrafo G'=(componente,E), donde G=(V,E) y componente incluido en V
-AdjacencyListGraph* AdjacencyListGraph::adjacencyListInducedSubGraph(set<int> *componente) {
-    int cantidadVertices = this->getVertexSize(); // cantidad vertices V
-    AdjacencyListGraph* subGraph = new AdjacencyListGraph(cantidadVertices);// O(n), estructura vacia subgrafo
-
-    //vector<Edge> ejesG = *graph->getEdges(); // desrreferencio
-
-    set<Edge> ejesG = *(this->getEdgeSet()); // desrreferencio
-    for(const auto& iter : ejesG) { // O(M), ver si usar getNeighbors
-        int iVertex = iter.getLeftVertex();
-        int jVertex = iter.getRigthVertex();
-        int pesoArista = iter.getEdgeCost();
-        const bool i_vertex_is_in  = componente->find(iVertex) != componente->end();
-        const bool j_vertex_is_in = componente->find(jVertex) != componente->end();
-
-        // agregar solo ejes que inciden en los vertices de la componente:
-        if(i_vertex_is_in &&  j_vertex_is_in) {
-            subGraph->addEdge(iVertex,jVertex,pesoArista);
-        }
-
-    }
-    return subGraph;
-}
-
 long AdjacencyListGraph::getMaxWeight() {
     return this->maxWeight;
 }
@@ -141,4 +116,8 @@ set<int> AdjacencyListGraph::getNeighbors(int indiceVertice) { // costo O(n)
         neighbors.insert(indexFromNeighborVertex);
     }
     return neighbors;
+}
+
+std::list<AdjacencyNode *> *AdjacencyListGraph::getAdyacents(int vertexIndex) {
+    return &(this->vertexAdjacents.at(vertexIndex));
 }

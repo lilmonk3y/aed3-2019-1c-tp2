@@ -49,7 +49,7 @@ int SegmentationAlgorithm::minInternalDifference(int indiceComponenteI, int indi
 }
 
 int SegmentationAlgorithm::internalDifference(set<int> *componente) { // O(KRUSKAL + creacion del grafo inducido)
-    Graph* subGrafoComponente = this->grafo->adjacencyListInducedSubGraph(componente);// G=(C,E) O(n)+O(m) // REDUJE COMPLEX
+    Graph* subGrafoComponente = this->adjacencyListInducedSubGraph(this->grafo, componente);// G=(C,E) O(n)+O(m) // REDUJE COMPLEX
     GetMST kruskal = GetMST(selectDisjoinSetStrategy(this->disjointSetStrategy)); // elijo la estrategia del disjoint set
     Graph* arbolRecubridorMinimoDeLaComponente = kruskal.getMST(subGrafoComponente); // REDUJE COMPLEX
     return arbolRecubridorMinimoDeLaComponente->getMaxWeight();// O(1)
@@ -90,6 +90,21 @@ std::map<int,std::set<int>*>* inicializarMapaComoDisjoinSet(int size){
         adyacentesPorComponente->insert(std::make_pair(vertex,component));
     }
     return adyacentesPorComponente;
+}
+
+// para construir el subgrafo G'=(componente,E'), donde G=(V,E) y componente incluido en V
+AdjacencyListGraph* SegmentationAlgorithm::adjacencyListInducedSubGraph( AdjacencyListGraph* graph, set<int> *componente) {
+    int cantidadVertices = graph->getVertexSize(); // cantidad vertices V
+    AdjacencyListGraph* subGraph = new AdjacencyListGraph(cantidadVertices);// O(n), estructura vacia subgrafo
+
+    for(int vertexInComponent : *componente) {
+        for (auto adyacentInOriginalGraph : *graph->getAdyacents(vertexInComponent)){
+            if (componente->find(adyacentInOriginalGraph->getVertex()) != componente->end()) {
+                subGraph->addEdge(vertexInComponent, adyacentInOriginalGraph->getVertex(), adyacentInOriginalGraph->getEdgeCost());
+            }
+        }
+    }
+    return subGraph;
 }
 
 

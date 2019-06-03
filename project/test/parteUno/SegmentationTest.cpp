@@ -327,14 +327,11 @@ TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillas){
     // si entre 400 y 1500 hay 15, el punto medio es 950
     // con 1000 hay 5 componentes
 
-
     // union del disjoint set tiene costo N
-
     DisjoinSet* disjoinSet = new ArrayDisjoinSet();
     segmentationAlgorithm = new SegmentationAlgorithm(imagen, segmentationScale, ancho, alto,disjoinSet);
     vector<vector<int> > imagenSegmentada = segmentationAlgorithm->imageToSegmentation();
     segmentationAlgorithm->generarFileOutput(imagenSegmentada,ancho, alto,"imagen-segmentada"); // genera el file con la imagen segmentada (pixeles componentes)
-    std::cout << "componentes: " << segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto) << endl;
     ASSERT_TRUE(segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto)==5);
 }
 

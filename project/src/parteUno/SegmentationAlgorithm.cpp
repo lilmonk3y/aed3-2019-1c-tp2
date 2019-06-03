@@ -38,8 +38,8 @@ DisjoinSet* SegmentationAlgorithm::graphSementationIntoSets() {
 int SegmentationAlgorithm::minInternalDifference(int indiceComponenteI, int indicecomponenteJ) {
     set<int>* componenteI = construirComponente(indiceComponenteI); // SIGMA(n),  VER SI SE PUEDE REDUCIR MAS
     set<int>* componenteJ = construirComponente(indicecomponenteJ); // SIGMA(n), VER SI SE PUEDE REDUCIR MAS
-    int difCompI = internalDifference(componenteI) + tau(componenteI.size()) ;// O(KRUSKAL + grafo inducido)
-    int difCompJ = internalDifference(componenteJ) + tau(componenteJ.size()) ;// O(KRUSKAL + grafo inducido)
+    int difCompI = internalDifference(componenteI) + tau(componenteI->size()) ;// O(KRUSKAL + grafo inducido)
+    int difCompJ = internalDifference(componenteJ) + tau(componenteJ->size()) ;// O(KRUSKAL + grafo inducido)
     return min(difCompI , difCompJ); // O(1)
 }
 
@@ -57,7 +57,7 @@ set<int>* SegmentationAlgorithm::construirComponente(int indiceDeComponente) {
     int quantityVertex = this->grafo->getVertex(); // O(1), cantidad de vertices del grafo
     for(int indexVertex=0; indexVertex < quantityVertex; indexVertex++) {
         if  (this->disjoinSet->find(indexVertex) == indiceDeComponente) {
-            componenteVertices.insert(indexVertex);
+            componenteVertices->insert(indexVertex);
         }
     }
     return componenteVertices;

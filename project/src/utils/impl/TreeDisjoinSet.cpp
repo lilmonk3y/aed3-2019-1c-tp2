@@ -5,7 +5,7 @@
 #include "../TreeDisjoinSet.h"
 
 void TreeDisjoinSet::create(Graph *graph) {
-    this->components = new DirectedTreeGraph(graph->getVertex());
+    this->components = new DirectedTreeGraph(graph->getVertexSize());
 }
 
 int TreeDisjoinSet::find(int vertex) {

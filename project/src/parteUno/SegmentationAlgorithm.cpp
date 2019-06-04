@@ -8,26 +8,38 @@
 #include <fstream>
 #include <algorithm>
 
-SegmentationAlgorithm::SegmentationAlgorithm(vector<vector<int> > imageInput,int scale,int ancho, int alto,DisjoinSet* disjoinSetInstance) {
+SegmentationAlgorithm::SegmentationAlgorithm(vector<vector<int> > imageInput,int scale,int ancho, int alto,string disjoinSetStrategy) {
    this->grafo = this->imageToGraph(&imageInput,ancho, alto);;
    this->scaleProportion = scale;
    this->ancho=ancho;
    this->alto=alto;
-   this->disjoinSet = disjoinSetInstance;
+   this->disjoinSet = selectDisjoinSetStrategy(disjoinSetStrategy);
+   this->adyacentesPorComponente = inicializarMapaComoDisjoinSet(ancho*alto);
+   this->disjointSetStrategy = disjoinSetStrategy;
+}
+
+// end 2 end (componentes es el campo this->disjointSet)
+vector<vector<int> > SegmentationAlgorithm::imageToSegmentation() {
+    DisjoinSet* componentes = this->graphSementationIntoSets();
+    return toSegmentationImage(componentes,this->ancho,this->alto);
 }
 
 DisjoinSet* SegmentationAlgorithm::graphSementationIntoSets() {
     this->disjoinSet->create(this->grafo); // crear lista de conjuntos disjunto del grafo original
 
     set<Edge>* edges = this->grafo->getEdgeSet(); // O(1), obtener E de G=(V,E)
+    vector<Edge> edgesSortedByCost = vector<Edge>(edges->begin(), edges->end()); // O(E)
+    sort(edgesSortedByCost.begin(), edgesSortedByCost.end(), edgeComparatorByCost); // O(E * log(E))
 
-    for(auto edge : *edges) { // itero todos los ejes. (estan ordenados de manera creciente)
-        int indiceComponenteI = this->disjoinSet->find(edge.getLeftVertex()); // O(1),busco componente vertice i, extremo del eje
-        int indicecomponenteJ = this->disjoinSet->find(edge.getRigthVertex());// O(1),busco componente vertice j, extremo del eje
+    for(auto edge : edgesSortedByCost) {
+        int indiceComponenteI = this->disjoinSet->find(edge.getLeftVertex());
+        int indicecomponenteJ = this->disjoinSet->find(edge.getRigthVertex());
 
         if( indiceComponenteI !=  indicecomponenteJ ) {
             if( edge.getEdgeCost() <= minInternalDifference(indiceComponenteI,indicecomponenteJ) ) {
                 this->disjoinSet->join(indiceComponenteI, indicecomponenteJ); // O(join del disjointSet),union componentes a las cuales pertenece los vertices
+
+                this->joinComponentsOnFather(indiceComponenteI, indicecomponenteJ);
             }
         }
     }
@@ -35,30 +47,18 @@ DisjoinSet* SegmentationAlgorithm::graphSementationIntoSets() {
 }
 
 int SegmentationAlgorithm::minInternalDifference(int indiceComponenteI, int indicecomponenteJ) {
-    set<int> componenteI = construirComponente(indiceComponenteI); // VER SI SE PUEDE REDUCIR MAS
-    set<int> componenteJ = construirComponente(indicecomponenteJ); // VER SI SE PUEDE REDUCIR MAS
-    int difCompI = internalDifference(componenteI) + tau(componenteI.size()) ;// O(KRUSKAL + grafo inducido)
-    int difCompJ = internalDifference(componenteJ) + tau(componenteJ.size()) ;// O(KRUSKAL + grafo inducido)
-    return min(difCompI , difCompJ); // O(1)
+    set<int>* componenteI = this->adyacentesPorComponente->at(indiceComponenteI);
+    set<int>* componenteJ = this->adyacentesPorComponente->at(indicecomponenteJ);
+    int difCompI = internalDifference(componenteI) + tau(componenteI->size()) ;// O(KRUSKAL + grafo inducido)
+    int difCompJ = internalDifference(componenteJ) + tau(componenteJ->size()) ;// O(KRUSKAL + grafo inducido)
+    return std::min(difCompI , difCompJ);
 }
 
-int SegmentationAlgorithm::internalDifference(set<int> componente) { // O(KRUSKAL + creacion del grafo inducido)
-    Graph* subGrafoComponente = this->grafo->adjacencyListInducedSubGraph(componente);// G=(C,E) O(n)+O(m) // REDUJE COMPLEX
-    GetMST kruskal = GetMST(new ArrayDisjoinSet()); // elijo la estrategia del disjoint set
-    Graph* arbolRecubridorMinimoDeLaComponente = kruskal.getMST(subGrafoComponente); // REDUJE COMPLEX
-    return arbolRecubridorMinimoDeLaComponente->getMaxWeight();// O(1) // REDUJE COMPLEX
-}
-
-// esto lo deberia hacer el disjoint set, reconstruir un conjunto disjunto dado un indice de una componente
-set<int> SegmentationAlgorithm::construirComponente(int indiceDeComponente) {
-    std::set<int>  componenteVertices;
-    int quantityVertex = this->grafo->getVertex(); // O(1), cantidad de vertices del grafo
-    for(int indexVertex=0; indexVertex < quantityVertex; indexVertex++) {
-        if  (this->disjoinSet->find(indexVertex) == indiceDeComponente) {
-            componenteVertices.insert(indexVertex);
-        }
-    }
-    return componenteVertices;
+int SegmentationAlgorithm::internalDifference(set<int> *componente) { // O(KRUSKAL + creacion del grafo inducido)
+    Graph* subGrafoComponente = this->adjacencyListInducedSubGraph(this->grafo, componente);// G=(C,E) O(n)+O(m) // REDUJE COMPLEX
+    GetMST kruskal = GetMST(selectDisjoinSetStrategy(this->disjointSetStrategy)); // elijo la estrategia del disjoint set
+    Graph* arbolRecubridorMinimoDeLaComponente = kruskal.getMST(subGrafoComponente);
+    return arbolRecubridorMinimoDeLaComponente->getMaxWeight();
 }
 
 int SegmentationAlgorithm::tau(int cardinal) {
@@ -66,11 +66,67 @@ int SegmentationAlgorithm::tau(int cardinal) {
     return k/cardinal;
 }
 
-int SegmentationAlgorithm::min(int a ,int b) {
-    if(a<b){
-        return a;
+/*
+ * Este método hace un join de las dos componentes que le llegan por parámetro.
+ * Hacer un join de los elementos de cada componente nos ahorra mucha memoria y tiempo de cálculo en el método
+ * minInternalDifference podiendo hacerlo en O(1) y pagando el costo una sola vez.
+ */
+std::map<int,std::set<int>*>* SegmentationAlgorithm::joinComponentsOnFather( int fatherIndex, int sonIndex){
+    this->adyacentesPorComponente->at(fatherIndex)->insert(this->adyacentesPorComponente->at(sonIndex)->begin(), this->adyacentesPorComponente->at(sonIndex)->end());
+    return this->adyacentesPorComponente;
+}
+
+// para construir el subgrafo G'=(componente,E'), donde G=(V,E) y componente incluido en V
+AdjacencyListGraph* SegmentationAlgorithm::adjacencyListInducedSubGraph( AdjacencyListGraph* graph, set<int> *componente) {
+    int cantidadVertices = graph->getVertexSize(); // cantidad vertices V
+    AdjacencyListGraph* subGraph = new AdjacencyListGraph(cantidadVertices);// O(n), estructura vacia subgrafo
+
+    for(int vertexInComponent : *componente) {
+        for (auto adyacentInOriginalGraph : *graph->getAdyacents(vertexInComponent)){
+            if (componente->find(adyacentInOriginalGraph->getVertex()) != componente->end()) {
+                subGraph->addEdge(vertexInComponent, adyacentInOriginalGraph->getVertex(), adyacentInOriginalGraph->getEdgeCost());
+            }
+        }
     }
-    return b;
+    return subGraph;
+}
+
+
+
+
+
+
+
+
+/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++FIN CORE DEL ALGORITMO+++++++++++++++++++++++++++++++*/
+
+
+
+
+
+
+
+
+std::map<int,std::set<int>*>* inicializarMapaComoDisjoinSet(int size){
+    auto adyacentesPorComponente = new std::map<int,std::set<int>*>();
+    for(int vertex = 0; vertex < size; vertex++){
+        auto component = new std::set<int>();
+        component->insert(vertex);
+        adyacentesPorComponente->insert(std::make_pair(vertex,component));
+    }
+    return adyacentesPorComponente;
+}
+
+DisjoinSet *selectDisjoinSetStrategy(string strategy) {
+    if(strategy == "array"){
+        return new ArrayDisjoinSet();
+    }else if(strategy == "tree"){
+        return new TreeDisjoinSet();
+    }else if( strategy == "treeCompressed"){
+        return new TreeCompressedDisjoinSet();
+    }else{
+        return new ArrayCompressedDisjoinSet();
+    }
 }
 
 // input
@@ -154,12 +210,6 @@ vector<vector<int> >  SegmentationAlgorithm::toSegmentationImage(DisjoinSet* com
         }
     }
     return matrixOutput;
-}
-
-// end 2 end (componentes es el campo this->disjointSet)
-vector<vector<int> > SegmentationAlgorithm::imageToSegmentation() {
-    DisjoinSet* componentes = this->graphSementationIntoSets();
-    return toSegmentationImage(componentes,this->ancho,this->alto);
 }
 
 // funcion solo para testeo

@@ -5,7 +5,7 @@
 
 void ArrayDisjoinSet::create(Graph *graph) {
     std::vector<int> components;
-    components.resize(graph->getVertex());
+    components.resize(graph->getVertexSize());
     for(std::size_t index = 0; index < components.size(); index++){
         components.at(index) = index;
     }

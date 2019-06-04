@@ -17,8 +17,8 @@ long Edge::getEdgeCost() const {
 }
 
 Edge::Edge(int vertex1, int vertex2, long cost) {
-    this->rVertexIndex = vertex1;
-    this->lVectexIndex = vertex2;
+    this->rVertexIndex = std::min(vertex1,vertex2);
+    this->lVectexIndex = std::max(vertex1,vertex2);
     this->edgeCost = cost;
 }
 
@@ -33,13 +33,13 @@ bool Edge::operator<(const Edge &other)const {
 
 
 bool operator==(const Edge first, const Edge other) {
-    return (first.getLeftVertex() == other.getLeftVertex() && first.getRigthVertex() == other.getRigthVertex()/* && first.getEdgeCost() == other.getEdgeCost()*/)
-    || (first.getLeftVertex() == other.getRigthVertex() && first.getRigthVertex()== other.getLeftVertex() /*&& first.getEdgeCost()== other.getEdgeCost()*/);
+    return first.getLeftVertex() == other.getLeftVertex() && first.getRigthVertex() == other.getRigthVertex() && first.getEdgeCost() == other.getEdgeCost();
 }
 
-bool operator<(const Edge first, const Edge other) { // ES UN MENOR IGUAL
-    if(first.getEdgeCost() == other.getEdgeCost()) { // ES UN MENOR IGUAL, sino el iterador de set quita los ejes de igual peso
-        return true;
-    }
-    return first.getEdgeCost() < other.getEdgeCost();
+bool operator<(const Edge first, const Edge other) {
+    return (first.getRigthVertex() < other.getRigthVertex() || first.getLeftVertex() < other.getLeftVertex()) /*|| first.getEdgeCost() < other.getEdgeCost()*/;
+}
+
+bool edgeComparatorByCost(const Edge first, const Edge second) {
+    return first.getEdgeCost() < second.getEdgeCost();
 }

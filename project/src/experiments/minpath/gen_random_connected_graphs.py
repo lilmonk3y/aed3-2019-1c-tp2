@@ -11,17 +11,18 @@ import random_connected_graph
 # Las distancias entre ciudades se generan con valores en el intervalo [1, 60] y los costos de nafta
 # en el intervalo [1, 10], ambos con distribución uniforme.
 
-def print_graph(number_of_vertices, number_of_edges):
-  print(f"{number_of_vertices} {number_of_edges}")
+def print_graph(vertices, number_of_edges, output_file):
+  number_of_vertices = len(vertices)
+  print(f"{number_of_vertices} {number_of_edges}", file=output_file)
   for i in range(0, number_of_vertices):
     vertex_weight = random.randint(1, 60)
-    print(vertex_weight)
+    print(vertex_weight, file=output_file)
 
-  graph = random_connected_graph.random_walk(number_of_vertices, number_of_edges)
+  graph = random_connected_graph.random_walk(vertices, number_of_edges)
 
   for vertex1, vertex2 in graph.edges:
     distance = random.randint(1, 10)
-    print(f"{vertex1} {vertex2} {distance}")
+    print(f"{vertex1} {vertex2} {distance}", file=output_file)
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser(description=__doc__)
@@ -42,24 +43,29 @@ if __name__ == '__main__':
   if args.n_max is None:
     args.n_max = args.n_min
 
-  if args.file is None:
-    args.file = ("./salidas/salida_grafos_random_" +
-                f"{args.graphs}_{args.n_min}_{args.n_max}_{args.step}_{args.density}.csv")
+  if args.output_file is None:
+    args.output_file = ("./salidas/salida_grafos_random_" +
+                f"{args.graphs}_{args.n_min}_{args.n_max}_{args.step}_{args.density}.txt")
 
-  path = "/".join(args.file.split("/")[0:-1]) # path without file name
+  path = "/".join(args.output_file.split("/")[0:-1]) # path without file name
   os.makedirs(path, exist_ok=True)
 
-  # max number of edges for each value of n
-  if args.n_min <= 2:
-    n_max = args.n_min - 1
-  else:
-    m_max = (args.n_min - 1) * (args.n_min - 2) / 2 # combinatorial(n_min-1, 2)
-
-  for n in range(args.n_min, args.n_max+1, args.step):
-    m_max += n # combinatorial(n, 2)
-    m = int(m_max*args.density) # number of edges
-    for i in range(0, args.graphs+1):
-      print_graph(n, m)
+  n_values = range(args.n_min, args.n_max+1, args.step)
+  with open(args.output_file, "w") as output_file:
+    print(len(n_values)*args.graphs, file=output_file)
+    for n in n_values:
+      edges_max = n*(n-1)/2
+      edges_min = n-1
+      edges = int(edges_max*args.density) # number of edges
+      if edges < edges_min:
+        new_density = edges_min/edges_max
+        print((f"Expected number of edges with nodes={n} and density="
+          + f"{args.density} is {edges} which would result in an unconnected "
+          + f"graph. New density={new_density:.2f}, edges={edges_min}\n"))
+        edges = edges_min
+      vertices = list(range(n))
+      for i in range(0, args.graphs):
+        print_graph(vertices, edges, output_file)
 
 
 

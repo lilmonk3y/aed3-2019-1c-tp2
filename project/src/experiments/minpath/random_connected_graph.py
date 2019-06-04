@@ -297,7 +297,7 @@ if __name__ == '__main__':
 
     # Approach
     if args.approach:
-        print 'Setting approach:', args.approach
+        print('Setting approach:', args.approach)
         approach = locals()[args.approach]
     else:
         approach = random_walk

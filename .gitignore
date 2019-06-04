@@ -26,3 +26,5 @@ project/src/experiments/minpath/.ipynb_checkpoints/
 ExperimentacionSegmentacion
 libYourLib.a
 runSegmentacion
+project/src/experiments/minpath/random_connected_graph.pyc
+project/src/experiments/minpath/__pycache__/

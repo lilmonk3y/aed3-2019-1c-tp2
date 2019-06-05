@@ -32,14 +32,9 @@ int main(){
     // h lineas con w numeros enteros (pixel) entre 0 y 255:
     vector<vector<int> > image = getImagePixelsFromInput(h, w);
 
-
     
     SegmentationAlgorithm* algoritmo = new SegmentationAlgorithm(image, scale,w,h,strategyName); // configuracion algoritmo
     vector<vector<int> > imagenSegmentada = algoritmo->imageToSegmentation(); // llamda al algoritmo
-
-
-
-
 
 
     cout << h << endl;

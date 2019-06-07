@@ -11,17 +11,17 @@ import random_connected_graph
 # Las distancias entre ciudades se generan con valores en el intervalo [1, 60] y los costos de nafta
 # en el intervalo [1, 10], ambos con distribución uniforme.
 
-def print_graph(vertices, number_of_edges, output_file):
+def print_graph(vertices, number_of_edges, output_file, distance_min, distance_max):
   number_of_vertices = len(vertices)
   print(f"{number_of_vertices} {number_of_edges}", file=output_file)
   for i in range(0, number_of_vertices):
-    vertex_weight = random.randint(1, 60)
+    vertex_weight = random.randint(1, 20)
     print(vertex_weight, file=output_file)
 
   graph = random_connected_graph.random_walk(vertices, number_of_edges)
 
   for vertex1, vertex2 in graph.edges:
-    distance = random.randint(1, 10)
+    distance = random.randint(distance_min, distance_max)
     print(f"{vertex1} {vertex2} {distance}", file=output_file)
 
 if __name__ == '__main__':
@@ -36,7 +36,11 @@ if __name__ == '__main__':
                       help='(optional) step between values of [n, N] - default=1'),
   parser.add_argument('-d', '--density', type=float,
                       help='(required) density of edges, positive float <= 1'),
-  parser.add_argument('-f', '--output-file', help='(optional) output file')
+  parser.add_argument('-f', '--output-file', help='(optional) output file'),
+  parser.add_argument('-l', '--distance-min', type=int, default=1,
+                      help='(optional) min number of distance range [l, L] - default=1'),
+  parser.add_argument('-L', '--distance-max', type=int, default=60,
+                      help='(optional) max number of distance range [l, L] - default=60')
 
   args = parser.parse_args()
 
@@ -65,7 +69,7 @@ if __name__ == '__main__':
         edges = edges_min
       vertices = list(range(n))
       for i in range(0, args.graphs):
-        print_graph(vertices, edges, output_file)
+        print_graph(vertices, edges, output_file, args.distance_min, args.distance_max)
 
 
 

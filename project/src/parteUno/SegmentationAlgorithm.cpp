@@ -31,18 +31,28 @@ DisjoinSet* SegmentationAlgorithm::graphSementationIntoSets() {
     vector<Edge> edgesSortedByCost = vector<Edge>(edges->begin(), edges->end()); // O(E)
     sort(edgesSortedByCost.begin(), edgesSortedByCost.end(), edgeComparatorByCost); // O(E * log(E))
 
+    // init thresholds
+    std::vector<float> threshold;
+    threshold.resize(this->grafo->getVertexSize());
+    for (int i = 0; i < threshold.size(); i++)
+        threshold.at(i) = tau(adyacentesPorComponente->at(i)->size());
+
     for(auto edge : edgesSortedByCost) {
         int indiceComponenteI = this->disjoinSet->find(edge.getLeftVertex());
         int indicecomponenteJ = this->disjoinSet->find(edge.getRigthVertex());
 
         if( indiceComponenteI !=  indicecomponenteJ ) {
-            if( edge.getEdgeCost() <= minInternalDifference(indiceComponenteI,indicecomponenteJ) ) {
-                this->disjoinSet->join(indiceComponenteI, indicecomponenteJ); // O(join del disjointSet),union componentes a las cuales pertenece los vertices
+            if((edge.getEdgeCost() <= threshold.at(indiceComponenteI)) && (edge.getEdgeCost() <= threshold.at(indicecomponenteJ))){
+                this->disjoinSet->join(indiceComponenteI, indicecomponenteJ);
 
                 this->joinComponentsOnFather(indiceComponenteI, indicecomponenteJ);
+
+                indiceComponenteI = disjoinSet->find(indiceComponenteI);
+                threshold.at(indiceComponenteI) = edge.getEdgeCost() + tau(adyacentesPorComponente->at(indiceComponenteI)->size());
             }
         }
     }
+
     return this->disjoinSet;
 }
 
@@ -61,7 +71,7 @@ int SegmentationAlgorithm::internalDifference(set<int> *componente) { // O(KRUSK
     return arbolRecubridorMinimoDeLaComponente->getMaxWeight();
 }
 
-int SegmentationAlgorithm::tau(int cardinal) {
+long SegmentationAlgorithm::tau(int cardinal) {
     int k = this->scaleProportion; // eso se setea a mano
     return k/cardinal;
 }

@@ -2,8 +2,6 @@
 #include <vector>
 #include "project/src/parteUno/SegmentationAlgorithm.h"
 
-DisjoinSet *selectStrategy(string basic_string);
-
 using namespace std;
 
 vector<vector<int>> getImagePixelsFromInput(int h, int w);
@@ -37,6 +35,7 @@ int main(){
     vector<vector<int> > imagenSegmentada = algoritmo->imageToSegmentation(); // llamda al algoritmo
 
 
+    cout << scale << endl;
     cout << h << endl;
     cout << w << endl;
 

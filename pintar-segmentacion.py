@@ -1,0 +1,44 @@
+from numpy import array
+import matplotlib.pyplot as plt
+from matplotlib.offsetbox import AnchoredText
+
+#https://stackoverflow.com/questions/36410321/matplotlib-how-to-represent-array-as-image
+segments = []
+
+scale = int(raw_input())
+height = int(raw_input())
+width = int(raw_input())
+pixelsRead = 0
+componentDicc = set()
+while pixelsRead < height * width:
+    pixelComponent = int(raw_input())
+    segments.append(pixelComponent)
+    pixelsRead += 1
+    if pixelComponent not in componentDicc:
+        componentDicc.add(pixelComponent)
+
+cantComp = len(componentDicc)
+
+
+#Convert list to array
+nArray = array(segments)
+#covert array to "matrix"
+a11=nArray.reshape(height,width)# alto y ancho
+plt.imshow(a11, cmap='nipy_spectral') #mapa de rojos, opciones: 'hot', 'nipy_spectral'
+plt.colorbar()
+
+
+textstr = '\n'.join((
+    r'Cantidad de componentes=%.2f' % (cantComp, ),
+    r'scale=%.2f' % (scale, )))
+
+# these are matplotlib.patch.Patch properties
+props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+
+# place a text box in upper left in axes coords
+plt.text(0.05, 0.95, textstr, fontsize=8,
+        verticalalignment='top', bbox=props)
+
+
+plt.show()
+

@@ -35,10 +35,8 @@ textstr = '\n'.join((
 # these are matplotlib.patch.Patch properties
 props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
 
-# place a text box in upper left in axes coords
-plt.text(0.05, 0.95, textstr, fontsize=8,
-        verticalalignment='top', bbox=props)
-
+#title:
+plt.title(textstr)
 
 plt.show()
 

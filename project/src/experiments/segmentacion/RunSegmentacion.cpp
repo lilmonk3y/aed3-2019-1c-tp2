@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include "project/src/parteUno/SegmentationAlgorithm.h"
+#include "../../parteUno/SegmentationAlgorithm.h"
 
 using namespace std;
 

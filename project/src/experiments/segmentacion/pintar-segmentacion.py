@@ -1,6 +1,5 @@
 from numpy import array
 import matplotlib.pyplot as plt
-from matplotlib.offsetbox import AnchoredText
 
 #https://stackoverflow.com/questions/36410321/matplotlib-how-to-represent-array-as-image
 segments = []
@@ -33,10 +32,10 @@ textstr = '\n'.join((
     r'scale=%.2f' % (scale, )))
 
 # these are matplotlib.patch.Patch properties
-props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+props = dict(boxstyle='round', facecolor='wheat', alpha=0.8)
 
 # place a text box in upper left in axes coords
-plt.text(0.05, 0.95, textstr, fontsize=8,
+plt.text(0.05, 0.95, textstr, fontsize=10,
         verticalalignment='top', bbox=props)
 
 

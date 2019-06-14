@@ -44,7 +44,9 @@ int main(){
     // ecritura de la diferencia de los tiempo:
     std::chrono::duration<double> tiempo = std::chrono::duration_cast<std::chrono::duration<double > >(tiempoFinal - tiempoInicio); // diferencia tiempos
     fileExperimento << std::fixed << tiempo.count()  << "\n"; // mando el tiempo al file, con notacion con coma, osea no cientifica
-
+    int cantidadComponentes = algoritmo->cantidadDeComponentes(imagenSegmentada,w, h);
+    fileExperimento << cantidadComponentes  << "\n"; // mando la cantidad de componentes al file.
+    fileExperimento.close();
 
 
 

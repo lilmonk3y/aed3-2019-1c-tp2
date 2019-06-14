@@ -34,10 +34,15 @@ textstr = '\n'.join((
 # these are matplotlib.patch.Patch properties
 props = dict(boxstyle='round', facecolor='wheat', alpha=0.8)
 
+<<<<<<< HEAD:project/src/experiments/segmentacion/pintar-segmentacion.py
 # place a text box in upper left in axes coords
 plt.text(0.05, 0.95, textstr, fontsize=10,
         verticalalignment='top', bbox=props)
 
+=======
+#title:
+plt.title(textstr)
+>>>>>>> 165ccca162015621ea8a984ef9f4843e86b36d04:pintar-segmentacion.py
 
 plt.show()
 

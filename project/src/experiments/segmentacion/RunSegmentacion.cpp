@@ -1,6 +1,11 @@
 #include <iostream>
 #include <vector>
+<<<<<<< HEAD:project/src/experiments/segmentacion/RunSegmentacion.cpp
 #include "../../parteUno/SegmentationAlgorithm.h"
+=======
+#include <fstream>
+#include "project/src/parteUno/SegmentationAlgorithm.h"
+>>>>>>> 165ccca162015621ea8a984ef9f4843e86b36d04:RunSegmentacion.cpp
 
 using namespace std;
 
@@ -32,7 +37,19 @@ int main(){
 
     
     SegmentationAlgorithm* algoritmo = new SegmentationAlgorithm(image, scale,w,h,strategyName); // configuracion algoritmo
-    vector<vector<int> > imagenSegmentada = algoritmo->imageToSegmentation(); // llamda al algoritmo
+    // medicion de tiempo:
+    std::ofstream fileExperimento;
+    fileExperimento.open("mediciones",std::ios::out);
+    std::chrono::steady_clock::time_point tiempoInicio = std::chrono::steady_clock::now();
+    // algoritmo
+    vector<vector<int> > imagenSegmentada = algoritmo->imageToSegmentation(); // llamada al algoritmo
+    // tiempo fin
+    std::chrono::steady_clock::time_point tiempoFinal = std::chrono::steady_clock::now();
+    // ecritura de la diferencia de los tiempo:
+    std::chrono::duration<double> tiempo = std::chrono::duration_cast<std::chrono::duration<double > >(tiempoFinal - tiempoInicio); // diferencia tiempos
+    fileExperimento << std::fixed << tiempo.count()  << "\n"; // mando el tiempo al file, con notacion con coma, osea no cientifica
+
+
 
 
     cout << scale << endl;

@@ -14,7 +14,7 @@ Para ver el mensaje de ayuda del generador de grafos ejecutarlo con el parámetr
 
 
 
-### Ejemplo para correr el algoritmo de segmentación de imagenes (usar python2):
+### Ejemplo para correr el algoritmo de segmentación de imagenes (usar python2) parados sobre la carpeta principal del proyecto, que es cuando entras:
 
 echo "array 2000 fuentes_de_la_catedra/BSDS300/images/test/random1.jpg" | python2 sendImage.py | ./runSegmentacion | python2 pintar-segmentacion.py
 

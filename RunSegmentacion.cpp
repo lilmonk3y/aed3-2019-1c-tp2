@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <chrono>
 #include "project/src/parteUno/SegmentationAlgorithm.h"
 
 using namespace std;

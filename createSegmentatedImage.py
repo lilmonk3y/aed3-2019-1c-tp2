@@ -20,8 +20,6 @@ segments = []
 
 height = int(raw_input())
 width = int(raw_input())
-print height
-print width
 pixelsRead = 0
 while pixelsRead < height * width:
 	segments.append(int(raw_input()))

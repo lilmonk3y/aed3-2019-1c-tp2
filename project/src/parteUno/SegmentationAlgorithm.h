@@ -33,7 +33,7 @@ public:
     AdjacencyListGraph* adjacencyListInducedSubGraph( AdjacencyListGraph* graph, set<int> *componente);
     int minInternalDifference(int componenteI, int componenteJ);
     int internalDifference(set<int> *componente);
-    int tau(int cardinal);
+    long tau(int cardinal);
     std::map<int,std::set<int>*>* joinComponentsOnFather( int fatherIndex, int sonIndex);
 
     // solo para TESTEAR, contar la cantidad de componentes en la segmentacion:

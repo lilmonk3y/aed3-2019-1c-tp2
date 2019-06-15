@@ -100,6 +100,9 @@ AdjacencyListGraph::~AdjacencyListGraph() {
             delete node;
         }
     }
+    delete edges; // podría haber sido borrado porque está expuesto en la función getEdgeSet sin
+                  // const-modifiers y en ese caso generaría acá un double delete, pero para
+                  // no modificar tanto asumo que no fue borrado
 }
 
 

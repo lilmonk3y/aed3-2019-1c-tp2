@@ -62,6 +62,7 @@ int main(){
         }
     }
 
+    delete algoritmo;
 }
 
 

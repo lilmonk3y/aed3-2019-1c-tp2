@@ -9,6 +9,7 @@ DirectedTreeGraph::DirectedTreeGraph(int vertexSize) {
 }
 
 void DirectedTreeGraph::resetSize(int newVerticesSize) {
+    for (TreeNode* node : vertices) delete node;
     this->vertices.clear();
     for(int index = 0; index < newVerticesSize; index++){
         this->vertices.emplace_back(new TreeNode(index));
@@ -55,4 +56,8 @@ TreeNode *DirectedTreeGraph::getRoot(TreeNode *node) {
     }else{
         return getRoot(node->getFather());
     }
+}
+
+DirectedTreeGraph::~DirectedTreeGraph() {
+    resetSize(0);
 }

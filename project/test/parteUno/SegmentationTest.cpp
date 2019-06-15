@@ -21,8 +21,13 @@ struct SegmentationAlgorithmTest : testing::Test{
         segmentationAlgorithm = new SegmentationAlgorithm(imagen,segmentationScaleDefault,anchoDefault,altoDefault,disjoinStrategy);
     }
 
+    void setSegmentationAlgorithm(SegmentationAlgorithm* algorithm) {
+        if (segmentationAlgorithm != NULL) delete segmentationAlgorithm;
+        segmentationAlgorithm = algorithm;
+    }
+
     ~SegmentationAlgorithmTest(){
-        delete segmentationAlgorithm;
+        setSegmentationAlgorithm(NULL);
     }
 };
 
@@ -36,7 +41,7 @@ TEST_F(SegmentationAlgorithmTest, simpleSegmentationWorks){
 
     //segmentationScale = 2; // con 1 falla,con 100 anda bien, con 1000 falla
     segmentationAlgorithm->setGrafo(grafo);
-    segmentationAlgorithm->adyacentesPorComponente = inicializarMapaComoDisjoinSet(2*2);
+    segmentationAlgorithm->setAdyacentesPorComponente(inicializarMapaComoDisjoinSet(2*2));
     DisjoinSet* disjointSet = segmentationAlgorithm->graphSementationIntoSets();
 
     ASSERT_TRUE(disjointSet->find(0) == disjointSet->find(1) );
@@ -93,7 +98,7 @@ TEST_F(SegmentationAlgorithmTest, image3x3pixelsWith3Areas){
     // 199 se rompe
     segmentationAlgorithm->setScaleProportion(segmentationScale);
     segmentationAlgorithm->setGrafo(grafo);
-    segmentationAlgorithm->adyacentesPorComponente = inicializarMapaComoDisjoinSet(3*3);
+    segmentationAlgorithm->setAdyacentesPorComponente(inicializarMapaComoDisjoinSet(3*3));
     DisjoinSet* disjointSet = segmentationAlgorithm->graphSementationIntoSets();
 
     ASSERT_TRUE(disjointSet->find(0) == disjointSet->find(3) );
@@ -126,12 +131,14 @@ TEST_F(SegmentationAlgorithmTest, matrizImagenAGrafo){
     DisjoinSet* disjoinSet = new ArrayDisjoinSet();
     segmentationAlgorithm->setDisjointSet(disjoinSet);
     AdjacencyListGraph* imageGraph = segmentationAlgorithm->imageToGraph(&imagen,ancho,alto);
-    segmentationAlgorithm->adyacentesPorComponente = inicializarMapaComoDisjoinSet(ancho*alto);
+    segmentationAlgorithm->setAdyacentesPorComponente(inicializarMapaComoDisjoinSet(ancho*alto));
 
 
     ASSERT_TRUE(imageGraph->getVertexSize()==12); // cantidad de vertices
     ASSERT_TRUE(imageGraph->getTotalCost()==0);
     ASSERT_TRUE(imageGraph->getEdgeSet()->size()==29); // todos los ejes que hay
+
+    delete imageGraph;
 }
 
 TEST_F(SegmentationAlgorithmTest, matrizImagenAGrafoPesosTest){
@@ -154,6 +161,7 @@ TEST_F(SegmentationAlgorithmTest, matrizImagenAGrafoPesosTest){
     sumValues = sumValues + 50+50+50+50+50+50+50; // valores asociado al vertice 50
 
     ASSERT_TRUE(imageGraph->getTotalCost()==sumValues); // no sabe que estoy agregando el mismo eje muchas veces
+    delete imageGraph;
 }
 
 TEST_F(SegmentationAlgorithmTest, sumaDePesosCorrecta){
@@ -174,6 +182,8 @@ TEST_F(SegmentationAlgorithmTest, sumaDePesosCorrecta){
     ASSERT_TRUE(imageGraph->getVertexSize()==12); // cantidad de vertices
     ASSERT_TRUE(imageGraph->getTotalCost()==8);
     ASSERT_TRUE(imageGraph->getEdgeSet()->size()==29); // todos los ejes que hay
+
+    delete imageGraph;
 }
 
 TEST_F(SegmentationAlgorithmTest, sumaDePesosCorrectaOtroTest){
@@ -193,6 +203,8 @@ TEST_F(SegmentationAlgorithmTest, sumaDePesosCorrectaOtroTest){
     ASSERT_TRUE(imageGraph->getVertexSize()==9); // cantidad de vertices
     ASSERT_TRUE(imageGraph->getTotalCost()==7+1+2+2);
     ASSERT_TRUE(imageGraph->getEdgeSet()->size()==20); // todos los ejes que hay
+
+    delete imageGraph;
 }
 
 TEST_F(SegmentationAlgorithmTest, segmentacionDeUnaImagenChiquita) {
@@ -211,7 +223,7 @@ TEST_F(SegmentationAlgorithmTest, segmentacionDeUnaImagenChiquita) {
     int scale = 2;
 
     string disjoinStrategy = "array";
-    segmentationAlgorithm = new SegmentationAlgorithm(imagen,scale,ancho,alto,disjoinStrategy); // usar otra configuracion
+    setSegmentationAlgorithm(new SegmentationAlgorithm(imagen,scale,ancho,alto,disjoinStrategy)); // usar otra configuracion
     vector<vector<int> > imagenSegmentada = segmentationAlgorithm->imageToSegmentation();
     ASSERT_TRUE(segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto)==4); // el fondo, el puntito arriba, el puntito a la izquirda, y el palito en el medio
 }
@@ -227,7 +239,7 @@ TEST_F(SegmentationAlgorithmTest, segmentacionDeUnaImagenConUnaCruz) {
     int scale = 2;
 
     string disjoinStrategy = "array";
-    segmentationAlgorithm = new SegmentationAlgorithm(imagen,scale,ancho,alto,disjoinStrategy); // usar otra configuracion
+    setSegmentationAlgorithm(new SegmentationAlgorithm(imagen,scale,ancho,alto,disjoinStrategy)); // usar otra configuracion
     vector<vector<int> > imagenSegmentada = segmentationAlgorithm->imageToSegmentation();
     ASSERT_TRUE(segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto)==2);
 }
@@ -280,6 +292,7 @@ TEST_F(SegmentationAlgorithmTest, imagenGrandeAGrafo){
     ASSERT_TRUE(imageGraph->getNeighbors(44*23+27).size() ==8);// nodo cualquiera de por el medio
     ASSERT_TRUE(imageGraph->getNeighbors(44*(alto-1)+0).size() ==3);// nodo esquina inferior izquierda
     ASSERT_TRUE(imageGraph->getNeighbors(44*(alto-1)+14).size() ==5);// nodo cualquier ultima fila
+    delete imageGraph;
 }
 
 
@@ -330,7 +343,7 @@ TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillas){
     // union del disjoint set tiene costo N
 
     string disjoinStrategy = "array";
-    segmentationAlgorithm = new SegmentationAlgorithm(imagen, segmentationScale, ancho, alto,disjoinStrategy);
+    setSegmentationAlgorithm(new SegmentationAlgorithm(imagen,segmentationScale,ancho,alto,disjoinStrategy));
     vector<vector<int> > imagenSegmentada = segmentationAlgorithm->imageToSegmentation();
     segmentationAlgorithm->generarFileOutput(imagenSegmentada,ancho, alto,"imagen-segmentada"); // genera el file con la imagen segmentada (pixeles componentes)
     ASSERT_TRUE(segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto)==5);
@@ -379,7 +392,7 @@ TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillasOtroDisjointSet){
     int segmentationScale = 900;
 
     string disjoinStrategy = "tree";
-    segmentationAlgorithm = new SegmentationAlgorithm(imagen, segmentationScale, ancho, alto,disjoinStrategy);
+    setSegmentationAlgorithm(new SegmentationAlgorithm(imagen,segmentationScale,ancho,alto,disjoinStrategy));
     vector<vector<int> > imagenSegmentada = segmentationAlgorithm->imageToSegmentation();
     segmentationAlgorithm->generarFileOutput(imagenSegmentada,ancho, alto,"imagen-segmentada"); // genera el file
     ASSERT_TRUE(segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto)==5);
@@ -426,7 +439,7 @@ TEST_F(SegmentationAlgorithmTest, segmentacionImagenComillasConArrayCompressedDi
     int segmentationScale = 900;
 
     string disjoinStrategy = "treeCompressed";
-    segmentationAlgorithm = new SegmentationAlgorithm(imagen, segmentationScale, ancho, alto,disjoinStrategy);
+    setSegmentationAlgorithm(new SegmentationAlgorithm(imagen,segmentationScale,ancho,alto,disjoinStrategy));
     vector<vector<int> > imagenSegmentada = segmentationAlgorithm->imageToSegmentation();
     segmentationAlgorithm->generarFileOutput(imagenSegmentada,ancho, alto,"imagen-segmentada"); // genera el file
     ASSERT_TRUE(segmentationAlgorithm->cantidadDeComponentes(imagenSegmentada, ancho, alto)==5);

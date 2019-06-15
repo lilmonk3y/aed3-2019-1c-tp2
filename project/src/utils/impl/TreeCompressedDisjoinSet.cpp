@@ -5,7 +5,8 @@
 #include "../TreeCompressedDisjoinSet.h"
 
 void TreeCompressedDisjoinSet::create(Graph *graph) {
-    this->components= new DirectedTreeGraph(graph->getVertexSize());
+    if (components != NULL) delete components;
+    this->components = new DirectedTreeGraph(graph->getVertexSize());
 
     std::vector<int> heights;
     heights.resize(graph->getVertexSize());
@@ -34,4 +35,8 @@ void TreeCompressedDisjoinSet::join(int alreadyIn, int newNode) {
     if(heights.at(lRepresentative) == heights.at(rRepresentative)) {
         this->heights.at(rRepresentative) = this->heights.at(rRepresentative) + 1;
     }
+}
+
+TreeCompressedDisjoinSet::~TreeCompressedDisjoinSet() {
+    if (components != NULL) delete components;
 }

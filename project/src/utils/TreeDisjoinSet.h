@@ -24,6 +24,8 @@ public:
      */
     void create(Graph *graph) override;
 
+    ~TreeDisjoinSet();
+
 private:
     DirectedTreeGraph *components;
 };

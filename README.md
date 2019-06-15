@@ -11,3 +11,18 @@ python3 project/src/experiments/minpath/gen_random_connected_graphs.py -g 100 -n
 ```
 
 Para ver el mensaje de ayuda del generador de grafos ejecutarlo con el parámetro -h
+
+
+
+### Ejemplo para correr el algoritmo de segmentación de imagenes:
+
+echo "array 2000 fuentes_de_la_catedra/BSDS300/images/test/random1.jpg" | python3 sendImage.py | ./runSegmentacion | python2 pintar-segmentacion.py
+
+Hay que poner donde dice 2000 el número que queramos desde 1 a 500000 es válido, y la ruta de la imagen deseada, variando ese número obtendremos diferentes segmentaciones.
+
+### Paquetes usados (instalar con pip, en la terminal pip install nombrePaquete):
+import cv2 (para python 2 y 3)  ###pip install opencv-python
+import sys (para python 2 y 3)
+
+numpy   (para python2 y 3)
+matplotlib  (para python2 y 3)

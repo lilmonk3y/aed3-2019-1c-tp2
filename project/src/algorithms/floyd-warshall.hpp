@@ -10,11 +10,12 @@ void floydWarshall(const GasGraph& graph, vector<vector<ulong>>& cityMinCost,
   vector<vector<ulong>> minCost(graph.getVertices());
   for (uint vertex_i = 0; vertex_i < graph.getVertices(); ++vertex_i) {
     minCost[vertex_i].assign(graph.getVertices(), infinity);
-    minCost[vertex_i][vertex_i] = 0;
     for (const auto& edge_ij : graph.getNeighbors(vertex_i)) {
       uint vertex_j = edge_ij.destination;
       minCost[vertex_i][vertex_j] = edge_ij.cost;
     }
+    for (ulong charge = 0; charge <= graph.getTankCapacity(); ++charge)
+      minCost[vertex_i][graph.getVertex(vertex_i, charge)] = 0;
   }
 
   cityMinCost.resize(graph.getCities());

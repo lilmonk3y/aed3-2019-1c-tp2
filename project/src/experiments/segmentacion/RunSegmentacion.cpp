@@ -4,6 +4,7 @@
 #include "../../parteUno/SegmentationAlgorithm.h"
 =======
 #include <fstream>
+#include <chrono>
 #include "project/src/parteUno/SegmentationAlgorithm.h"
 >>>>>>> 165ccca162015621ea8a984ef9f4843e86b36d04:RunSegmentacion.cpp
 
@@ -48,7 +49,9 @@ int main(){
     // ecritura de la diferencia de los tiempo:
     std::chrono::duration<double> tiempo = std::chrono::duration_cast<std::chrono::duration<double > >(tiempoFinal - tiempoInicio); // diferencia tiempos
     fileExperimento << std::fixed << tiempo.count()  << "\n"; // mando el tiempo al file, con notacion con coma, osea no cientifica
-
+    int cantidadComponentes = algoritmo->cantidadDeComponentes(imagenSegmentada,w, h);
+    fileExperimento << cantidadComponentes  << "\n"; // mando la cantidad de componentes al file.
+    fileExperimento.close();
 
 
 
@@ -63,6 +66,7 @@ int main(){
         }
     }
 
+    delete algoritmo;
 }
 
 

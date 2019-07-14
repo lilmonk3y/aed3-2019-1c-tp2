@@ -18,6 +18,8 @@ public:
     bool adjacent(int vertexIndex1, int vertexIndex2) ;
     void resetSize(int newVerticesSize) ;
     int getVertex() ;
+
+    ~DirectedTreeGraph();
 private:
     std::vector<TreeNode*> vertices;
 

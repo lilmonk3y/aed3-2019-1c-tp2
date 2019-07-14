@@ -18,6 +18,23 @@ SegmentationAlgorithm::SegmentationAlgorithm(vector<vector<int> > imageInput,int
    this->disjointSetStrategy = disjoinSetStrategy;
 }
 
+SegmentationAlgorithm::~SegmentationAlgorithm() {
+    if (disjoinSet != NULL) delete disjoinSet;
+    if (grafo != NULL) delete grafo;
+    setAdyacentesPorComponente(NULL);    
+}
+
+void SegmentationAlgorithm::setAdyacentesPorComponente(std::map<int,std::set<int>*>* adyacentesPorComponente) {
+    if (this->adyacentesPorComponente != NULL) {
+        for (const auto& elem : *this->adyacentesPorComponente) {
+            delete elem.second;
+        }
+        delete this->adyacentesPorComponente;
+    }
+    this->adyacentesPorComponente = adyacentesPorComponente;
+}
+
+
 // end 2 end (componentes es el campo this->disjointSet)
 vector<vector<int> > SegmentationAlgorithm::imageToSegmentation() {
     DisjoinSet* componentes = this->graphSementationIntoSets();
@@ -66,9 +83,13 @@ int SegmentationAlgorithm::minInternalDifference(int indiceComponenteI, int indi
 
 int SegmentationAlgorithm::internalDifference(set<int> *componente) { // O(KRUSKAL + creacion del grafo inducido)
     Graph* subGrafoComponente = this->adjacencyListInducedSubGraph(this->grafo, componente);// G=(C,E) O(n)+O(m) // REDUJE COMPLEX
-    GetMST kruskal = GetMST(selectDisjoinSetStrategy(this->disjointSetStrategy)); // elijo la estrategia del disjoint set
+    DisjoinSet* disjoinSet = selectDisjoinSetStrategy(this->disjointSetStrategy);
+    GetMST kruskal = GetMST(disjoinSet); // elijo la estrategia del disjoint set
     Graph* arbolRecubridorMinimoDeLaComponente = kruskal.getMST(subGrafoComponente);
-    return arbolRecubridorMinimoDeLaComponente->getMaxWeight();
+    int maxWeight = arbolRecubridorMinimoDeLaComponente->getMaxWeight();
+    delete arbolRecubridorMinimoDeLaComponente;
+    delete disjoinSet;
+    return maxWeight;
 }
 
 long SegmentationAlgorithm::tau(int cardinal) {
@@ -253,6 +274,7 @@ list<int> SegmentationAlgorithm::componentesDeLaSegmentacion(vector<vector<int> 
 }
 
 void SegmentationAlgorithm::setGrafo(AdjacencyListGraph* graph) {
+    if (grafo != NULL) delete grafo;
     this->grafo = graph;
 }
 
@@ -272,6 +294,7 @@ void SegmentationAlgorithm::setAncho(int an)  {
 }
 
 void SegmentationAlgorithm::setDisjointSet(DisjoinSet* disjoinSetInstance) {
+    if (disjoinSet != NULL) delete disjoinSet;
     this->disjoinSet = disjoinSetInstance;
 }
 

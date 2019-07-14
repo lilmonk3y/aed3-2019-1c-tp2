@@ -1,12 +1,8 @@
 #include <iostream>
 #include <vector>
-<<<<<<< HEAD:project/src/experiments/segmentacion/RunSegmentacion.cpp
 #include "../../parteUno/SegmentationAlgorithm.h"
-=======
 #include <fstream>
 #include <chrono>
-#include "project/src/parteUno/SegmentationAlgorithm.h"
->>>>>>> 165ccca162015621ea8a984ef9f4843e86b36d04:RunSegmentacion.cpp
 
 using namespace std;
 

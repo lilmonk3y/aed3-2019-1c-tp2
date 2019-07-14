@@ -16,12 +16,14 @@ struct MSTTest : testing::Test {
     Graph *graph;
     Graph *graph1;
     Graph *graph2;
+    DisjoinSet* disjoinSet;
 
     MSTTest(){
         //getMST = new GetMST(new ArrayDisjoinSet());
         //getMST = new GetMST(new ArrayCompressedDisjoinSet());
         //getMST = new GetMST(new TreeDisjoinSet());
-        getMST = new GetMST(new TreeCompressedDisjoinSet());
+        disjoinSet = new TreeCompressedDisjoinSet();
+        getMST = new GetMST(disjoinSet);
 
         graph1 = new AdjacencyListGraph(4);
         graph1->addEdge(0,1, 3);
@@ -52,6 +54,7 @@ struct MSTTest : testing::Test {
         delete getMST;
         delete graph1;
         delete graph2;
+        delete disjoinSet;
     }
 };
 
@@ -65,6 +68,7 @@ TEST_F(MSTTest,whenGetPrimMSTOfACircuit_mustReturnAnMSTOfTheOriginalGraph){
     Graph *actualMST = getMST->getMST(graph);
 
     ASSERT_EQ(10 , actualMST->getTotalCost());
+    delete actualMST;
     delete graph;
 }
 
@@ -75,6 +79,7 @@ TEST_F(MSTTest,whenGetKruskalCompressedMSTOfATree_mustReturnTheSameGraph){
     Graph *actualMST = getMST->getMST(graph);
 
     ASSERT_EQ(5,actualMST->getTotalCost());
+    delete actualMST;
     delete graph;
 }
 
@@ -84,6 +89,7 @@ TEST_F(MSTTest, whenGraph1PrimMST_shouldHaveTotalWeight6)
 
     float actualWeight = mst->getTotalCost();
     ASSERT_EQ(6, actualWeight);
+    delete mst;
 }
 
 TEST_F(MSTTest, whenGraph2PrimMST_shouldHaveTotalWeight37)
@@ -92,6 +98,7 @@ TEST_F(MSTTest, whenGraph2PrimMST_shouldHaveTotalWeight37)
 
     float actualWeight = mst->getTotalCost();
     ASSERT_EQ(37, actualWeight);
+    delete mst;
 }
 
 TEST_F(MSTTest, testing1){
@@ -108,6 +115,7 @@ TEST_F(MSTTest, testing1){
 
     ASSERT_EQ(12, actualWeigth);
     delete graph;
+    delete mst;
 }
 
 TEST_F(MSTTest,testing2){
@@ -127,6 +135,7 @@ TEST_F(MSTTest,testing2){
 
     ASSERT_EQ(26, actualWeigth);
     delete graph;
+    delete mst;
 }
 
 TEST_F(MSTTest, testing3){
@@ -151,4 +160,5 @@ TEST_F(MSTTest, testing3){
 
     ASSERT_EQ(32, actualWeigth);
     delete graph;
+    delete mst;
 }

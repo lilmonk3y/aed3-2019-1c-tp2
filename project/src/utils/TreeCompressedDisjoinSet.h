@@ -24,6 +24,8 @@ public:
     */
     void join(int alreadyIn, int newNode) override;
 
+    ~TreeCompressedDisjoinSet();
+
 private:
     DirectedTreeGraph* components;
     std::vector<int> heights;

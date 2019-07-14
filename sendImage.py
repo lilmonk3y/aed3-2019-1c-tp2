@@ -7,17 +7,16 @@ inputVar = raw_input().split(' ', 3)
 disjoinset = inputVar[0]
 scale = inputVar[1]
 imageName = str(inputVar[2])
-
 img = cv2.imread(imageName,cv2.IMREAD_GRAYSCALE)
 
 height, width = img.shape[:2]
-print disjoinset
-print scale
-print height
-print width
+print(disjoinset)
+print(scale)
+print(height)
+print(width)
 for i in range(int(height)):
 	for j in range(int(width)):
 		k = img.item(i,j)
-		print k
+		print(k)
 
 

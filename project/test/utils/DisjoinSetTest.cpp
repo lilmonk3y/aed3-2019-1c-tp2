@@ -32,6 +32,8 @@ TEST_F(DisSetTest,whenCreateADisjoinSet_mustAddEveryNodeIntoADifferentComponent)
     ASSERT_EQ(0, disjoinSet->find(0));
     ASSERT_EQ(1, disjoinSet->find(1));
     ASSERT_EQ(2, disjoinSet->find(2));
+
+    delete graph;
 }
 
 TEST_F(DisSetTest, whenJoiningTwoComponents_mustPutThemTheSameComponentId){
@@ -42,6 +44,8 @@ TEST_F(DisSetTest, whenJoiningTwoComponents_mustPutThemTheSameComponentId){
 
     ASSERT_EQ(0, disjoinSet->find(0));
     ASSERT_EQ(0, disjoinSet->find(1));
+
+    delete graph;
 }
 
 TEST_F(DisSetTest, whenJoiningComponentsWithMoreThanOneElement_mustPutTheSameIdToAllElements){
@@ -62,6 +66,8 @@ TEST_F(DisSetTest, whenJoiningComponentsWithMoreThanOneElement_mustPutTheSameIdT
     ASSERT_EQ(0, disjoinSet->find(3));
     ASSERT_EQ(0, disjoinSet->find(4));
     ASSERT_EQ(0, disjoinSet->find(5));
+
+    delete graph;
 }
 
 TEST_F(DisSetTest,whenJoiningComponentsWithSons_mustAddSonsToComponent){
@@ -76,6 +82,8 @@ TEST_F(DisSetTest,whenJoiningComponentsWithSons_mustAddSonsToComponent){
     ASSERT_EQ(2, disjoinSet->find(5));
     ASSERT_EQ(2, disjoinSet->find(4));
     ASSERT_EQ(2, disjoinSet->find(2));
+
+    delete graph;
 }
 
 TEST_F(DisSetTest,testing1){
@@ -94,6 +102,8 @@ TEST_F(DisSetTest,testing1){
     ASSERT_EQ(1, disjoinSet->find(4));
     ASSERT_EQ(1, disjoinSet->find(5));
     ASSERT_EQ(1, disjoinSet->find(0));
+
+    delete graph;
 }
 
 TEST_F(DisSetTest,testing2){
@@ -121,6 +131,8 @@ TEST_F(DisSetTest,testing2){
     ASSERT_EQ(0,disjoinSet->find(7));
     ASSERT_EQ(0,disjoinSet->find(8));
     ASSERT_EQ(0,disjoinSet->find(9));
+
+    delete graph;
 }
 
 TEST_F(DisSetTest, testing3){
@@ -168,4 +180,6 @@ TEST_F(DisSetTest, testing3){
     ASSERT_EQ(0, disjoinSet->find(17));
     ASSERT_EQ(0, disjoinSet->find(18));
     ASSERT_EQ(0, disjoinSet->find(19));
+
+    delete graph;
 }

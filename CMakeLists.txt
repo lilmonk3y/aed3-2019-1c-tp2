@@ -78,7 +78,7 @@ add_executable(aed3_2019_1c_tp2 main.cpp ${SOURCE_FILES})
         project/src/parteUno/SegmentationAlgorithm.cpp
         )
 
-add_executable(runSegmentacion RunSegmentacion.cpp ${SEGMENTACION_FILES})
+add_executable(runSegmentacion project/src/experiments/segmentacion/RunSegmentacion.cpp ${SEGMENTACION_FILES})
 
 
 target_link_libraries(aed3_2019_1c_tp2 gtest gtest_main)

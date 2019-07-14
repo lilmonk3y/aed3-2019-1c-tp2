@@ -23,6 +23,8 @@ class SegmentationAlgorithm{
 public:
     SegmentationAlgorithm(vector<vector<int> > imageInput,int scale,int ancho, int alto,string disjoinSetStrategy);
 
+    ~SegmentationAlgorithm();
+
     // algoritmo end to end:
     vector<vector<int> > imageToSegmentation();
     AdjacencyListGraph* imageToGraph(vector<vector<int> >* imagen,int ancho, int alto);// puede ser void y sin parametros
@@ -33,7 +35,7 @@ public:
     AdjacencyListGraph* adjacencyListInducedSubGraph( AdjacencyListGraph* graph, set<int> *componente);
     int minInternalDifference(int componenteI, int componenteJ);
     int internalDifference(set<int> *componente);
-    int tau(int cardinal);
+    long tau(int cardinal);
     std::map<int,std::set<int>*>* joinComponentsOnFather( int fatherIndex, int sonIndex);
 
     // solo para TESTEAR, contar la cantidad de componentes en la segmentacion:
@@ -45,6 +47,8 @@ public:
     void setAlto(int al);
     void setAncho(int an);
     void setDisjointSet(DisjoinSet* disjoinSetInstance);
+
+    void setAdyacentesPorComponente(std::map<int,std::set<int>*>* adyacentesPorComponente);
 
     //private: // comentar para los test
     // atributos:

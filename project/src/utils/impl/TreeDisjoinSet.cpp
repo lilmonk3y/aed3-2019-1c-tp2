@@ -5,6 +5,7 @@
 #include "../TreeDisjoinSet.h"
 
 void TreeDisjoinSet::create(Graph *graph) {
+    if (components != NULL) delete components;
     this->components = new DirectedTreeGraph(graph->getVertexSize());
 }
 
@@ -14,4 +15,8 @@ int TreeDisjoinSet::find(int vertex) {
 
 void TreeDisjoinSet::join(int alreadyIn, int newNode) {
     this->components->addToComponent(alreadyIn, newNode);
+}
+
+TreeDisjoinSet::~TreeDisjoinSet() {
+    if (components != NULL) delete components;
 }

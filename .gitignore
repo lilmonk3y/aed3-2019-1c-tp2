@@ -28,3 +28,10 @@ libYourLib.a
 runSegmentacion
 project/src/experiments/minpath/random_connected_graph.pyc
 project/src/experiments/minpath/__pycache__/
+**/*.DS_Store
+**/*__init__.py
+fuentes_de_la_catedra/BSDS300/.DS_Store
+fuentes_de_la_catedra/BSDS300/images/.DS_Store
+fuentes_de_la_catedra/BSDS300/images/test/.DS_Store
+
+

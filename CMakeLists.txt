@@ -83,10 +83,6 @@ add_executable(runSegmentacion project/src/experiments/segmentacion/RunSegmentac
 
 target_link_libraries(aed3_2019_1c_tp2 gtest gtest_main)
 
-
-#target_link_libraries(RunSegmentation segLib)
-#add_executable(ExperimentacionSegmentacion project/src/experiments/segmentacion/experimento-segmentacion-1.cpp ${SEGMENTACION_FILES})
-
 set(SOURCE_FILES_MIN_PATH
     project/src/algorithms/bellman-ford.hpp
     project/src/algorithms/dijkstra-with-fifo-queue.hpp
@@ -98,12 +94,10 @@ set(SOURCE_FILES_MIN_PATH
     project/src/entity/impl/EdgeWeightedGraph.cpp
     project/src/entity/impl/GasGraph.cpp)
 
-###### CORRE BIEN BAJO LA IDE CLION PERO PUEDE ROMPER DE OTRO MODO
-#add_executable(main-min-path main-min-path.cpp ${SOURCE_FILES_MIN_PATH})
+add_executable(main-min-path main-min-path.cpp ${SOURCE_FILES_MIN_PATH})
 
-#add_executable(timer project/src/experiments/minpath/timer.cpp ${SOURCE_FILES_MIN_PATH})
+add_executable(timer project/src/experiments/minpath/timer.cpp ${SOURCE_FILES_MIN_PATH})
 
-#target_link_libraries(aed3_2019_1c_tp2 gtest gtest_main runSegmentacion)
 target_link_libraries(aed3_2019_1c_tp2 gtest gtest_main)
 
 

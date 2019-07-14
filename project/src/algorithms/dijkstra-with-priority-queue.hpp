@@ -21,7 +21,7 @@ void dijkstraPriorityQueue(const GasGraph& graph, uint originCity, vector<ulong>
   cityMinCost[originCity] = 0;
 
   // priority_queue<cost, dest>. Some cost of going from originCity to dest:
-  priority_queue<tuple<ulong, uint>, vector<tuple<ulong, int>>, greater<tuple<ulong, int>>> costs;
+  priority_queue<tuple<ulong, int>, vector<tuple<ulong, int>>, greater<tuple<ulong, int>>> costs;
 
   costs.push(make_tuple(0, graph.getVertex(originCity, initialGasCharge)));
   uint vertex_i;

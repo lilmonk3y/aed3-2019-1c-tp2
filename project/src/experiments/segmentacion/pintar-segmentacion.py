@@ -24,25 +24,22 @@ nArray = array(segments)
 #covert array to "matrix"
 a11=nArray.reshape(height,width)# alto y ancho
 plt.imshow(a11, cmap='nipy_spectral') #mapa de rojos, opciones: 'hot', 'nipy_spectral'
-plt.colorbar()
+#plt.colorbar()
 
 
 textstr = '\n'.join((
     r'Cantidad de componentes=%.2f' % (cantComp, ),
-    r'scale=%.2f' % (scale, )))
+    r'Scale=%.2f' % (scale, )))
 
 # these are matplotlib.patch.Patch properties
 props = dict(boxstyle='round', facecolor='wheat', alpha=0.8)
 
-<<<<<<< HEAD:project/src/experiments/segmentacion/pintar-segmentacion.py
 # place a text box in upper left in axes coords
-plt.text(0.05, 0.95, textstr, fontsize=10,
-        verticalalignment='top', bbox=props)
+# plt.text(0.05, 0.95, textstr, fontsize=10,
+#         verticalalignment='top', bbox=props)
 
-=======
 #title:
 plt.title(textstr)
->>>>>>> 165ccca162015621ea8a984ef9f4843e86b36d04:pintar-segmentacion.py
 
 plt.show()
 
